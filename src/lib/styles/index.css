@@ -1,0 +1,23 @@
+/**
+ * The library stylesheet. Consumers import this once:
+ *
+ *   import 'liquid-glass-react/styles.css';
+ *
+ * Import order is the cascade, and it is owned here rather than by each
+ * component importing its own CSS. Component files importing their own styles
+ * would make the final order depend on module evaluation order, which changes
+ * with tree-shaking -- so a component would win or lose against the base
+ * material depending on what else the consumer happened to import.
+ *
+ * Order: tokens, then the shared material, then components alphabetically.
+ * Nothing here relies on source order to beat a competing selector; components
+ * that need to override the surface do it by setting tokens, not by out-ranking
+ * `.lg-surface`.
+ */
+@import './tokens.css';
+@import './surface.css';
+
+@import '../components/Button/Button.css';
+@import '../components/Input/Input.css';
+@import '../components/Switch/Switch.css';
+@import '../components/Tabs/Tabs.css';

@@ -1,0 +1,142 @@
+/**
+ * Tabs.
+ *
+ * The list is a recessed glass trough; the indicator is a raised pane that
+ * slides inside it. Position and size come from custom properties written by
+ * the component after measuring the selected tab, so the indicator tracks
+ * labels of any width.
+ */
+
+.lg-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lg-space-4);
+  font-family: var(--lg-font);
+}
+
+.lg-tablist {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  align-self: flex-start;
+
+  --lg-tint-alpha: 0.07;
+  --lg-inset:
+    inset 0 1px 2px hsl(var(--lg-tint-hue) 30% 8% / 0.26),
+    inset 0 -1px 0 0 hsl(0 0% 100% / 0.12);
+  --lg-noise-opacity: 0.02;
+  --lg-tab-indicator-opacity: 0;
+}
+
+.lg-tabs[data-orientation='vertical'] {
+  flex-direction: row;
+}
+
+.lg-tabs[data-orientation='vertical'] .lg-tablist {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* The indicator is a real element rather than a pseudo, because `.lg-surface`
+ * has already spent both of the list's pseudo-elements on the rim and noise. */
+.lg-tablist__indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+
+  width: var(--lg-tab-w, 0);
+  height: var(--lg-tab-h, 0);
+  transform: translate3d(var(--lg-tab-x, 0), var(--lg-tab-y, 0), 0);
+  opacity: var(--lg-tab-indicator-opacity);
+
+  border-radius: var(--lg-radius-pill);
+  background-image: linear-gradient(
+    var(--lg-light-angle),
+    hsl(0 0% 100% / 0.22),
+    hsl(0 0% 100% / 0.1)
+  );
+  box-shadow:
+    inset 0 1px 0 hsl(0 0% 100% / 0.45),
+    inset 0 -1px 2px hsl(var(--lg-tint-hue) 30% 12% / 0.18),
+    0 1px 2px hsl(var(--lg-tint-hue) 40% 6% / 0.24),
+    0 4px 10px -2px hsl(var(--lg-tint-hue) 40% 6% / 0.2);
+
+  /* Width and height animate too, so moving between a short label and a long
+   * one stretches rather than jumping. They are not compositor properties, but
+   * this is one element and the alternative -- scaleX -- would squash the
+   * indicator's own highlight. */
+  transition:
+    transform var(--lg-dur-base) var(--lg-ease-spring),
+    width var(--lg-dur-base) var(--lg-ease-spring),
+    height var(--lg-dur-base) var(--lg-ease-spring),
+    opacity var(--lg-dur-fast) var(--lg-ease-out);
+}
+
+.lg-tab {
+  position: relative;
+  z-index: 3;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lg-space-2);
+
+  height: 30px;
+  padding-inline: 14px;
+  margin: 0;
+  border: 0;
+  border-radius: var(--lg-radius-pill);
+  background: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+
+  font-family: inherit;
+  font-size: var(--lg-text-base);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+  color: var(--lg-fg-muted);
+  cursor: pointer;
+
+  transition: color var(--lg-dur-fast) var(--lg-ease-out);
+}
+
+.lg-tab:hover:not(:disabled) {
+  color: var(--lg-fg);
+}
+
+.lg-tab[data-selected='true'] {
+  color: var(--lg-fg);
+  font-weight: 550;
+}
+
+.lg-tab:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.lg-tab:focus-visible {
+  outline: none;
+  box-shadow: var(--lg-focus-ring);
+}
+
+.lg-tabpanel {
+  outline: none;
+}
+
+.lg-tabpanel:focus-visible {
+  border-radius: var(--lg-radius-sm);
+  box-shadow: var(--lg-focus-ring);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lg-tablist__indicator,
+  .lg-tab {
+    transition-duration: 1ms;
+  }
+}

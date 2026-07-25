@@ -1,0 +1,230 @@
+/**
+ * `.lg-surface` -- the material every component in the library is made of.
+ *
+ * Structure is three stacked layers on one element:
+ *
+ *   ::after   noise microtexture   (top)
+ *   ::before  rim light + fringe
+ *   element   tint, body gradient, backdrop-filter, insets, shadows (bottom)
+ *
+ * Both pseudo-elements are spoken for. A component that needs a further layer
+ * (a hover sheen, a press flash) renders a real child element rather than
+ * fighting for ::before, which is why `GlassSurface` exposes children directly.
+ */
+
+/* Registering the animated tokens as typed properties is what lets them
+ * interpolate. An unregistered custom property is a string to the animation
+ * system, so `transition: --lg-tint-alpha` on a plain `--x: 0.1` is a no-op and
+ * hover would snap instead of easing. */
+@property --lg-tint-alpha {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0.1;
+}
+
+@property --lg-blur {
+  syntax: '<length>';
+  inherits: true;
+  initial-value: 20px;
+}
+
+@property --lg-noise-opacity {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 0.035;
+}
+
+.lg-surface {
+  position: relative;
+  isolation: isolate;
+  border: 0;
+  border-radius: var(--lg-radius);
+  color: var(--lg-fg);
+  font-family: var(--lg-font);
+
+  background-color: var(--lg-tint);
+  background-image: var(--lg-body-gradient);
+
+  -webkit-backdrop-filter: var(--lg-backdrop);
+  backdrop-filter: var(--lg-backdrop);
+
+  box-shadow: var(--lg-inset), var(--lg-shadow);
+
+  transition:
+    box-shadow var(--lg-dur-base) var(--lg-ease-out),
+    transform var(--lg-dur-base) var(--lg-ease-spring),
+    --lg-tint-alpha var(--lg-dur-fast) var(--lg-ease-out),
+    --lg-blur var(--lg-dur-base) var(--lg-ease-out);
+}
+
+/* Rim light + chromatic fringe.
+ *
+ * A gradient border, not a stroke: the mask punches out the interior so only a
+ * `--lg-rim-width` frame of the gradient survives. The alternative,
+ * `border-image`, cannot follow a border-radius. */
+.lg-surface::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  padding: var(--lg-rim-width);
+  pointer-events: none;
+
+  background-image: var(--lg-fringe-gradient), var(--lg-rim-gradient);
+  /* `screen` keeps the fringe additive, so it brightens the lit edge rather
+   * than muddying it the way `normal` compositing would. */
+  background-blend-mode: screen, normal;
+
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* Microtexture. `overlay` rather than `normal` so the grain modulates whatever
+ * is behind the glass instead of laying a flat grey film over it. */
+.lg-surface::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  pointer-events: none;
+
+  background-image: var(--lg-noise-image);
+  background-size: var(--lg-noise-size) var(--lg-noise-size);
+  background-repeat: repeat;
+  opacity: var(--lg-noise-opacity);
+  mix-blend-mode: overlay;
+
+  transition: opacity var(--lg-dur-fast) var(--lg-ease-out);
+}
+
+/* Content sits above both pseudo-elements. Components that render bare text
+ * children get this for free via the primitive's content wrapper. */
+.lg-surface__content {
+  position: relative;
+  z-index: 3;
+}
+
+/* ---- Elevation --------------------------------------------------------- */
+
+.lg-surface[data-elevation='flat'] {
+  box-shadow: var(--lg-inset);
+}
+
+.lg-surface[data-elevation='raised'] {
+  box-shadow: var(--lg-inset), var(--lg-shadow-raised);
+}
+
+.lg-surface[data-elevation='overlay'] {
+  box-shadow: var(--lg-inset), var(--lg-shadow-overlay);
+}
+
+/* ---- Radius ------------------------------------------------------------ */
+
+.lg-surface[data-radius='sm'] {
+  --lg-radius: var(--lg-radius-sm);
+}
+.lg-surface[data-radius='md'] {
+  --lg-radius: var(--lg-radius-md);
+}
+.lg-surface[data-radius='lg'] {
+  --lg-radius: var(--lg-radius-lg);
+}
+.lg-surface[data-radius='xl'] {
+  --lg-radius: var(--lg-radius-xl);
+}
+.lg-surface[data-radius='pill'] {
+  --lg-radius: var(--lg-radius-pill);
+}
+
+/* ---- Interactivity -----------------------------------------------------
+ *
+ * Hover thickens the tint and deepens the blur very slightly; press pushes the
+ * element a fraction of a pixel toward the surface and collapses the ambient
+ * shadow, which is what sells contact. The translate is sub-pixel on purpose --
+ * anything larger looks like the element is jumping rather than depressing. */
+
+.lg-surface[data-interactive='true'] {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lg-surface[data-interactive='true']:hover:not([aria-disabled='true']) {
+  --lg-tint-alpha: 0.16;
+  --lg-blur: 24px;
+  --lg-noise-opacity: 0.045;
+}
+
+.lg-surface[data-interactive='true']:active:not([aria-disabled='true']) {
+  --lg-tint-alpha: 0.2;
+  transform: translateY(0.5px) scale(0.994);
+  box-shadow: var(--lg-inset), var(--lg-shadow-contact);
+  transition-duration: var(--lg-dur-instant);
+}
+
+.lg-surface[aria-disabled='true'],
+.lg-surface:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* ---- Focus -------------------------------------------------------------
+ *
+ * One ring for the whole library. It replaces the shadow stack rather than
+ * appending to it, because a ring competing with an ambient shadow reads as
+ * blurry at exactly the moment the user most needs to see where they are. */
+
+.lg-focusable:focus-visible,
+.lg-surface:focus-visible {
+  outline: none;
+  box-shadow: var(--lg-inset), var(--lg-shadow), var(--lg-focus-ring);
+}
+
+.lg-focusable:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ---- Fallbacks ---------------------------------------------------------
+ *
+ * Without backdrop-filter the panel is a transparent hole and any text on it is
+ * illegible, so the fallback trades the effect for an opaque-enough tint. The
+ * rim and noise still run, which keeps it recognisably the same component. */
+
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .lg-surface {
+    --lg-tint-alpha: 0.82;
+    --lg-tint-light: 16%;
+  }
+
+  :where(.lg-theme-light) .lg-surface,
+  :where([data-lg-contrast='dark-fg']) .lg-surface {
+    --lg-tint-alpha: 0.86;
+    --lg-tint-light: 94%;
+  }
+}
+
+/* ---- Reduced motion -----------------------------------------------------
+ *
+ * Transitions are cut to a near-instant crossfade rather than to zero: keeping
+ * a few frames avoids the harsh state-popping that a hard `none` produces,
+ * while removing all perceptible movement. Transforms are dropped outright. */
+
+@media (prefers-reduced-motion: reduce) {
+  .lg-surface,
+  .lg-surface::after {
+    transition-duration: 1ms;
+  }
+
+  .lg-surface[data-interactive='true']:active:not([aria-disabled='true']) {
+    transform: none;
+  }
+}

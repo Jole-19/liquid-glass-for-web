@@ -1,0 +1,194 @@
+/**
+ * Input.
+ *
+ * `.lg-field__box` inverts the surface lighting to make the glass read as
+ * recessed. It does this by overriding `--lg-inset`, so the change still flows
+ * from the same tokens everything else uses -- switch `--lg-light-angle` and
+ * the field's highlight moves with every other component's.
+ */
+
+.lg-field {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--lg-space-2);
+  font-family: var(--lg-font);
+  min-width: 0;
+}
+
+.lg-field[data-block='true'] {
+  display: flex;
+  width: 100%;
+}
+
+.lg-field__label {
+  font-size: var(--lg-text-sm);
+  font-weight: 500;
+  color: var(--lg-fg-muted);
+  letter-spacing: -0.005em;
+}
+
+.lg-field__required {
+  margin-left: 2px;
+  color: var(--lg-danger);
+}
+
+.lg-field__box {
+  display: flex;
+  align-items: center;
+  gap: var(--lg-field-gap);
+
+  height: var(--lg-field-height);
+  padding-inline: var(--lg-field-padding);
+  border-radius: var(--lg-radius-sm);
+
+  /* Recessed: specular on the bottom edge, shadow cast down from the top. */
+  --lg-tint-alpha: 0.06;
+  --lg-inset:
+    inset 0 1px 2px hsl(var(--lg-tint-hue) 30% 8% / 0.28),
+    inset 0 -1px 0 0 hsl(0 0% 100% / 0.16);
+  --lg-rim-gradient: linear-gradient(
+    var(--lg-light-angle),
+    hsl(0 0% 100% / 0.06),
+    hsl(0 0% 100% / 0.16)
+  );
+  --lg-noise-opacity: 0.02;
+
+  transition:
+    box-shadow var(--lg-dur-fast) var(--lg-ease-out),
+    --lg-tint-alpha var(--lg-dur-fast) var(--lg-ease-out);
+}
+
+.lg-field__box:hover {
+  --lg-tint-alpha: 0.09;
+}
+
+/* The ring lives on the box because the box is what the user sees as "the
+ * field"; putting `:focus-visible` styling on the inner input would draw a
+ * rectangle inside a rectangle. `:focus-within` rather than `:focus-visible`
+ * is deliberate -- a text field being focused by click should show it, unlike
+ * a button. */
+.lg-field__box:focus-within {
+  --lg-tint-alpha: 0.1;
+  box-shadow: var(--lg-inset), var(--lg-focus-ring);
+}
+
+.lg-field__input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+
+  background: none;
+  border: 0;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+
+  font-family: inherit;
+  font-size: var(--lg-field-text);
+  color: var(--lg-fg);
+  letter-spacing: -0.005em;
+}
+
+.lg-field__input::placeholder {
+  color: var(--lg-fg-subtle);
+}
+
+/* Chrome paints autofilled fields an opaque yellow, which obliterates the
+ * glass. There is no property to disable it, so the standard workaround is an
+ * absurdly long inset shadow used as a fill, plus text-fill-color for the
+ * text. */
+.lg-field__input:-webkit-autofill,
+.lg-field__input:-webkit-autofill:hover,
+.lg-field__input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--lg-fg);
+  -webkit-box-shadow: 0 0 0 1000px hsl(var(--lg-tint-hue) 30% 18% / 0.9) inset;
+  caret-color: var(--lg-fg);
+  transition: background-color 100000s ease 0s;
+}
+
+.lg-field__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--lg-field-icon);
+  height: var(--lg-field-icon);
+  color: var(--lg-fg-subtle);
+}
+
+.lg-field__icon > svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.lg-field__message {
+  margin: 0;
+  font-size: var(--lg-text-sm);
+  line-height: 1.4;
+  color: var(--lg-fg-subtle);
+}
+
+/* ---- Sizes -------------------------------------------------------------- */
+
+.lg-field[data-size='sm'] {
+  --lg-field-height: 30px;
+  --lg-field-padding: 10px;
+  --lg-field-gap: 6px;
+  --lg-field-text: var(--lg-text-sm);
+  --lg-field-icon: 14px;
+}
+
+.lg-field[data-size='md'] {
+  --lg-field-height: 38px;
+  --lg-field-padding: 12px;
+  --lg-field-gap: 8px;
+  --lg-field-text: var(--lg-text-base);
+  --lg-field-icon: 16px;
+}
+
+.lg-field[data-size='lg'] {
+  --lg-field-height: 46px;
+  --lg-field-padding: 16px;
+  --lg-field-gap: 10px;
+  --lg-field-text: var(--lg-text-lg);
+  --lg-field-icon: 18px;
+}
+
+/* ---- States ------------------------------------------------------------- */
+
+.lg-field[data-invalid='true'] .lg-field__box {
+  --lg-rim-gradient: linear-gradient(
+    var(--lg-light-angle),
+    hsl(2 78% 62% / 0.5),
+    hsl(2 78% 62% / 0.8)
+  );
+  --lg-tint: var(--lg-danger-soft);
+}
+
+.lg-field[data-invalid='true'] .lg-field__box:focus-within {
+  box-shadow:
+    var(--lg-inset),
+    0 0 0 var(--lg-focus-width) hsl(0 0% 4% / 0.55),
+    0 0 0 calc(var(--lg-focus-width) * 2) var(--lg-danger);
+}
+
+.lg-field[data-invalid='true'] .lg-field__message {
+  color: var(--lg-danger);
+}
+
+.lg-field[data-disabled='true'] {
+  opacity: 0.45;
+}
+
+.lg-field[data-disabled='true'] .lg-field__input {
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lg-field__box {
+    transition-duration: 1ms;
+  }
+}

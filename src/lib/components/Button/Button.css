@@ -1,0 +1,195 @@
+/**
+ * Button.
+ *
+ * Everything here sits on top of `.lg-surface`; the variants are token
+ * overrides rather than fresh backgrounds, so a button and a card next to each
+ * other are demonstrably the same material at different tints.
+ */
+
+.lg-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lg-button-gap);
+
+  height: var(--lg-button-height);
+  padding-inline: var(--lg-button-padding);
+
+  font-family: inherit;
+  font-size: var(--lg-button-text);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.005em;
+  text-decoration: none;
+  white-space: nowrap;
+
+  /* Anchors and buttons disagree on nearly every inherited box property. */
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* ---- Sizes -------------------------------------------------------------- */
+
+.lg-button[data-size='sm'] {
+  --lg-button-height: 30px;
+  --lg-button-padding: 12px;
+  --lg-button-gap: 6px;
+  --lg-button-text: var(--lg-text-sm);
+  --lg-button-icon: 14px;
+}
+
+.lg-button[data-size='md'] {
+  --lg-button-height: 38px;
+  --lg-button-padding: 16px;
+  --lg-button-gap: 8px;
+  --lg-button-text: var(--lg-text-base);
+  --lg-button-icon: 16px;
+}
+
+.lg-button[data-size='lg'] {
+  --lg-button-height: 46px;
+  --lg-button-padding: 22px;
+  --lg-button-gap: 10px;
+  --lg-button-text: var(--lg-text-lg);
+  --lg-button-icon: 18px;
+}
+
+.lg-button[data-icon-only='true'] {
+  width: var(--lg-button-height);
+  padding-inline: 0;
+}
+
+.lg-button[data-block='true'] {
+  display: flex;
+  width: 100%;
+}
+
+/* ---- Variants -----------------------------------------------------------
+ *
+ * `primary` tints the glass with the accent instead of filling it. A solid fill
+ * would read as a normal button that happens to be sitting on a glass page; the
+ * point is that the accent is *in* the material, so the backdrop still shows
+ * through and the rim still catches light. */
+
+.lg-button[data-variant='primary'] {
+  --lg-tint: hsl(var(--lg-accent-hue) 90% 62% / 0.42);
+  --lg-tint-alpha: 0.42;
+  --lg-rim-bright: hsl(var(--lg-accent-hue) 100% 88% / 0.9);
+  --lg-specular: hsl(var(--lg-accent-hue) 100% 92% / 0.55);
+  --lg-shadow-color: var(--lg-accent-hue) 70% 20%;
+  color: hsl(0 0% 100%);
+  font-weight: 550;
+}
+
+.lg-button[data-variant='primary']:hover:not([aria-disabled='true']) {
+  --lg-tint: hsl(var(--lg-accent-hue) 92% 66% / 0.56);
+}
+
+.lg-button[data-variant='primary']:active:not([aria-disabled='true']) {
+  --lg-tint: hsl(var(--lg-accent-hue) 92% 58% / 0.62);
+}
+
+.lg-button[data-variant='secondary'] {
+  color: var(--lg-fg);
+}
+
+/* `ghost` starts as almost nothing and materialises on hover. It keeps the rim
+ * at very low alpha rather than removing it, so the hit area is still findable
+ * against a busy backdrop. */
+.lg-button[data-variant='ghost'] {
+  --lg-tint-alpha: 0;
+  --lg-rim-bright: hsl(0 0% 100% / 0.14);
+  --lg-rim-mid: hsl(0 0% 100% / 0.04);
+  --lg-rim-dark: hsl(0 0% 100% / 0.02);
+  --lg-specular: transparent;
+  --lg-inner-shadow: transparent;
+  --lg-noise-opacity: 0;
+  color: var(--lg-fg-muted);
+}
+
+.lg-button[data-variant='ghost']:hover:not([aria-disabled='true']) {
+  --lg-tint-alpha: 0.12;
+  --lg-rim-bright: hsl(0 0% 100% / 0.4);
+  --lg-noise-opacity: 0.03;
+  color: var(--lg-fg);
+}
+
+/* ---- Icons -------------------------------------------------------------- */
+
+.lg-button__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--lg-button-icon);
+  height: var(--lg-button-icon);
+}
+
+.lg-button__icon > svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.lg-button__label {
+  display: inline-block;
+}
+
+/* ---- Loading ------------------------------------------------------------
+ *
+ * The label is hidden with opacity, not removed, so the button keeps its width
+ * and the layout around it does not jump on every submit. */
+
+.lg-button[data-loading='true'] .lg-button__label,
+.lg-button[data-loading='true'] .lg-button__icon {
+  opacity: 0;
+}
+
+.lg-button[data-loading='true'] {
+  cursor: progress;
+}
+
+.lg-button__spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  width: var(--lg-button-icon);
+  height: var(--lg-button-icon);
+  margin: calc(var(--lg-button-icon) / -2) 0 0 calc(var(--lg-button-icon) / -2);
+
+  border-radius: 50%;
+  border: 2px solid currentColor;
+  /* One transparent quadrant is what makes the rotation readable; a full ring
+   * spinning looks static. */
+  border-top-color: transparent;
+  opacity: 0.85;
+
+  animation: lg-spin 620ms linear infinite;
+}
+
+@keyframes lg-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Still needs to communicate "working", so it pulses in place instead of
+   * spinning -- removing the indicator entirely would be worse than the motion. */
+  .lg-button__spinner {
+    animation: lg-pulse 1.2s var(--lg-ease-in-out) infinite;
+    border-top-color: currentColor;
+  }
+}
+
+@keyframes lg-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}

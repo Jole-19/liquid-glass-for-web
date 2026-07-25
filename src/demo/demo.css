@@ -1,0 +1,159 @@
+/**
+ * Showcase-only styles. Nothing here ships in the library.
+ *
+ * The backdrop is doing real work: glass is only judgeable over a busy,
+ * colourful, high-contrast background. A flat grey page would hide every flaw
+ * the material has.
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: var(--lg-font);
+  color: var(--lg-fg);
+  background-color: #08080b;
+  -webkit-font-smoothing: antialiased;
+}
+
+.demo-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background-color: #08080b;
+}
+
+/* Layered conic and radial gradients rather than a photo, so the demo has no
+ * binary assets and no licensing question, while still giving the glass
+ * saturated colour and hard edges to refract. */
+.demo-backdrop::before {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(
+      42rem 42rem at 18% 22%,
+      hsl(268 90% 58% / 0.75),
+      transparent 60%
+    ),
+    radial-gradient(
+      38rem 38rem at 82% 18%,
+      hsl(190 95% 52% / 0.6),
+      transparent 62%
+    ),
+    radial-gradient(
+      46rem 46rem at 68% 82%,
+      hsl(330 92% 56% / 0.62),
+      transparent 60%
+    ),
+    radial-gradient(
+      34rem 34rem at 30% 88%,
+      hsl(38 96% 56% / 0.5),
+      transparent 58%
+    ),
+    conic-gradient(
+      from 210deg at 50% 50%,
+      hsl(220 80% 12%),
+      hsl(280 70% 14%),
+      hsl(200 80% 10%),
+      hsl(220 80% 12%)
+    );
+  filter: saturate(120%);
+  animation: demo-drift 48s var(--lg-ease-in-out) infinite alternate;
+}
+
+@keyframes demo-drift {
+  from {
+    transform: translate3d(-2%, -1%, 0) scale(1.04);
+  }
+  to {
+    transform: translate3d(2%, 2%, 0) scale(1.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-backdrop::before {
+    animation: none;
+  }
+}
+
+.demo-page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: var(--lg-space-6) var(--lg-space-5) 96px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--lg-space-6);
+}
+
+.demo-hero {
+  padding: 56px 0 24px;
+}
+
+.demo-hero h1 {
+  margin: 0 0 var(--lg-space-3);
+  font-size: clamp(32px, 6vw, 56px);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.demo-hero p {
+  margin: 0;
+  max-width: 56ch;
+  font-size: var(--lg-text-lg);
+  line-height: 1.6;
+  color: var(--lg-fg-muted);
+}
+
+.demo-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lg-space-4);
+}
+
+.demo-section > h2 {
+  margin: 0;
+  font-size: var(--lg-text-sm);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lg-fg-subtle);
+}
+
+.demo-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--lg-space-4);
+}
+
+.demo-row--top {
+  align-items: flex-start;
+}
+
+.demo-panel {
+  padding: var(--lg-space-5);
+  max-width: 60ch;
+  line-height: 1.6;
+  color: var(--lg-fg-muted);
+}
+
+.demo-panel code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.9em;
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: hsl(0 0% 100% / 0.1);
+  color: var(--lg-fg);
+}

@@ -1,0 +1,234 @@
+/**
+ * Design tokens.
+ *
+ * Everything visual in the library resolves through these custom properties, so
+ * a consumer can retheme the whole material by overriding a handful of values on
+ * :root (or on any subtree -- they cascade).
+ *
+ * The naming is `--lg-<group>-<name>`. Tokens that a component is expected to
+ * override locally are read through an indirection (e.g. `--lg-tint` defaults
+ * from `--lg-tint-base`) so a component can set the near token without
+ * clobbering the theme.
+ */
+
+:where(:root),
+:where(.lg-theme) {
+  /* ---- Light direction --------------------------------------------------
+   * A single source of truth for where the light comes from. Every rim,
+   * specular and shadow in the library derives its geometry from these two
+   * numbers, which is what keeps a page of components looking like one
+   * physical material rather than a pile of unrelated gradients.
+   *
+   * Default is top-left, matching how nearly every OS renders window chrome.
+   */
+  --lg-light-angle: 145deg; /* direction the light travels, for gradients */
+  --lg-light-x: -1; /* unitless, -1..1, feeds shadow offsets */
+  --lg-light-y: -1;
+
+  /* ---- Backdrop filter --------------------------------------------------
+   * Saturation is the important one. `blur()` alone gives the flat, grey,
+   * "frosted plastic" look; pushing saturation past 100% is what makes the
+   * colour behind the panel bloom through it like real glass.
+   */
+  --lg-blur: 20px;
+  --lg-saturate: 180%;
+  --lg-brightness: 105%;
+  --lg-backdrop: blur(var(--lg-blur)) saturate(var(--lg-saturate))
+    brightness(var(--lg-brightness));
+
+  /* ---- Tint -------------------------------------------------------------
+   * The glass body itself. Kept very low alpha: the backdrop filter is doing
+   * the work, the tint only biases the hue and adds body.
+   */
+  --lg-tint-hue: 220;
+  --lg-tint-sat: 40%;
+  --lg-tint-light: 90%;
+  --lg-tint-alpha: 0.1;
+  --lg-tint-base: hsl(
+    var(--lg-tint-hue) var(--lg-tint-sat) var(--lg-tint-light) /
+      var(--lg-tint-alpha)
+  );
+  --lg-tint: var(--lg-tint-base);
+
+  /* Gradient across the body, brighter on the lit edge. Subtle -- this is the
+   * difference between "a translucent rectangle" and "a pane with a surface". */
+  --lg-body-gradient: linear-gradient(
+    var(--lg-light-angle),
+    hsl(0 0% 100% / 0.12),
+    hsl(0 0% 100% / 0.02) 42%,
+    hsl(0 0% 100% / 0) 100%
+  );
+
+  /* ---- Rim light --------------------------------------------------------
+   * Drawn as a masked pseudo-element gradient rather than a uniform border.
+   * A real pane catches light along the edge facing the source and goes nearly
+   * dark on the opposite edge; a flat 1px rgba border reads as a sticker.
+   */
+  --lg-rim-width: 1px;
+  --lg-rim-bright: hsl(0 0% 100% / 0.55);
+  --lg-rim-mid: hsl(0 0% 100% / 0.14);
+  --lg-rim-dark: hsl(0 0% 100% / 0.04);
+  --lg-rim-gradient: linear-gradient(
+    var(--lg-light-angle),
+    var(--lg-rim-bright),
+    var(--lg-rim-mid) 34%,
+    var(--lg-rim-dark) 62%,
+    var(--lg-rim-bright) 100%
+  );
+
+  /* Chromatic fringe. Two complementary hues bled into the rim at very low
+   * alpha, faking the dispersion you get at the edge of a real bevel. It should
+   * never be consciously visible -- if you can name the colour, it is too high. */
+  --lg-fringe-alpha: 0.28;
+  --lg-fringe-warm: hsl(28 100% 70% / var(--lg-fringe-alpha));
+  --lg-fringe-cool: hsl(205 100% 74% / var(--lg-fringe-alpha));
+  --lg-fringe-gradient: linear-gradient(
+    var(--lg-light-angle),
+    var(--lg-fringe-cool),
+    transparent 30%,
+    transparent 70%,
+    var(--lg-fringe-warm)
+  );
+
+  /* ---- Specular / thickness --------------------------------------------
+   * An inset highlight on the lit edge plus a faint inset shadow opposite,
+   * which is what gives the panel apparent depth rather than zero thickness.
+   */
+  --lg-specular: hsl(0 0% 100% / 0.4);
+  --lg-specular-blur: 1px;
+  --lg-inner-shadow: hsl(var(--lg-tint-hue) 30% 10% / 0.18);
+  --lg-inner-shadow-blur: 12px;
+  --lg-inset:
+    inset 0 var(--lg-rim-width) var(--lg-specular-blur) 0 var(--lg-specular),
+    inset 0 calc(-1 * var(--lg-inner-shadow-blur) / 2)
+      var(--lg-inner-shadow-blur) calc(-1 * var(--lg-inner-shadow-blur) / 2)
+      var(--lg-inner-shadow);
+
+  /* ---- Microtexture -----------------------------------------------------
+   * Fractal noise over the surface. Real glass is never a perfectly smooth
+   * gradient, and the banding you get from a clean gradient is the single
+   * loudest "this is CSS" tell. 2-4% is the usable range.
+   */
+  --lg-noise-opacity: 0.035;
+  --lg-noise-size: 180px;
+  /* Inline so the library never needs a second network request for an asset
+   * that is 300 bytes of markup. baseFrequency 0.8 lands in the grain range;
+   * lower values read as clouds, higher as flat grey. */
+  --lg-noise-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  /* ---- Shadows ----------------------------------------------------------
+   * Two layers: a tight contact shadow that anchors the element to the surface
+   * beneath it, and a wide ambient one for the room light. A single soft blur
+   * reads as a drop shadow from 2010.
+   */
+  --lg-shadow-color: var(--lg-tint-hue) 40% 6%;
+  --lg-shadow-contact: 0 1px 2px hsl(var(--lg-shadow-color) / 0.16),
+    0 2px 6px hsl(var(--lg-shadow-color) / 0.1);
+  --lg-shadow-ambient: 0 12px 32px -8px hsl(var(--lg-shadow-color) / 0.22);
+  --lg-shadow: var(--lg-shadow-contact), var(--lg-shadow-ambient);
+
+  --lg-shadow-raised: 0 1px 2px hsl(var(--lg-shadow-color) / 0.18),
+    0 4px 10px hsl(var(--lg-shadow-color) / 0.12),
+    0 24px 56px -12px hsl(var(--lg-shadow-color) / 0.3);
+
+  --lg-shadow-overlay: 0 2px 4px hsl(var(--lg-shadow-color) / 0.2),
+    0 8px 20px hsl(var(--lg-shadow-color) / 0.16),
+    0 48px 96px -24px hsl(var(--lg-shadow-color) / 0.42);
+
+  /* ---- Radii ------------------------------------------------------------ */
+  --lg-radius-sm: 8px;
+  --lg-radius-md: 14px;
+  --lg-radius-lg: 20px;
+  --lg-radius-xl: 28px;
+  --lg-radius-pill: 999px;
+  --lg-radius: var(--lg-radius-md);
+
+  /* ---- Foreground -------------------------------------------------------
+   * Overridden at runtime by useAdaptiveContrast when the backdrop luminance
+   * demands it. Defaults assume glass over a mid-to-dark backdrop, which is
+   * where glassmorphism is usually deployed.
+   */
+  --lg-fg: hsl(0 0% 100% / 0.94);
+  --lg-fg-muted: hsl(0 0% 100% / 0.66);
+  --lg-fg-subtle: hsl(0 0% 100% / 0.42);
+
+  /* ---- Accent ----------------------------------------------------------- */
+  --lg-accent-hue: 220;
+  --lg-accent: hsl(var(--lg-accent-hue) 90% 62%);
+  --lg-accent-soft: hsl(var(--lg-accent-hue) 90% 62% / 0.22);
+  --lg-accent-contrast: hsl(var(--lg-accent-hue) 60% 12%);
+
+  --lg-danger: hsl(2 78% 62%);
+  --lg-danger-soft: hsl(2 78% 62% / 0.2);
+
+  /* ---- Focus ------------------------------------------------------------
+   * One ring treatment across every interactive component. Drawn with two
+   * layers so it stays visible over both light and dark backdrops.
+   */
+  --lg-focus-width: 2px;
+  --lg-focus-ring: 0 0 0 var(--lg-focus-width) hsl(0 0% 4% / 0.55),
+    0 0 0 calc(var(--lg-focus-width) * 2) var(--lg-accent);
+
+  /* ---- Motion -----------------------------------------------------------
+   * `--lg-ease-spring` overshoots slightly; it is the house curve for anything
+   * that should feel physical (press release, panel entry). `--lg-ease-out` is
+   * for things that should not draw attention (hover tint, opacity).
+   */
+  --lg-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --lg-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --lg-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --lg-dur-instant: 90ms;
+  --lg-dur-fast: 160ms;
+  --lg-dur-base: 240ms;
+  --lg-dur-slow: 420ms;
+
+  /* ---- Spacing / type ---------------------------------------------------
+   * Deliberately minimal. The library is not a design system; these exist only
+   * so component internals share a rhythm.
+   */
+  --lg-space-1: 4px;
+  --lg-space-2: 8px;
+  --lg-space-3: 12px;
+  --lg-space-4: 16px;
+  --lg-space-5: 24px;
+  --lg-space-6: 32px;
+
+  --lg-font: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', system-ui,
+    sans-serif;
+  --lg-text-sm: 13px;
+  --lg-text-base: 14px;
+  --lg-text-lg: 16px;
+
+  --lg-z-overlay: 1000;
+  --lg-z-popover: 1100;
+}
+
+/**
+ * Light-backdrop theme.
+ *
+ * Applied by useAdaptiveContrast (as `data-lg-contrast="dark-fg"`) or set
+ * manually via `.lg-theme-light`. Glass over a bright photo needs dark text and
+ * a *darker* tint -- keeping a white tint over white just dissolves the panel.
+ */
+:where(.lg-theme-light),
+:where([data-lg-contrast='dark-fg']) {
+  --lg-tint-light: 20%;
+  --lg-tint-alpha: 0.08;
+  --lg-brightness: 102%;
+
+  --lg-rim-bright: hsl(0 0% 100% / 0.7);
+  --lg-rim-mid: hsl(var(--lg-tint-hue) 20% 20% / 0.1);
+  --lg-rim-dark: hsl(var(--lg-tint-hue) 20% 20% / 0.16);
+
+  --lg-specular: hsl(0 0% 100% / 0.75);
+  --lg-inner-shadow: hsl(var(--lg-tint-hue) 30% 10% / 0.1);
+
+  --lg-fg: hsl(var(--lg-tint-hue) 30% 10% / 0.94);
+  --lg-fg-muted: hsl(var(--lg-tint-hue) 20% 16% / 0.66);
+  --lg-fg-subtle: hsl(var(--lg-tint-hue) 20% 20% / 0.44);
+
+  --lg-accent-contrast: hsl(0 0% 100%);
+  --lg-focus-ring: 0 0 0 var(--lg-focus-width) hsl(0 0% 100% / 0.8),
+    0 0 0 calc(var(--lg-focus-width) * 2) var(--lg-accent);
+}

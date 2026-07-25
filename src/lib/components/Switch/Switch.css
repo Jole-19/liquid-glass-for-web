@@ -1,0 +1,152 @@
+/**
+ * Switch.
+ *
+ * The track is recessed glass, the thumb is a raised pane sliding inside it.
+ * Two different lighting treatments on the same material is what makes the
+ * thumb read as a separate object rather than a coloured blob.
+ */
+
+.lg-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--lg-space-3);
+  font-family: var(--lg-font);
+  font-size: var(--lg-switch-text);
+}
+
+.lg-switch__label {
+  color: var(--lg-fg);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  letter-spacing: -0.005em;
+}
+
+.lg-switch__track {
+  position: relative;
+  flex: none;
+  display: block;
+  width: var(--lg-switch-width);
+  height: var(--lg-switch-height);
+  padding: 0;
+  margin: 0;
+  border-radius: var(--lg-radius-pill);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+
+  /* Recessed, same inversion the Input uses. */
+  --lg-tint-alpha: 0.08;
+  --lg-inset:
+    inset 0 1px 2px hsl(var(--lg-tint-hue) 30% 8% / 0.3),
+    inset 0 -1px 0 0 hsl(0 0% 100% / 0.14);
+  --lg-noise-opacity: 0.02;
+
+  transition:
+    background-color var(--lg-dur-base) var(--lg-ease-out),
+    box-shadow var(--lg-dur-fast) var(--lg-ease-out);
+}
+
+.lg-switch__thumb {
+  position: absolute;
+  top: var(--lg-switch-inset);
+  left: var(--lg-switch-inset);
+  z-index: 3;
+
+  width: var(--lg-switch-thumb);
+  height: var(--lg-switch-thumb);
+  border-radius: 50%;
+
+  background-image: linear-gradient(
+    var(--lg-light-angle),
+    hsl(0 0% 100% / 0.98),
+    hsl(0 0% 100% / 0.82)
+  );
+  box-shadow:
+    inset 0 1px 0 hsl(0 0% 100%),
+    inset 0 -1px 1px hsl(var(--lg-tint-hue) 30% 20% / 0.2),
+    0 1px 2px hsl(var(--lg-tint-hue) 40% 6% / 0.35),
+    0 2px 6px hsl(var(--lg-tint-hue) 40% 6% / 0.2);
+
+  transition: transform var(--lg-dur-base) var(--lg-ease-spring);
+}
+
+/* Translating rather than animating `left` keeps the whole thing on the
+ * compositor, and the spring easing gives the thumb a small overshoot that
+ * reads as physical weight. */
+.lg-switch[data-checked='true'] .lg-switch__thumb {
+  transform: translateX(
+    calc(var(--lg-switch-width) - var(--lg-switch-thumb) - var(--lg-switch-inset) * 2)
+  );
+}
+
+.lg-switch[data-checked='true'] .lg-switch__track {
+  --lg-tint: hsl(var(--lg-accent-hue) 90% 58% / 0.72);
+  --lg-inset:
+    inset 0 1px 2px hsl(var(--lg-accent-hue) 60% 20% / 0.34),
+    inset 0 -1px 0 0 hsl(var(--lg-accent-hue) 100% 90% / 0.3);
+}
+
+/* The press squashes the thumb horizontally, the way a physical toggle deforms
+ * under a thumb. It is a small detail that does a lot of work. */
+.lg-switch__track:active:not(:disabled) .lg-switch__thumb {
+  width: calc(var(--lg-switch-thumb) * 1.14);
+  border-radius: var(--lg-radius-pill);
+  transition-duration: var(--lg-dur-instant);
+}
+
+.lg-switch[data-checked='true'] .lg-switch__track:active:not(:disabled) .lg-switch__thumb {
+  transform: translateX(
+    calc(
+      var(--lg-switch-width) - var(--lg-switch-thumb) * 1.14 -
+        var(--lg-switch-inset) * 2
+    )
+  );
+}
+
+.lg-switch[data-disabled='true'] {
+  opacity: 0.45;
+}
+
+.lg-switch[data-disabled='true'] .lg-switch__label,
+.lg-switch__track:disabled {
+  cursor: not-allowed;
+}
+
+/* ---- Sizes -------------------------------------------------------------- */
+
+.lg-switch[data-size='sm'] {
+  --lg-switch-width: 34px;
+  --lg-switch-height: 20px;
+  --lg-switch-thumb: 14px;
+  --lg-switch-inset: 3px;
+  --lg-switch-text: var(--lg-text-sm);
+}
+
+.lg-switch[data-size='md'] {
+  --lg-switch-width: 44px;
+  --lg-switch-height: 26px;
+  --lg-switch-thumb: 20px;
+  --lg-switch-inset: 3px;
+  --lg-switch-text: var(--lg-text-base);
+}
+
+.lg-switch[data-size='lg'] {
+  --lg-switch-width: 56px;
+  --lg-switch-height: 32px;
+  --lg-switch-thumb: 25px;
+  --lg-switch-inset: 3.5px;
+  --lg-switch-text: var(--lg-text-lg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lg-switch__thumb,
+  .lg-switch__track {
+    transition-duration: 1ms;
+  }
+
+  .lg-switch__track:active:not(:disabled) .lg-switch__thumb {
+    width: var(--lg-switch-thumb);
+  }
+}

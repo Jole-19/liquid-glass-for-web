@@ -28,7 +28,17 @@ export default defineConfig({
       fileName: (format) => `liquid-glass.${format === 'es' ? 'js' : 'cjs'}`,
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'react-dom/client', 'react/jsx-runtime'],
+      external: [
+        'react',
+        'react-dom',
+        'react-dom/client',
+        'react/jsx-runtime',
+        // Optional peer dependency, reached only through a dynamic import in
+        // the WebGL tier. Bundling it would put ~100 kB of shader code into
+        // the main entry for every consumer, including the majority who never
+        // touch Tier 2.
+        '@ybouane/liquidglass',
+      ],
       output: {
         assetFileNames: 'liquid-glass.[ext]',
       },

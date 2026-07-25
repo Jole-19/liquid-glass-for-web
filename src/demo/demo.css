@@ -105,6 +105,74 @@ body {
   max-width: 420px;
 }
 
+.demo-note {
+  margin: 0;
+  max-width: 68ch;
+  font-size: var(--lg-text-sm);
+  line-height: 1.6;
+  color: var(--lg-fg-muted);
+}
+
+/* The stage is the renderer's root, so only its direct children participate:
+ * the canvas backdrop and the two panels. */
+.demo-stage {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  aspect-ratio: 720 / 446;
+  border-radius: var(--lg-radius-lg);
+  overflow: hidden;
+}
+
+.demo-stage__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.demo-stage__tier1,
+.demo-stage__tier2 {
+  position: absolute;
+  top: 22%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+  justify-content: center;
+
+  width: 170px;
+  height: 108px;
+  padding: var(--lg-space-4);
+
+  font-size: var(--lg-text-sm);
+  color: var(--lg-fg);
+}
+
+.demo-stage__tier1 strong,
+.demo-stage__tier2 strong {
+  font-size: var(--lg-text-base);
+  font-weight: 600;
+}
+
+.demo-stage__tier1 span,
+.demo-stage__tier2 span {
+  color: var(--lg-fg-muted);
+}
+
+.demo-stage__tier1 {
+  left: 8%;
+}
+
+.demo-stage__tier2 {
+  left: 52%;
+  cursor: grab;
+}
+
+.demo-stage__tier2:active {
+  cursor: grabbing;
+}
+
 .demo-hero h1 {
   margin: 0 0 var(--lg-space-3);
   font-size: clamp(32px, 6vw, 56px);

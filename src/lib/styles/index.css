@@ -25,3 +25,7 @@
 @import '../components/Switch/Switch.css';
 @import '../components/Tabs/Tabs.css';
 @import '../components/Tooltip/Tooltip.css';
+
+/* Last, because it takes the CSS material back off the Tier 2 panels once the
+ * renderer is live, and needs to win against the component rules above. */
+@import '../webgl/GlassStage.css';

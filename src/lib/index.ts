@@ -84,6 +84,18 @@ export type {
   Placement,
 } from './primitives/useAnchoredPosition';
 
+export { GlassStage, GlassPanel, useGlassStage } from './webgl';
+export type {
+  GlassStageProps,
+  GlassPanelProps,
+  RefractionConfig,
+  RefractionInstance,
+  RefractionStatus,
+  UseLiquidGlassOptions,
+  UseLiquidGlassResult,
+} from './webgl';
+export { useLiquidGlass } from './webgl';
+
 export { cx } from './utils/cx';
 export type { ClassValue } from './utils/cx';
 export type {

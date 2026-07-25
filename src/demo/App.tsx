@@ -24,6 +24,7 @@ import {
   Tooltip,
 } from '../lib';
 import { IconArrowRight, IconSearch, IconSparkle } from './icons';
+import { Refraction } from './Refraction';
 
 export function App() {
   const [loading, setLoading] = useState(false);
@@ -117,6 +118,8 @@ export function App() {
             <Button size="lg">Large</Button>
           </div>
         </section>
+
+        <Refraction />
 
         <section className="demo-section">
           <h2>Card</h2>

@@ -1,0 +1,56 @@
+/**
+ * Tier 2.
+ *
+ * Panels carry the full `.lg-surface` material and only give it up once the
+ * renderer reports `ready`. That ordering is what makes the fallback work: with
+ * no package, no WebGL, or a failed compile, the panel is simply a Tier 1
+ * surface, and nobody sees a transparent rectangle.
+ */
+
+.lg-stage {
+  position: relative;
+  isolation: isolate;
+}
+
+.lg-glass-panel {
+  position: relative;
+  font-family: var(--lg-font);
+  color: var(--lg-fg);
+}
+
+/* The renderer injects its own canvas as a child of the panel and positions it
+ * absolutely, so the panel has to be a positioned containing block. It sets
+ * this itself for `static` elements, but doing it here avoids a layout shift on
+ * the frame it takes effect. */
+.lg-stage[data-refraction='loading'] .lg-glass-panel,
+.lg-stage[data-refraction='ready'] .lg-glass-panel {
+  position: relative;
+}
+
+/* Hand the material over to the shader.
+ *
+ * Every one of these has a WebGL equivalent that the renderer is now drawing:
+ * `backdrop-filter` becomes real refraction, the rim becomes `edgeHighlight`
+ * and `fresnel`, the specular becomes `specular`, and the box-shadow becomes
+ * `shadowOpacity` / `shadowSpread`. Leaving them on would composite the two
+ * materials on top of each other. */
+.lg-stage[data-refraction='ready'] .lg-glass-panel {
+  background-color: transparent;
+  background-image: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+.lg-stage[data-refraction='ready'] .lg-glass-panel::before,
+.lg-stage[data-refraction='ready'] .lg-glass-panel::after {
+  content: none;
+}
+
+/* Panel content paints above the injected shader canvas. The renderer captures
+ * this content separately and composites it, so it must stay visible rather
+ * than being hidden behind the canvas. */
+.lg-glass-panel > * {
+  position: relative;
+  z-index: 1;
+}

@@ -35,6 +35,12 @@ export interface AdaptiveContrastOptions {
   /**
    * Luminance (0-1) above which the backdrop counts as light and the hook
    * switches to dark foreground text.
+   *
+   * Below the 0.5 you might expect, because the measurement is of the raw
+   * backdrop but the text sits on tinted glass over it, and the tint lifts the
+   * composited luminance. Flipping at the midpoint leaves a band where the
+   * backdrop is still nominally dark but the panel is already too bright for
+   * white text.
    */
   threshold?: number;
   /**
@@ -67,7 +73,7 @@ export interface AdaptiveContrastResult {
 
 const DEFAULTS = {
   enabled: true,
-  threshold: 0.55,
+  threshold: 0.42,
   hysteresis: 0.06,
   resolution: 48,
   fallback: 'light-fg' as ContrastMode,

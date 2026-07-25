@@ -18,6 +18,10 @@
 @import './surface.css';
 
 @import '../components/Button/Button.css';
+@import '../components/Card/Card.css';
 @import '../components/Input/Input.css';
+@import '../components/Modal/Modal.css';
+@import '../components/Navbar/Navbar.css';
 @import '../components/Switch/Switch.css';
 @import '../components/Tabs/Tabs.css';
+@import '../components/Tooltip/Tooltip.css';

@@ -1,0 +1,199 @@
+/**
+ * Modal.
+ *
+ * The scrim is itself glass -- a blurred, darkened pane rather than a flat
+ * black wash. That is what keeps the page recognisable behind the dialog
+ * instead of replacing it with a grey rectangle, and it is why this is a
+ * portal rather than a native `<dialog>`: content in the top layer cannot be
+ * sampled by `backdrop-filter`.
+ */
+
+.lg-modal {
+  position: fixed;
+  inset: 0;
+  z-index: var(--lg-z-overlay);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--lg-space-5);
+
+  font-family: var(--lg-font);
+}
+
+.lg-modal__scrim {
+  position: absolute;
+  inset: 0;
+  background-color: hsl(var(--lg-tint-hue) 40% 4% / 0.42);
+  -webkit-backdrop-filter: blur(6px) saturate(120%);
+  backdrop-filter: blur(6px) saturate(120%);
+
+  animation: lg-scrim-in var(--lg-dur-base) var(--lg-ease-out) both;
+}
+
+.lg-modal__scrim[data-state='closed'] {
+  animation: lg-scrim-out var(--lg-dur-fast) var(--lg-ease-out) both;
+}
+
+.lg-modal__panel {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--lg-modal-width);
+  max-height: calc(100dvh - var(--lg-space-6) * 2);
+  padding: var(--lg-space-5);
+
+  /* The dialog is brighter than a resting surface. It has the page's own glass
+   * behind it as well as the scrim, and at the default tint it would read as
+   * murky rather than as a pane floating above everything. */
+  --lg-tint-alpha: 0.16;
+  --lg-blur: 32px;
+  --lg-saturate: 190%;
+
+  outline: none;
+  animation: lg-modal-in var(--lg-dur-base) var(--lg-ease-spring) both;
+}
+
+.lg-modal__panel[data-state='closed'] {
+  animation: lg-modal-out var(--lg-dur-fast) var(--lg-ease-out) both;
+}
+
+.lg-modal[data-size='sm'] {
+  --lg-modal-width: 380px;
+}
+.lg-modal[data-size='md'] {
+  --lg-modal-width: 520px;
+}
+.lg-modal[data-size='lg'] {
+  --lg-modal-width: 760px;
+}
+.lg-modal[data-size='full'] {
+  --lg-modal-width: none;
+}
+
+.lg-modal[data-size='full'] .lg-modal__panel {
+  width: 100%;
+  height: 100%;
+  max-height: none;
+}
+
+.lg-modal__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lg-space-2);
+  flex: none;
+}
+
+.lg-modal__title {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--lg-fg);
+}
+
+.lg-modal__description {
+  margin: 0;
+  font-size: var(--lg-text-base);
+  line-height: 1.55;
+  color: var(--lg-fg-muted);
+}
+
+/* The only scrolling region, so a long dialog keeps its header and footer
+ * pinned instead of scrolling the whole pane off the screen. */
+.lg-modal__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin-top: var(--lg-space-4);
+  font-size: var(--lg-text-base);
+  line-height: 1.6;
+  color: var(--lg-fg-muted);
+}
+
+.lg-modal__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--lg-space-2);
+  flex: none;
+  flex-wrap: wrap;
+  margin-top: var(--lg-space-5);
+}
+
+@keyframes lg-scrim-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lg-scrim-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Rises and scales up very slightly. The scale is small enough to read as the
+ * pane coming toward the viewer rather than as a zoom. */
+@keyframes lg-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes lg-modal-out {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(4px) scale(0.985);
+  }
+}
+
+/* Durations are read from the computed style to schedule the unmount, so these
+ * cannot be `none` -- a zero-duration animation never starts and the component
+ * would fall back to unmounting on the same frame, which is fine, but keeping a
+ * single frame here means the exit path is identical in both cases. */
+@media (prefers-reduced-motion: reduce) {
+  .lg-modal__scrim,
+  .lg-modal__scrim[data-state='closed'],
+  .lg-modal__panel,
+  .lg-modal__panel[data-state='closed'] {
+    animation-duration: 1ms;
+  }
+
+  @keyframes lg-modal-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes lg-modal-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+}

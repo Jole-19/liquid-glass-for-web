@@ -1,0 +1,116 @@
+/**
+ * Card.
+ *
+ * Padding lives on the slots rather than the card, so `CardMedia` can bleed to
+ * the edges while its siblings stay inset without anyone having to cancel a
+ * parent padding with a negative margin.
+ */
+
+.lg-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: var(--lg-card-pad) 0;
+  --lg-card-pad: var(--lg-space-5);
+}
+
+.lg-card[data-flush='true'] {
+  padding: 0;
+  --lg-card-pad: 0px;
+}
+
+.lg-card__header,
+.lg-card__body,
+.lg-card__footer {
+  padding-inline: var(--lg-card-pad, var(--lg-space-5));
+  min-width: 0;
+}
+
+.lg-card__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--lg-space-1);
+}
+
+/* Only applies when a slot actually follows, so a card with just a header does
+ * not carry a trailing gap. */
+.lg-card__header + .lg-card__body,
+.lg-card__body + .lg-card__footer,
+.lg-card__header + .lg-card__footer {
+  margin-top: var(--lg-space-4);
+}
+
+.lg-card__title {
+  margin: 0;
+  font-size: var(--lg-text-lg);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--lg-fg);
+}
+
+.lg-card__description {
+  margin: 0;
+  font-size: var(--lg-text-sm);
+  line-height: 1.5;
+  color: var(--lg-fg-muted);
+}
+
+.lg-card__body {
+  font-size: var(--lg-text-base);
+  line-height: 1.6;
+  color: var(--lg-fg-muted);
+}
+
+.lg-card__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--lg-space-2);
+  flex-wrap: wrap;
+}
+
+/* Media bleeds to the card's edges. `overflow: hidden` plus the inherited
+ * radius is what keeps a square image from poking out of the rounded corners;
+ * the negative top margin cancels the card's own vertical padding when the
+ * media is the first child. */
+.lg-card__media {
+  position: relative;
+  overflow: hidden;
+  border-radius: inherit;
+  margin-inline: 0;
+  line-height: 0;
+}
+
+.lg-card__media > img,
+.lg-card__media > video,
+.lg-card__media > canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.lg-card__media:first-child {
+  margin-top: calc(-1 * var(--lg-card-pad));
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.lg-card__media:last-child {
+  margin-bottom: calc(-1 * var(--lg-card-pad));
+  border-start-start-radius: 0;
+  border-start-end-radius: 0;
+}
+
+.lg-card__media:first-child:last-child {
+  margin-block: calc(-1 * var(--lg-card-pad));
+  border-radius: inherit;
+}
+
+.lg-card__media + .lg-card__header,
+.lg-card__media + .lg-card__body {
+  margin-top: var(--lg-space-4);
+}
+
+.lg-card__body + .lg-card__media,
+.lg-card__header + .lg-card__media {
+  margin-top: var(--lg-space-4);
+}

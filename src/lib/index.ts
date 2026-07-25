@@ -32,8 +32,34 @@ export type {
   ButtonSize,
 } from './components/Button';
 
+export {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardBody,
+  CardFooter,
+  CardMedia,
+} from './components/Card';
+export type { CardOwnProps, CardSlotProps } from './components/Card';
+
 export { Input } from './components/Input';
 export type { InputProps, InputSize } from './components/Input';
+
+export { Modal, ModalBody, ModalFooter } from './components/Modal';
+export type {
+  ModalProps,
+  ModalSize,
+  ModalSlotProps,
+} from './components/Modal';
+
+export {
+  Navbar,
+  NavbarBrand,
+  NavbarSpacer,
+  NavbarActions,
+} from './components/Navbar';
+export type { NavbarProps, NavbarSlotProps } from './components/Navbar';
 
 export { Switch } from './components/Switch';
 export type { SwitchProps, SwitchSize } from './components/Switch';
@@ -47,6 +73,16 @@ export type {
   TabsOrientation,
   TabsActivation,
 } from './components/Tabs';
+
+export { Tooltip } from './components/Tooltip';
+export type { TooltipProps } from './components/Tooltip';
+
+export { useAnchoredPosition } from './primitives/useAnchoredPosition';
+export type {
+  AnchoredPosition,
+  AnchoredPositionOptions,
+  Placement,
+} from './primitives/useAnchoredPosition';
 
 export { cx } from './utils/cx';
 export type { ClassValue } from './utils/cx';

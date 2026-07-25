@@ -1,23 +1,57 @@
 import { useState } from 'react';
 import {
   Button,
+  Card,
+  CardBody,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
   GlassSurface,
   Input,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  Navbar,
+  NavbarActions,
+  NavbarBrand,
+  NavbarSpacer,
   Switch,
   Tab,
   TabList,
   TabPanel,
   Tabs,
+  Tooltip,
 } from '../lib';
 import { IconArrowRight, IconSearch, IconSparkle } from './icons';
 
 export function App() {
   const [loading, setLoading] = useState(false);
   const [notify, setNotify] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
 
   return (
     <>
       <div className="demo-backdrop" aria-hidden="true" />
+
+      <Navbar>
+        <NavbarBrand>
+          <IconSparkle />
+          Liquid Glass
+        </NavbarBrand>
+        <NavbarSpacer />
+        <NavbarActions>
+          <Tooltip content="Scroll down — the bar frosts as content passes under it">
+            <Button variant="ghost" size="sm">
+              Docs
+            </Button>
+          </Tooltip>
+          <Button variant="primary" size="sm" onClick={() => setModalOpen(true)}>
+            Open modal
+          </Button>
+        </NavbarActions>
+      </Navbar>
+
       <main className="demo-page">
         <header className="demo-hero">
           <h1>Liquid Glass</h1>
@@ -59,7 +93,9 @@ export function App() {
             <Button variant="primary" endIcon={<IconArrowRight />}>
               With icon
             </Button>
-            <Button iconOnly aria-label="Enhance" startIcon={<IconSparkle />} />
+            <Tooltip content="Enhance" placement="bottom">
+              <Button iconOnly aria-label="Enhance" startIcon={<IconSparkle />} />
+            </Tooltip>
             <Button disabled>Disabled</Button>
             <Button
               variant="primary"
@@ -71,7 +107,7 @@ export function App() {
             >
               Submit
             </Button>
-            <Button as="a" href="#surface" variant="ghost">
+            <Button as="a" href="#top" variant="ghost">
               As a link
             </Button>
           </div>
@@ -79,6 +115,42 @@ export function App() {
             <Button size="sm">Small</Button>
             <Button size="md">Medium</Button>
             <Button size="lg">Large</Button>
+          </div>
+        </section>
+
+        <section className="demo-section">
+          <h2>Card</h2>
+          <div className="demo-row demo-row--top">
+            <Card className="demo-card">
+              <CardHeader>
+                <CardTitle>Two-tier material</CardTitle>
+                <CardDescription>Portable CSS, opt-in WebGL</CardDescription>
+              </CardHeader>
+              <CardBody>
+                Every component is the same surface at a different tint, so a
+                button and a card side by side are demonstrably one material.
+              </CardBody>
+              <CardFooter>
+                <Button size="sm" variant="primary">
+                  Read more
+                </Button>
+                <Button size="sm" variant="ghost">
+                  Dismiss
+                </Button>
+              </CardFooter>
+            </Card>
+
+            <Card className="demo-card" interactive>
+              <CardHeader>
+                <CardTitle>Interactive</CardTitle>
+                <CardDescription>Hover and press states</CardDescription>
+              </CardHeader>
+              <CardBody>
+                Hover thickens the tint and deepens the blur; press pushes the
+                pane half a pixel toward the surface and collapses the ambient
+                shadow.
+              </CardBody>
+            </Card>
           </div>
         </section>
 
@@ -109,6 +181,21 @@ export function App() {
             <Switch label="Small" size="sm" defaultChecked />
             <Switch label="Large" size="lg" />
             <Switch label="Disabled" disabled defaultChecked />
+          </div>
+        </section>
+
+        <section className="demo-section">
+          <h2>Tooltip</h2>
+          <div className="demo-row">
+            {(['top', 'bottom', 'left', 'right'] as const).map((placement) => (
+              <Tooltip
+                key={placement}
+                placement={placement}
+                content={`Placed on the ${placement}, flipping if it does not fit`}
+              >
+                <Button variant="secondary">{placement}</Button>
+              </Tooltip>
+            ))}
           </div>
         </section>
 
@@ -152,6 +239,31 @@ export function App() {
           </Tabs>
         </section>
       </main>
+
+      <Modal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title="Focus is trapped in here"
+        description="Tab cycles within the dialog, Escape closes it, and focus returns to the button that opened it."
+      >
+        <ModalBody>
+          <p>
+            The scrim is glass rather than a flat black wash, so the page stays
+            recognisable behind the dialog. Scrolling is locked while it is
+            open, with the scrollbar width compensated so the layout underneath
+            does not shift.
+          </p>
+          <Input label="Try tabbing" placeholder="…then shift-tab past the start" />
+        </ModalBody>
+        <ModalFooter>
+          <Button variant="ghost" onClick={() => setModalOpen(false)}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={() => setModalOpen(false)}>
+            Done
+          </Button>
+        </ModalFooter>
+      </Modal>
     </>
   );
 }

@@ -1,0 +1,89 @@
+/**
+ * Navbar.
+ *
+ * Every property below is a `calc()` on `--lg-nav-progress`, which the
+ * component writes once per frame while scrolling. Retuning the effect -- or
+ * disabling it by pinning the property to a constant -- needs no JS.
+ */
+
+@property --lg-nav-progress {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 0;
+}
+
+.lg-navbar {
+  display: flex;
+  align-items: center;
+  gap: var(--lg-space-4);
+  width: 100%;
+  min-height: 56px;
+  padding-inline: var(--lg-space-5);
+  border-radius: 0;
+  font-family: var(--lg-font);
+
+  /* At rest the bar is effectively invisible; at full progress it is a normal
+   * pane of glass. Both ends are still expressed in the shared tokens, so a
+   * themed `--lg-blur` or `--lg-tint-hue` still applies. */
+  --lg-blur: calc(var(--lg-nav-progress) * 22px);
+  --lg-saturate: calc(100% + var(--lg-nav-progress) * 80%);
+  --lg-tint-alpha: calc(var(--lg-nav-progress) * 0.14);
+  --lg-noise-opacity: calc(var(--lg-nav-progress) * 0.035);
+
+  /* The hairline under the bar is the first thing to appear and does most of
+   * the work of separating the bar from the content sliding under it. */
+  --lg-rim-bright: hsl(0 0% 100% / calc(var(--lg-nav-progress) * 0.4));
+  --lg-rim-mid: hsl(0 0% 100% / calc(var(--lg-nav-progress) * 0.1));
+  --lg-rim-dark: hsl(0 0% 100% / calc(var(--lg-nav-progress) * 0.03));
+  --lg-specular: hsl(0 0% 100% / calc(var(--lg-nav-progress) * 0.3));
+  --lg-inner-shadow: transparent;
+
+  box-shadow:
+    var(--lg-inset),
+    0 1px 0 hsl(0 0% 100% / calc(var(--lg-nav-progress) * 0.1)),
+    0 8px 24px -8px hsl(var(--lg-shadow-color) / calc(var(--lg-nav-progress) * 0.34));
+
+  /* Not transitioned. The progress value is already continuous, and a
+   * transition on top of a per-frame write just adds lag between the scroll
+   * position and the bar. */
+  transition: none;
+}
+
+.lg-navbar[data-sticky='true'] {
+  position: sticky;
+  top: 0;
+  z-index: var(--lg-z-overlay);
+}
+
+/* The rim is a full frame by default; on a full-bleed bar only the bottom edge
+ * should read as an edge, since the others run off the viewport. */
+.lg-navbar::before {
+  -webkit-mask: none;
+  mask: none;
+  padding: 0;
+  background-image: none;
+  border-bottom: 1px solid
+    hsl(0 0% 100% / calc(var(--lg-nav-progress) * 0.14));
+}
+
+.lg-navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--lg-space-2);
+  font-size: var(--lg-text-lg);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--lg-fg);
+  white-space: nowrap;
+}
+
+.lg-navbar__spacer {
+  flex: 1;
+  min-width: var(--lg-space-4);
+}
+
+.lg-navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--lg-space-2);
+}

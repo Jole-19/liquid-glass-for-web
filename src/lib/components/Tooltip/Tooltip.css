@@ -1,0 +1,85 @@
+/**
+ * Tooltip.
+ *
+ * Positioned with a transform on a `position: fixed` element, so moving it is a
+ * compositor operation and it is immune to transformed or scrolled ancestors.
+ */
+
+.lg-tooltip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--lg-z-popover);
+
+  max-width: 260px;
+  padding: 6px 10px;
+
+  font-family: var(--lg-font);
+  font-size: var(--lg-text-sm);
+  font-weight: 450;
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+  color: var(--lg-fg);
+  text-align: left;
+
+  /* Denser than a resting surface. A tooltip is small and short-lived, and at
+   * the default tint the text does not separate from whatever is behind it. */
+  --lg-tint-alpha: 0.2;
+  --lg-blur: 24px;
+  --lg-noise-opacity: 0.025;
+
+  pointer-events: none;
+  animation: lg-tooltip-in var(--lg-dur-fast) var(--lg-ease-out) both;
+}
+
+/* A rotated square peeking out from behind the body. It sits below the body in
+ * the stack so the body's own rim covers the arrow's inner two edges, which is
+ * what makes the two read as one shape. */
+.lg-tooltip__arrow {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  z-index: -1;
+
+  background-color: var(--lg-tint);
+  transform: rotate(45deg);
+  border: var(--lg-rim-width) solid hsl(0 0% 100% / 0.16);
+}
+
+.lg-tooltip[data-placement='top'] .lg-tooltip__arrow {
+  bottom: -4px;
+  left: calc(var(--lg-tooltip-arrow, 50%) - 4px);
+}
+
+.lg-tooltip[data-placement='bottom'] .lg-tooltip__arrow {
+  top: -4px;
+  left: calc(var(--lg-tooltip-arrow, 50%) - 4px);
+}
+
+.lg-tooltip[data-placement='left'] .lg-tooltip__arrow {
+  right: -4px;
+  top: calc(var(--lg-tooltip-arrow, 50%) - 4px);
+}
+
+.lg-tooltip[data-placement='right'] .lg-tooltip__arrow {
+  left: -4px;
+  top: calc(var(--lg-tooltip-arrow, 50%) - 4px);
+}
+
+/* A fade and nothing else. The element's position is carried on `transform`,
+ * so animating a scale here would override the translate and drop the tooltip
+ * at the top-left corner for the length of the animation. */
+@keyframes lg-tooltip-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lg-tooltip {
+    animation-duration: 1ms;
+  }
+}

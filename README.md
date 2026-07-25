@@ -1,7 +1,16 @@
 # Liquid Glass
 
+[![License](https://img.shields.io/github/license/Jole-19/Liquid-glass-library?style=flat-square&color=6b7cff)](./LICENSE)
+[![Stars](https://img.shields.io/github/stars/Jole-19/Liquid-glass-library?style=flat-square&color=6b7cff)](https://github.com/Jole-19/Liquid-glass-library/stargazers)
+[![Last commit](https://img.shields.io/github/last-commit/Jole-19/Liquid-glass-library?style=flat-square&color=6b7cff)](https://github.com/Jole-19/Liquid-glass-library/commits)
+![JS](https://img.shields.io/badge/js-9.5%20kB%20gzip-6b7cff?style=flat-square)
+![CSS](https://img.shields.io/badge/css-5.8%20kB%20gzip-6b7cff?style=flat-square)
+
 A glassmorphic React component library built on one portable CSS material, with
 an opt-in WebGL refraction tier for hero elements.
+
+Run `pnpm dev` for the documentation site — an interactive breakdown of the
+material, a live token playground, and every component with its source.
 
 ## Why another glass library
 
@@ -26,9 +35,18 @@ the hard part:
 
 ## Install
 
+Not published to npm yet, so install straight from the repository — every major
+package manager accepts a GitHub target:
+
 ```bash
-pnpm add liquid-glass-react
+pnpm add github:Jole-19/Liquid-glass-library
+# npm install github:Jole-19/Liquid-glass-library
+# yarn add github:Jole-19/Liquid-glass-library
+# bun add github:Jole-19/Liquid-glass-library
 ```
+
+Once it is published the command becomes `pnpm add liquid-glass-react` and
+nothing else changes — the import specifier is already the package name.
 
 ```tsx
 import { Button } from 'liquid-glass-react';
@@ -156,15 +174,16 @@ none of its ~100 kB reaches consumers who never use it.
 
 ```bash
 pnpm install
-pnpm dev        # showcase app
-pnpm build      # showcase app -> dist-demo
+pnpm dev        # documentation site
+pnpm build      # documentation site -> dist-site
 pnpm build:lib  # library -> dist (ESM + CJS + types + one stylesheet)
 pnpm typecheck
 ```
 
-The showcase in `src/demo` consumes `src/lib` directly, so the components are
-always dogfooded rather than only existing in isolation. See [`PLAN.md`](./PLAN.md)
-for the architecture and the reasoning behind it.
+The site in `src/site` consumes `src/lib` directly — its navbar, tabs, switches
+and cards are the real components, so the documentation cannot drift from what
+it documents. See [`PLAN.md`](./PLAN.md) for the architecture and the reasoning
+behind it.
 
 ## Licence
 

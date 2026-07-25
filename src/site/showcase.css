@@ -1,0 +1,707 @@
+/**
+ * Styles for the demonstrations themselves — the anatomy panel, the token
+ * playground, the refraction stage and the component examples.
+ *
+ * Split from `site.css`, which is the site's chrome. This file is the part that
+ * would go away if the page were only documentation and not also an argument.
+ */
+
+/* ---- Range inputs -------------------------------------------------------
+ *
+ * The library has no Slider yet, so the sliders on this page are native inputs
+ * dressed to match. Kept here rather than in the library precisely because a
+ * real Slider needs keyboard semantics and a value announcement this does not
+ * attempt.
+ */
+
+.playground input[type='range'],
+.ramp__slider input[type='range'] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 22px;
+  margin: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.playground input[type='range']::-webkit-slider-runnable-track,
+.ramp__slider input[type='range']::-webkit-slider-runnable-track {
+  height: 5px;
+  border-radius: var(--lg-radius-pill);
+  background: hsl(0 0% 100% / 0.14);
+  box-shadow: inset 0 1px 2px hsl(230 40% 4% / 0.45);
+}
+
+.playground input[type='range']::-moz-range-track,
+.ramp__slider input[type='range']::-moz-range-track {
+  height: 5px;
+  border-radius: var(--lg-radius-pill);
+  background: hsl(0 0% 100% / 0.14);
+}
+
+.playground input[type='range']::-webkit-slider-thumb,
+.ramp__slider input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  margin-top: -5.5px;
+  border-radius: 50%;
+  background: linear-gradient(160deg, #fff, hsl(220 20% 82%));
+  box-shadow:
+    0 1px 2px hsl(230 40% 4% / 0.5),
+    0 2px 8px hsl(230 40% 4% / 0.35);
+  transition: transform var(--lg-dur-fast) var(--lg-ease-spring);
+}
+
+.playground input[type='range']::-moz-range-thumb,
+.ramp__slider input[type='range']::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border: 0;
+  border-radius: 50%;
+  background: linear-gradient(160deg, #fff, hsl(220 20% 82%));
+  box-shadow: 0 1px 2px hsl(230 40% 4% / 0.5);
+}
+
+.playground input[type='range']:active::-webkit-slider-thumb,
+.ramp__slider input[type='range']:active::-webkit-slider-thumb {
+  transform: scale(1.15);
+}
+
+.playground input[type='range']:focus-visible,
+.ramp__slider input[type='range']:focus-visible {
+  outline: none;
+}
+
+.playground input[type='range']:focus-visible::-webkit-slider-thumb,
+.ramp__slider input[type='range']:focus-visible::-webkit-slider-thumb {
+  box-shadow: var(--lg-focus-ring);
+}
+
+/* ---- Pillar grid --------------------------------------------------------- */
+
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--site-rule);
+  border-radius: var(--lg-radius-lg);
+  overflow: hidden;
+  /* The 1px grid gap plus this background is what draws the hairlines between
+   * cells, which stays correct however many columns the grid resolves to. */
+  background: var(--site-rule);
+}
+
+.pillars__item {
+  padding: var(--lg-space-5);
+  background: hsl(230 30% 7% / 0.34);
+}
+
+.pillars__item h3 {
+  margin: 0 0 var(--lg-space-2);
+  font-size: 14.5px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+}
+
+.pillars__item p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.62;
+  color: var(--lg-fg-muted);
+}
+
+/* ---- Tier comparison ----------------------------------------------------- */
+
+.tiers {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--lg-space-4);
+}
+
+.tiers__card {
+  padding: var(--lg-space-5);
+  border: 1px solid var(--site-rule);
+  border-radius: var(--lg-radius-lg);
+  background: hsl(230 30% 7% / 0.3);
+}
+
+.tiers__card[data-accent='true'] {
+  border-color: hsl(var(--lg-accent-hue) 90% 62% / 0.34);
+  background:
+    linear-gradient(
+      160deg,
+      hsl(var(--lg-accent-hue) 90% 62% / 0.1),
+      transparent 60%
+    ),
+    hsl(230 30% 7% / 0.3);
+}
+
+.tiers__tag {
+  margin: 0 0 var(--lg-space-2);
+  font-family: var(--site-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lg-accent);
+}
+
+.tiers__card h4 {
+  margin: 0 0 var(--lg-space-2);
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.tiers__card p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.62;
+  color: var(--lg-fg-muted);
+}
+
+.tiers__meta {
+  margin-top: var(--lg-space-3) !important;
+  padding-top: var(--lg-space-3);
+  border-top: 1px solid var(--site-rule);
+  font-family: var(--site-mono);
+  font-size: 11.5px !important;
+  color: var(--lg-fg-subtle) !important;
+}
+
+/* ---- Anatomy ------------------------------------------------------------- */
+
+.anatomy {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--lg-space-5);
+  align-items: start;
+}
+
+.anatomy__stage {
+  position: sticky;
+  /* Sticky already establishes a containing block for the ::before grid. Worth
+   * knowing, because switching this to `static` in the responsive rules below
+   * would let the overlay escape -- so that rule sets `position: relative`
+   * rather than `static`. */
+  top: calc(var(--site-header) + 32px);
+  display: grid;
+  place-items: center;
+  min-height: 300px;
+  padding: var(--lg-space-6);
+  border-radius: var(--lg-radius-lg);
+  overflow: hidden;
+  /* Its own busy backdrop. Removing a layer has to be visible, and it would not
+   * be over the page's own wash at this size. */
+  background:
+    radial-gradient(18rem 18rem at 20% 25%, hsl(330 90% 58% / 0.85), transparent 60%),
+    radial-gradient(16rem 16rem at 82% 22%, hsl(190 96% 52% / 0.8), transparent 62%),
+    radial-gradient(20rem 20rem at 62% 88%, hsl(44 96% 58% / 0.7), transparent 60%),
+    linear-gradient(150deg, hsl(258 70% 16%), hsl(210 74% 12%));
+}
+
+.anatomy__stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, hsl(0 0% 100% / 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, hsl(0 0% 100% / 0.1) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.anatomy__panel {
+  position: relative;
+  width: min(300px, 100%);
+  padding: var(--lg-space-5);
+  text-align: left;
+}
+
+.anatomy__panel-title {
+  margin: 0 0 var(--lg-space-2);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.anatomy__panel-body {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--lg-fg-muted);
+}
+
+.anatomy__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.anatomy__item {
+  padding: var(--lg-space-3) 0;
+  border-bottom: 1px solid var(--site-rule);
+  transition: opacity var(--lg-dur-fast) var(--lg-ease-out);
+}
+
+.anatomy__item:last-child {
+  border-bottom: 0;
+}
+
+.anatomy__item[data-off] {
+  opacity: 0.48;
+}
+
+.anatomy__blurb {
+  margin: 6px 0 0 calc(var(--lg-space-2) + 34px);
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--lg-fg-subtle);
+}
+
+.anatomy__code {
+  grid-column: 1 / -1;
+}
+
+/* ---- Playground ---------------------------------------------------------- */
+
+.playground {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: var(--lg-space-5);
+  align-items: start;
+}
+
+.playground__preview {
+  display: grid;
+  place-items: center;
+  min-height: 340px;
+  padding: var(--lg-space-5);
+  border-radius: var(--lg-radius-lg);
+  background:
+    radial-gradient(20rem 20rem at 24% 20%, hsl(268 90% 60% / 0.8), transparent 62%),
+    radial-gradient(18rem 18rem at 80% 76%, hsl(186 92% 52% / 0.7), transparent 62%),
+    linear-gradient(160deg, hsl(240 60% 12%), hsl(280 50% 10%));
+}
+
+.playground__panel {
+  width: 100%;
+  max-width: 340px;
+  padding: var(--lg-space-5);
+}
+
+.playground__panel h4 {
+  margin: 0 0 var(--lg-space-2);
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.playground__panel > p {
+  margin: 0 0 var(--lg-space-4);
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--lg-fg-muted);
+}
+
+.playground__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--lg-space-2);
+}
+
+.playground__row + .playground__row {
+  margin-top: var(--lg-space-3);
+}
+
+.playground__controls {
+  padding: var(--lg-space-4);
+  border: 1px solid var(--site-rule);
+  border-radius: var(--lg-radius-lg);
+  background: hsl(230 30% 7% / 0.3);
+}
+
+.playground__controls-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--lg-space-3);
+  padding-bottom: var(--lg-space-3);
+  border-bottom: 1px solid var(--site-rule);
+}
+
+.playground__legend {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lg-fg-subtle);
+}
+
+.playground__reset {
+  padding: 3px 10px;
+  border: 1px solid var(--site-rule);
+  border-radius: var(--lg-radius-pill);
+  background: none;
+  font-family: inherit;
+  font-size: 12px;
+  color: var(--lg-fg-muted);
+  cursor: pointer;
+}
+
+.playground__reset:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.playground__reset:not(:disabled):hover {
+  color: var(--lg-fg);
+  border-color: var(--site-rule-strong);
+}
+
+.playground__control + .playground__control {
+  margin-top: var(--lg-space-3);
+}
+
+.playground__control label {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--lg-space-3);
+  margin-bottom: 2px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.playground__name {
+  color: var(--lg-fg-muted);
+}
+
+.playground__value {
+  font-family: var(--site-mono);
+  font-size: 11.5px;
+  color: var(--lg-fg);
+  font-variant-numeric: tabular-nums;
+}
+
+.playground__hint {
+  margin: 2px 0 0;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--lg-fg-subtle);
+}
+
+.playground__code {
+  grid-column: 1 / -1;
+}
+
+/* ---- Adaptive contrast ramp ---------------------------------------------- */
+
+.ramp {
+  position: relative;
+  border-radius: var(--lg-radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--site-rule);
+}
+
+.ramp__canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.ramp__panel {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 200px;
+  padding: var(--lg-space-4);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  /* No transition on `left`: the panel should track the slider exactly, so the
+   * luminance readout and the position always agree. */
+}
+
+.ramp__panel strong {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.ramp__panel span {
+  font-size: 12.5px;
+  color: var(--lg-fg-muted);
+}
+
+.ramp__controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--lg-space-5);
+  margin-top: var(--lg-space-4);
+}
+
+.ramp__slider {
+  flex: 1 1 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--lg-fg-muted);
+}
+
+.readout {
+  display: flex;
+  gap: var(--lg-space-5);
+  margin: 0;
+}
+
+.readout dt {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--lg-fg-subtle);
+}
+
+.readout dd {
+  margin: 2px 0 0;
+  font-family: var(--site-mono);
+  font-size: 15px;
+  color: var(--lg-fg);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Refraction stage ---------------------------------------------------- */
+
+.stagewrap__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--lg-space-4);
+  margin-bottom: var(--lg-space-4);
+}
+
+.stagewrap__hint {
+  flex: 1 1 320px;
+  margin: 0;
+  max-width: 56ch;
+  font-size: 14px;
+  color: var(--lg-fg-muted);
+}
+
+.stagewrap__status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 5px 12px;
+  border: 1px solid var(--site-rule);
+  border-radius: var(--lg-radius-pill);
+  font-family: var(--site-mono);
+  font-size: 11.5px;
+  white-space: nowrap;
+  color: var(--lg-fg-muted);
+}
+
+.stagewrap__pip {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--lg-fg-subtle);
+}
+
+.stagewrap__status[data-status='loading'] .stagewrap__pip {
+  background: hsl(42 92% 60%);
+  animation: pip-pulse 1.1s ease-in-out infinite;
+}
+
+.stagewrap__status[data-status='ready'] .stagewrap__pip {
+  background: hsl(150 80% 55%);
+  box-shadow: 0 0 0 3px hsl(150 80% 55% / 0.2);
+}
+
+.stagewrap__status[data-status='unavailable'] .stagewrap__pip {
+  background: hsl(2 78% 62%);
+}
+
+@keyframes pip-pulse {
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stagewrap__status[data-status='loading'] .stagewrap__pip {
+    animation: none;
+  }
+}
+
+.stage {
+  position: relative;
+  border-radius: var(--lg-radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--site-rule);
+}
+
+.stage__canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.stage__tier1,
+.stage__tier2 {
+  position: absolute;
+  top: 26%;
+  width: 34%;
+  min-width: 150px;
+  padding: var(--lg-space-4);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.stage__tier1 {
+  left: 8%;
+}
+
+.stage__tier2 {
+  left: 56%;
+}
+
+.stage__tier1 strong,
+.stage__tier2 strong {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.stage__tier1 span,
+.stage__tier2 span {
+  font-size: 12.5px;
+  color: var(--lg-fg-muted);
+}
+
+/* ---- Example furniture --------------------------------------------------- */
+
+.swatch {
+  display: grid;
+  place-items: center;
+  min-width: 132px;
+  min-height: 84px;
+  padding: var(--lg-space-4);
+  font-size: 13px;
+  color: var(--lg-fg-muted);
+  text-align: center;
+}
+
+.cardgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--lg-space-4);
+  width: 100%;
+}
+
+.showcard {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+}
+
+.showcard__art {
+  height: 132px;
+  background:
+    radial-gradient(12rem 8rem at 26% 30%, hsl(320 90% 62% / 0.9), transparent 62%),
+    radial-gradient(10rem 8rem at 78% 68%, hsl(196 94% 56% / 0.85), transparent 60%),
+    linear-gradient(140deg, hsl(258 72% 26%), hsl(206 78% 20%));
+}
+
+.fieldgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--lg-space-4);
+  width: 100%;
+}
+
+.switchgrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lg-space-4) var(--lg-space-5);
+  width: 100%;
+}
+
+.navdemo {
+  width: 100%;
+}
+
+.navdemo__bar {
+  border-radius: 0;
+}
+
+.navdemo__mark {
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  color: var(--lg-accent);
+}
+
+.navdemo__note {
+  margin: 0;
+  padding: var(--lg-space-4) clamp(20px, 4vw, 36px);
+  font-size: 13px;
+  color: var(--lg-fg-subtle);
+}
+
+/* ---- Support table ------------------------------------------------------- */
+
+.props__table td[data-yes] {
+  color: hsl(150 62% 66%);
+}
+
+/* ---- Responsive ---------------------------------------------------------- */
+
+@media (max-width: 1080px) {
+  .anatomy,
+  .playground {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .anatomy__stage,
+  .playground__preview {
+    position: relative;
+    top: auto;
+    min-height: 260px;
+  }
+}
+
+@media (max-width: 640px) {
+  .stage__tier1,
+  .stage__tier2 {
+    top: 18%;
+    width: 40%;
+    min-width: 0;
+    padding: var(--lg-space-3);
+  }
+
+  .stage__tier1 strong,
+  .stage__tier2 strong {
+    font-size: 13px;
+  }
+
+  .stage__tier1 span,
+  .stage__tier2 span {
+    font-size: 11px;
+  }
+
+  .ramp__panel {
+    width: 150px;
+    padding: var(--lg-space-3);
+  }
+}

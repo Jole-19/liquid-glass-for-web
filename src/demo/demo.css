@@ -173,6 +173,61 @@ body {
   cursor: grabbing;
 }
 
+.demo-adaptive {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  border-radius: var(--lg-radius-lg);
+  overflow: hidden;
+}
+
+.demo-adaptive__canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.demo-adaptive__panel {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 200px;
+  padding: var(--lg-space-4);
+  font-size: var(--lg-text-sm);
+
+  /* Only `left` is animated, and it is driven by the slider, so the movement
+   * is already continuous. A transition here would lag the sampling behind the
+   * panel and make the flip look mistimed. */
+  transition: none;
+}
+
+.demo-adaptive__panel strong {
+  font-size: var(--lg-text-base);
+  font-weight: 600;
+}
+
+.demo-adaptive__panel span {
+  color: var(--lg-fg-muted);
+}
+
+.demo-adaptive__control {
+  display: flex;
+  align-items: center;
+  gap: var(--lg-space-3);
+  max-width: 720px;
+  font-size: var(--lg-text-sm);
+  color: var(--lg-fg-muted);
+}
+
+.demo-adaptive__control input {
+  flex: 1;
+  accent-color: var(--lg-accent);
+}
+
 .demo-hero h1 {
   margin: 0 0 var(--lg-space-3);
   font-size: clamp(32px, 6vw, 56px);

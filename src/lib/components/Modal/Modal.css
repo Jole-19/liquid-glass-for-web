@@ -31,6 +31,14 @@
   animation: lg-scrim-in var(--lg-dur-base) var(--lg-ease-out) both;
 }
 
+/* Without the blur, a 42% wash leaves the page behind the dialog legible enough
+ * to compete with it. Darkening it is the only way to keep the dialog dominant. */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .lg-modal__scrim {
+    background-color: hsl(var(--lg-tint-hue) 40% 4% / 0.72);
+  }
+}
+
 .lg-modal__scrim[data-state='closed'] {
   animation: lg-scrim-out var(--lg-dur-fast) var(--lg-ease-out) both;
 }

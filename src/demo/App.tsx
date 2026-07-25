@@ -24,6 +24,7 @@ import {
   Tooltip,
 } from '../lib';
 import { IconArrowRight, IconSearch, IconSparkle } from './icons';
+import { Adaptive } from './Adaptive';
 import { Refraction } from './Refraction';
 
 export function App() {
@@ -120,6 +121,8 @@ export function App() {
         </section>
 
         <Refraction />
+
+        <Adaptive />
 
         <section className="demo-section">
           <h2>Card</h2>

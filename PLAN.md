@@ -184,30 +184,34 @@ ESM plus rolled-up types with a single extracted stylesheet.
 
 - [x] **scaffold** — Vite + React + TypeScript, strict tsconfig, library mode
       build config, demo app entry consuming `src/lib`
-- [ ] **tokens** — the design token layer: tint, blur, saturation, rim light
+- [x] **tokens** — the design token layer: tint, blur, saturation, rim light
       direction, noise opacity, layered shadow scales, radii, motion curves
-- [ ] **surface** — the `.lg-surface` material and `GlassSurface` primitive:
+- [x] **surface** — the `.lg-surface` material and `GlassSurface` primitive:
       backdrop-filter with saturation, asymmetric gradient rim, inset specular,
       SVG noise microtexture, layered shadows. *This is the make-or-break visual
       work.*
-- [ ] **adaptive-contrast** — port Lumen's luminance sampling into a
+- [x] **adaptive-contrast** — port Lumen's luminance sampling into a
       `useAdaptiveContrast` hook so glass stays legible over arbitrary backdrops
-- [ ] **button** — variants (primary / secondary / ghost), sizes, icon and
+- [x] **button** — variants (primary / secondary / ghost), sizes, icon and
       loading states, spring hover and press motion, full keyboard and
       `focus-visible` support
-- [ ] **core-interactive** — Input, Switch and Tabs, sharing the surface
+- [x] **core-interactive** — Input, Switch and Tabs, sharing the surface
       primitive and focus ring treatment
-- [ ] **layout-overlay** — Card, Navbar (scroll-aware blur intensity) and Modal
+- [x] **layout-overlay** — Card, Navbar (scroll-aware blur intensity) and Modal
       (glass backdrop with proper focus trap and scroll lock)
-- [ ] **tooltip** — Tooltip / Popover with positioning that survives viewport
-      edges
-- [ ] **webgl-tier** — `GlassStage` plus the `refraction` variant: enforce the
-      direct-child constraint at the API level with a dev-time warning, wire
-      `button: true` for free shader press states
-- [ ] **demo-site** — showcase app dogfooding every component over a
-      photographic backdrop, with a Tier 1 vs Tier 2 side-by-side comparison
-- [ ] **polish** — reduced-motion support, `backdrop-filter` fallbacks for
-      unsupported browsers, accessibility audit, README
+- [x] **tooltip** — Tooltip with positioning that survives viewport edges,
+      factored into a `useAnchoredPosition` hook. *Popover deferred; the hook is
+      the reusable half and it exists.*
+- [x] **webgl-tier** — `GlassStage` plus `GlassPanel`: enforce the direct-child
+      constraint at the API level with a dev-time warning, wire `button: true`
+      for free shader press states
+- [x] **demo-site** — showcase app dogfooding every component, with a Tier 1 vs
+      Tier 2 side-by-side comparison and an adaptive-contrast demo. *Backdrop is
+      generated rather than photographic, to keep the repo free of binary assets
+      and licensing questions.*
+- [x] **polish** — reduced-motion support, `backdrop-filter` fallbacks,
+      `forced-colors` and `prefers-contrast` handling, accessibility audit,
+      README
 
 ---
 
@@ -217,3 +221,10 @@ ESM plus rolled-up types with a single extracted stylesheet.
 - A Web Component wrapper (the CSS layer is built to make this cheap)
 - Full dark/light theme switching beyond the adaptive contrast pass
 - Storybook
+- Popover — a click-triggered, focus-managed sibling of Tooltip. The hard half,
+  edge-aware positioning, is already done in `useAnchoredPosition`.
+- A test suite. The focus trap, the roving tab stop and the luminance maths are
+  the three things worth testing, and all three are currently verified by hand.
+- Bundled (rolled-up) type declarations. `vite-plugin-dts` can do it via
+  `@microsoft/api-extractor`, which does not yet support TypeScript 7; the build
+  emits per-file declarations behind a `dist/index.d.ts` entry instead.

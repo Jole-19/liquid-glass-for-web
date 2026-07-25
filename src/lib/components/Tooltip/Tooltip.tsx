@@ -185,6 +185,12 @@ export function Tooltip({
             ref={floatingRef}
             id={id}
             role="tooltip"
+            // WCAG 1.4.13 requires the tooltip stay visible while the pointer
+            // is over it, so a user who has magnified the page can move onto
+            // it to read. That means it has to be hoverable, which in turn
+            // means cancelling the pending hide on enter.
+            onPointerEnter={() => show(0)}
+            onPointerLeave={() => hide(closeDelay)}
             className={cx('lg-surface', 'lg-tooltip', className)}
             data-elevation="overlay"
             data-radius="sm"

@@ -48,7 +48,12 @@
   -webkit-backdrop-filter: var(--lg-backdrop);
   backdrop-filter: var(--lg-backdrop);
 
-  box-shadow: var(--lg-inset), var(--lg-shadow);
+  /* Indirection so the focus ring can append itself to whatever cast shadow the
+   * current elevation has. Reading `--lg-shadow` directly there would give a
+   * flat surface a shadow it does not otherwise have, the moment it is
+   * focused. */
+  --lg-shadow-current: var(--lg-shadow);
+  box-shadow: var(--lg-inset), var(--lg-shadow-current);
 
   transition:
     box-shadow var(--lg-dur-base) var(--lg-ease-out),
@@ -115,15 +120,17 @@
 /* ---- Elevation --------------------------------------------------------- */
 
 .lg-surface[data-elevation='flat'] {
-  box-shadow: var(--lg-inset);
+  /* A fully transparent shadow rather than `none`, so the value stays a valid
+   * shadow the focus rule can concatenate onto. */
+  --lg-shadow-current: 0 0 0 0 transparent;
 }
 
 .lg-surface[data-elevation='raised'] {
-  box-shadow: var(--lg-inset), var(--lg-shadow-raised);
+  --lg-shadow-current: var(--lg-shadow-raised);
 }
 
 .lg-surface[data-elevation='overlay'] {
-  box-shadow: var(--lg-inset), var(--lg-shadow-overlay);
+  --lg-shadow-current: var(--lg-shadow-overlay);
 }
 
 /* ---- Radius ------------------------------------------------------------ */
@@ -166,8 +173,11 @@
 
 .lg-surface[data-interactive='true']:active:not([aria-disabled='true']) {
   --lg-tint-alpha: 0.2;
+  /* The ambient half of the shadow collapses on press, leaving only contact.
+   * That is what reads as the element being pushed down onto the surface
+   * rather than merely getting smaller. */
+  --lg-shadow-current: var(--lg-shadow-contact);
   transform: translateY(0.5px) scale(0.994);
-  box-shadow: var(--lg-inset), var(--lg-shadow-contact);
   transition-duration: var(--lg-dur-instant);
 }
 
@@ -186,7 +196,7 @@
 .lg-focusable:focus-visible,
 .lg-surface:focus-visible {
   outline: none;
-  box-shadow: var(--lg-inset), var(--lg-shadow), var(--lg-focus-ring);
+  box-shadow: var(--lg-inset), var(--lg-shadow-current), var(--lg-focus-ring);
 }
 
 .lg-focusable:focus:not(:focus-visible) {
@@ -209,6 +219,65 @@
   :where([data-lg-contrast='dark-fg']) .lg-surface {
     --lg-tint-alpha: 0.86;
     --lg-tint-light: 94%;
+  }
+}
+
+/* ---- Forced colors ------------------------------------------------------
+ *
+ * Windows High Contrast replaces every colour with one from the user's chosen
+ * palette and drops backgrounds and shadows entirely, which leaves a glass
+ * panel as literally nothing -- no edge, no fill, no separation from the page.
+ * The material has to be abandoned and replaced with a plain system border,
+ * which is the whole point of the mode: the user has asked for their colours,
+ * not ours.
+ */
+
+@media (forced-colors: active) {
+  .lg-surface {
+    border: 1px solid CanvasText;
+    background-color: Canvas;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none;
+    forced-color-adjust: none;
+    color: CanvasText;
+  }
+
+  .lg-surface::before,
+  .lg-surface::after {
+    content: none;
+  }
+
+  /* `outline` rather than the usual box-shadow ring: shadows are not rendered
+   * at all in this mode, so the focus indicator would silently vanish. */
+  .lg-focusable:focus-visible,
+  .lg-surface:focus-visible {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+    box-shadow: none;
+  }
+}
+
+/* ---- Increased contrast -------------------------------------------------
+ *
+ * A request for more contrast, not for a different palette. The tint gains body
+ * and the rim goes to a definite edge, so panels separate from a busy backdrop
+ * without giving up the material.
+ */
+
+@media (prefers-contrast: more) {
+  .lg-surface {
+    --lg-tint-alpha: 0.24;
+    --lg-noise-opacity: 0.02;
+    --lg-rim-bright: hsl(0 0% 100% / 0.85);
+    --lg-rim-mid: hsl(0 0% 100% / 0.45);
+    --lg-rim-dark: hsl(0 0% 100% / 0.3);
+  }
+
+  :where(.lg-theme-light) .lg-surface,
+  :where([data-lg-contrast='dark-fg']) .lg-surface {
+    --lg-rim-mid: hsl(var(--lg-tint-hue) 20% 20% / 0.4);
+    --lg-rim-dark: hsl(var(--lg-tint-hue) 20% 20% / 0.5);
   }
 }
 

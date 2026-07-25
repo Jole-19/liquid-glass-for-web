@@ -28,7 +28,11 @@
   --lg-blur: 24px;
   --lg-noise-opacity: 0.025;
 
-  pointer-events: none;
+  /* Hoverable, per WCAG 1.4.13: a magnified user must be able to move onto the
+   * tooltip to read it without it vanishing. The cost is that it can sit over
+   * something clickable, which is bounded -- it only exists while its trigger
+   * is hovered or focused. */
+  pointer-events: auto;
   animation: lg-tooltip-in var(--lg-dur-fast) var(--lg-ease-out) both;
 }
 

@@ -66,6 +66,22 @@
     hsl(0 0% 100% / calc(var(--lg-nav-progress) * 0.14));
 }
 
+/* The scroll response is a blur ramp, and without `backdrop-filter` there is no
+ * blur to ramp. The tint has to carry the whole effect instead, which means
+ * going almost opaque by the time the bar is "solid" -- otherwise the links sit
+ * unreadably on top of the content scrolling under them. */
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .lg-navbar {
+    --lg-tint-alpha: calc(var(--lg-nav-progress) * 0.92);
+    --lg-tint-light: 12%;
+  }
+
+  :where(.lg-theme-light) .lg-navbar,
+  :where([data-lg-contrast='dark-fg']) .lg-navbar {
+    --lg-tint-light: 96%;
+  }
+}
+
 .lg-navbar__brand {
   display: flex;
   align-items: center;

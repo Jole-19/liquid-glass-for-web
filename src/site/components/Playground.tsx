@@ -146,7 +146,7 @@ export function Playground() {
 
   return (
     <div className="playground">
-      <div className="playground__preview" style={style}>
+      <div className="playground__preview lg-theme-dark" style={style}>
         <GlassSurface className="playground__panel" radius="lg" elevation="raised">
           <h4>Live preview</h4>
           <p>

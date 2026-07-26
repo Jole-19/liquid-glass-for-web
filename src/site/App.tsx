@@ -10,9 +10,11 @@ import { ComponentsCore } from './sections/ComponentsCore';
 import { ComponentsInteractive } from './sections/ComponentsInteractive';
 import { Reference } from './sections/Reference';
 import { REPO_URL } from './config';
+import { useTheme } from './theme';
 
 export function App() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [theme, toggleTheme] = useTheme();
 
   return (
     <>
@@ -25,7 +27,12 @@ export function App() {
           position or the whole page is a demo of nothing. */}
       <div className="backdrop" aria-hidden="true" />
 
-      <TopBar menuOpen={menuOpen} onMenuToggle={setMenuOpen} />
+      <TopBar
+        menuOpen={menuOpen}
+        onMenuToggle={setMenuOpen}
+        theme={theme}
+        onThemeToggle={toggleTheme}
+      />
 
       <div className="shell">
         <Hero />

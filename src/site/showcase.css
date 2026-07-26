@@ -4,7 +4,27 @@
  *
  * Split from `site.css`, which is the site's chrome. This file is the part that
  * would go away if the page were only documentation and not also an argument.
+ *
+ * The demo stages are the one place on the page that stays saturated in both
+ * themes, and deliberately so: a glass panel over a neutral background
+ * demonstrates nothing. They are framed and self-contained, so they read as
+ * specimens under glass rather than as the page's own colour.
  */
+
+:root {
+  --demo-track: hsl(228 24% 50% / 0.28);
+  --demo-thumb: linear-gradient(160deg, #fff, hsl(220 16% 84%));
+  --demo-thumb-shadow: 0 1px 2px hsl(228 40% 10% / 0.42), 0 2px 8px
+    hsl(228 40% 10% / 0.28);
+
+  /* One cool family across every stage, so the specimens look related to each
+   * other and to the page rather than like four unrelated screenshots. */
+  --demo-stage-a: hsl(258 78% 24%);
+  --demo-stage-b: hsl(206 82% 18%);
+  --demo-blob-1: hsl(266 92% 62% / 0.82);
+  --demo-blob-2: hsl(192 94% 54% / 0.78);
+  --demo-blob-3: hsl(216 92% 60% / 0.72);
+}
 
 /* ---- Range inputs -------------------------------------------------------
  *
@@ -29,15 +49,15 @@
 .ramp__slider input[type='range']::-webkit-slider-runnable-track {
   height: 5px;
   border-radius: var(--lg-radius-pill);
-  background: hsl(0 0% 100% / 0.14);
-  box-shadow: inset 0 1px 2px hsl(230 40% 4% / 0.45);
+  background: var(--demo-track);
+  box-shadow: inset 0 1px 2px hsl(228 40% 10% / 0.35);
 }
 
 .playground input[type='range']::-moz-range-track,
 .ramp__slider input[type='range']::-moz-range-track {
   height: 5px;
   border-radius: var(--lg-radius-pill);
-  background: hsl(0 0% 100% / 0.14);
+  background: var(--demo-track);
 }
 
 .playground input[type='range']::-webkit-slider-thumb,
@@ -48,10 +68,8 @@
   height: 16px;
   margin-top: -5.5px;
   border-radius: 50%;
-  background: linear-gradient(160deg, #fff, hsl(220 20% 82%));
-  box-shadow:
-    0 1px 2px hsl(230 40% 4% / 0.5),
-    0 2px 8px hsl(230 40% 4% / 0.35);
+  background: var(--demo-thumb);
+  box-shadow: var(--demo-thumb-shadow);
   transition: transform var(--lg-dur-fast) var(--lg-ease-spring);
 }
 
@@ -61,8 +79,8 @@
   height: 16px;
   border: 0;
   border-radius: 50%;
-  background: linear-gradient(160deg, #fff, hsl(220 20% 82%));
-  box-shadow: 0 1px 2px hsl(230 40% 4% / 0.5);
+  background: var(--demo-thumb);
+  box-shadow: var(--demo-thumb-shadow);
 }
 
 .playground input[type='range']:active::-webkit-slider-thumb,
@@ -99,7 +117,7 @@
 
 .pillars__item {
   padding: var(--lg-space-5);
-  background: hsl(230 30% 7% / 0.34);
+  background: var(--site-panel);
 }
 
 .pillars__item h3 {
@@ -113,7 +131,7 @@
   margin: 0;
   font-size: 13.5px;
   line-height: 1.62;
-  color: var(--lg-fg-muted);
+  color: var(--site-text-muted);
 }
 
 /* ---- Tier comparison ----------------------------------------------------- */
@@ -128,7 +146,7 @@
   padding: var(--lg-space-5);
   border: 1px solid var(--site-rule);
   border-radius: var(--lg-radius-lg);
-  background: hsl(230 30% 7% / 0.3);
+  background: var(--site-panel);
 }
 
 .tiers__card[data-accent='true'] {
@@ -139,7 +157,7 @@
       hsl(var(--lg-accent-hue) 90% 62% / 0.1),
       transparent 60%
     ),
-    hsl(230 30% 7% / 0.3);
+    var(--site-panel);
 }
 
 .tiers__tag {
@@ -149,7 +167,7 @@
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--lg-accent);
+  color: var(--site-accent-text);
 }
 
 .tiers__card h4 {
@@ -163,7 +181,7 @@
   margin: 0;
   font-size: 13.5px;
   line-height: 1.62;
-  color: var(--lg-fg-muted);
+  color: var(--site-text-muted);
 }
 
 .tiers__meta {
@@ -172,7 +190,7 @@
   border-top: 1px solid var(--site-rule);
   font-family: var(--site-mono);
   font-size: 11.5px !important;
-  color: var(--lg-fg-subtle) !important;
+  color: var(--site-text-subtle) !important;
 }
 
 /* ---- Anatomy ------------------------------------------------------------- */
@@ -200,10 +218,10 @@
   /* Its own busy backdrop. Removing a layer has to be visible, and it would not
    * be over the page's own wash at this size. */
   background:
-    radial-gradient(18rem 18rem at 20% 25%, hsl(330 90% 58% / 0.85), transparent 60%),
-    radial-gradient(16rem 16rem at 82% 22%, hsl(190 96% 52% / 0.8), transparent 62%),
-    radial-gradient(20rem 20rem at 62% 88%, hsl(44 96% 58% / 0.7), transparent 60%),
-    linear-gradient(150deg, hsl(258 70% 16%), hsl(210 74% 12%));
+    radial-gradient(18rem 18rem at 20% 25%, var(--demo-blob-1), transparent 60%),
+    radial-gradient(16rem 16rem at 82% 22%, var(--demo-blob-2), transparent 62%),
+    radial-gradient(20rem 20rem at 62% 88%, var(--demo-blob-3), transparent 60%),
+    linear-gradient(150deg, var(--demo-stage-a), var(--demo-stage-b));
 }
 
 .anatomy__stage::before {
@@ -234,7 +252,7 @@
   margin: 0;
   font-size: 13px;
   line-height: 1.6;
-  color: var(--lg-fg-muted);
+  color: var(--site-text-muted);
 }
 
 .anatomy__list {
@@ -261,7 +279,7 @@
   margin: 6px 0 0 calc(var(--lg-space-2) + 34px);
   font-size: 12.5px;
   line-height: 1.55;
-  color: var(--lg-fg-subtle);
+  color: var(--site-text-subtle);
 }
 
 .anatomy__code {
@@ -284,9 +302,9 @@
   padding: var(--lg-space-5);
   border-radius: var(--lg-radius-lg);
   background:
-    radial-gradient(20rem 20rem at 24% 20%, hsl(268 90% 60% / 0.8), transparent 62%),
-    radial-gradient(18rem 18rem at 80% 76%, hsl(186 92% 52% / 0.7), transparent 62%),
-    linear-gradient(160deg, hsl(240 60% 12%), hsl(280 50% 10%));
+    radial-gradient(20rem 20rem at 24% 20%, var(--demo-blob-1), transparent 62%),
+    radial-gradient(18rem 18rem at 80% 76%, var(--demo-blob-2), transparent 62%),
+    linear-gradient(160deg, var(--demo-stage-b), var(--demo-stage-a));
 }
 
 .playground__panel {
@@ -305,7 +323,7 @@
   margin: 0 0 var(--lg-space-4);
   font-size: 13px;
   line-height: 1.55;
-  color: var(--lg-fg-muted);
+  color: var(--site-text-muted);
 }
 
 .playground__row {
@@ -323,7 +341,7 @@
   padding: var(--lg-space-4);
   border: 1px solid var(--site-rule);
   border-radius: var(--lg-radius-lg);
-  background: hsl(230 30% 7% / 0.3);
+  background: var(--site-panel);
 }
 
 .playground__controls-head {
@@ -341,7 +359,7 @@
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--lg-fg-subtle);
+  color: var(--site-text-subtle);
 }
 
 .playground__reset {
@@ -351,7 +369,7 @@
   background: none;
   font-family: inherit;
   font-size: 12px;
-  color: var(--lg-fg-muted);
+  color: var(--site-text-muted);
   cursor: pointer;
 }
 
@@ -380,7 +398,7 @@
 }
 
 .playground__name {
-  color: var(--lg-fg-muted);
+  color: var(--site-text-muted);
 }
 
 .playground__value {
@@ -394,7 +412,7 @@
   margin: 2px 0 0;
   font-size: 11.5px;
   line-height: 1.5;
-  color: var(--lg-fg-subtle);
+  color: var(--site-text-subtle);
 }
 
 .playground__code {
@@ -436,6 +454,9 @@
 
 .ramp__panel span {
   font-size: 12.5px;
+  /* The library token, not the site's: this panel's theme is decided by
+   * useAdaptiveContrast from the pixels under it, and the whole demonstration
+   * is that its text follows the backdrop rather than the page. */
   color: var(--lg-fg-muted);
 }
 
@@ -453,7 +474,7 @@
   flex-direction: column;
   gap: 4px;
   font-size: 13px;
-  color: var(--lg-fg-muted);
+  color: var(--site-text-muted);
 }
 
 .readout {
@@ -467,7 +488,7 @@
   font-weight: 600;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--lg-fg-subtle);
+  color: var(--site-text-subtle);
 }
 
 .readout dd {
@@ -494,7 +515,7 @@
   margin: 0;
   max-width: 56ch;
   font-size: 14px;
-  color: var(--lg-fg-muted);
+  color: var(--site-text-muted);
 }
 
 .stagewrap__status {
@@ -508,14 +529,14 @@
   font-family: var(--site-mono);
   font-size: 11.5px;
   white-space: nowrap;
-  color: var(--lg-fg-muted);
+  color: var(--site-text-muted);
 }
 
 .stagewrap__pip {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--lg-fg-subtle);
+  background: var(--site-text-subtle);
 }
 
 .stagewrap__status[data-status='loading'] .stagewrap__pip {
@@ -586,7 +607,7 @@
 .stage__tier1 span,
 .stage__tier2 span {
   font-size: 12.5px;
-  color: var(--lg-fg-muted);
+  color: var(--site-text-muted);
 }
 
 /* ---- Example furniture --------------------------------------------------- */
@@ -598,7 +619,7 @@
   min-height: 84px;
   padding: var(--lg-space-4);
   font-size: 13px;
-  color: var(--lg-fg-muted);
+  color: var(--site-text-muted);
   text-align: center;
 }
 
@@ -618,9 +639,9 @@
 .showcard__art {
   height: 132px;
   background:
-    radial-gradient(12rem 8rem at 26% 30%, hsl(320 90% 62% / 0.9), transparent 62%),
-    radial-gradient(10rem 8rem at 78% 68%, hsl(196 94% 56% / 0.85), transparent 60%),
-    linear-gradient(140deg, hsl(258 72% 26%), hsl(206 78% 20%));
+    radial-gradient(12rem 8rem at 26% 30%, var(--demo-blob-1), transparent 62%),
+    radial-gradient(10rem 8rem at 78% 68%, var(--demo-blob-2), transparent 60%),
+    linear-gradient(140deg, var(--demo-stage-a), var(--demo-stage-b));
 }
 
 .fieldgrid {
@@ -656,13 +677,13 @@
   margin: 0;
   padding: var(--lg-space-4) clamp(20px, 4vw, 36px);
   font-size: 13px;
-  color: var(--lg-fg-subtle);
+  color: var(--site-text-subtle);
 }
 
 /* ---- Support table ------------------------------------------------------- */
 
 .props__table td[data-yes] {
-  color: hsl(150 62% 66%);
+  color: var(--site-yes);
 }
 
 /* ---- Responsive ---------------------------------------------------------- */

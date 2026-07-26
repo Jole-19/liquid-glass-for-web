@@ -14,11 +14,6 @@ export function Hero() {
   return (
     <header className="hero" id="top">
       <div className="hero__body">
-        <p className="hero__eyebrow">
-          <span className="hero__dot" aria-hidden="true" />
-          React + TypeScript · no dependencies beyond React
-        </p>
-
         <h1 className="hero__title">
           Glass that behaves
           <br />

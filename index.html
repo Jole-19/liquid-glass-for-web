@@ -8,8 +8,26 @@
       name="description"
       content="A React component library built on one portable CSS glass material, with an optional WebGL refraction tier. Design tokens, adaptive contrast and accessibility built in."
     />
-    <meta name="theme-color" content="#06060a" />
-    <meta name="color-scheme" content="dark" />
+    <meta name="color-scheme" content="light dark" />
+
+    <!-- Applied before first paint. Deferring the theme to React would show a
+         frame of the wrong one, which on dark-to-light is a full-screen flash. -->
+    <script>
+      (function () {
+        var theme = 'dark';
+        try {
+          var stored = localStorage.getItem('lg-theme');
+          if (stored === 'light' || stored === 'dark') theme = stored;
+          else if (matchMedia('(prefers-color-scheme: light)').matches)
+            theme = 'light';
+        } catch (error) {
+          /* Storage is unavailable in some embedded contexts. Dark stands. */
+        }
+        document.documentElement.dataset.theme = theme;
+        if (theme === 'light')
+          document.documentElement.classList.add('lg-theme-light');
+      })();
+    </script>
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Liquid Glass — a glass material for the web" />

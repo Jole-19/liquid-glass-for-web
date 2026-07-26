@@ -107,7 +107,10 @@ export function Anatomy() {
 
   return (
     <div className="anatomy">
-      <div className="anatomy__stage">
+      {/* The stage stays dark in light mode -- a glass panel over a white page
+          demonstrates nothing -- so the panel inside it is pinned to the
+          dark-backdrop theme rather than following the page. */}
+      <div className="anatomy__stage lg-theme-dark">
         <GlassSurface
           className="anatomy__panel"
           radius="xl"

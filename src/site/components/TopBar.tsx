@@ -1,12 +1,22 @@
 import { useEffect } from 'react';
 import { Button, Navbar, NavbarActions, NavbarBrand, NavbarSpacer } from '../../lib';
-import { IconClose, IconGitHub, IconMenu, IconSparkle } from '../icons';
+import {
+  IconClose,
+  IconGitHub,
+  IconMenu,
+  IconMoon,
+  IconSparkle,
+  IconSun,
+} from '../icons';
 import { NAV } from '../nav';
 import { REPO_URL } from '../config';
+import type { Theme } from '../theme';
 
 export interface TopBarProps {
   menuOpen: boolean;
   onMenuToggle: (open: boolean) => void;
+  theme: Theme;
+  onThemeToggle: () => void;
 }
 
 /**
@@ -17,7 +27,12 @@ export interface TopBarProps {
  * should not lock scrolling or trap focus the way a dialog does, and dismissing
  * it by tapping a link is the normal path rather than an escape hatch.
  */
-export function TopBar({ menuOpen, onMenuToggle }: TopBarProps) {
+export function TopBar({
+  menuOpen,
+  onMenuToggle,
+  theme,
+  onThemeToggle,
+}: TopBarProps) {
   // Any hash change means a link was followed, which should close the sheet.
   useEffect(() => {
     const close = () => onMenuToggle(false);
@@ -61,9 +76,17 @@ export function TopBar({ menuOpen, onMenuToggle }: TopBarProps) {
         <NavbarSpacer />
 
         <NavbarActions>
-          <Button as="a" href="#install" variant="ghost" size="sm">
-            Install
-          </Button>
+          <button
+            type="button"
+            className="topbar__theme lg-focusable"
+            onClick={onThemeToggle}
+            // The label names the destination rather than the current state.
+            // "Dark mode: on" leaves the reader working out what pressing it
+            // does; "Switch to light mode" does not.
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+          >
+            {theme === 'dark' ? <IconSun /> : <IconMoon />}
+          </button>
           <Button
             as="a"
             href={REPO_URL}

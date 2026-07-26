@@ -39,7 +39,7 @@ body {
   font-size: 15px;
   line-height: 1.65;
   color: var(--lg-fg);
-  background-color: #06060a;
+  background-color: var(--site-bg);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -52,10 +52,113 @@ body {
 
   --site-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
     'Liberation Mono', monospace;
+}
 
-  --site-rule: hsl(0 0% 100% / 0.08);
-  --site-rule-strong: hsl(0 0% 100% / 0.14);
-  --site-well: hsl(230 30% 8% / 0.5);
+/**
+ * Palette.
+ *
+ * Near-neutral in both directions, with the library's own accent hue as the
+ * only colour that carries meaning. The backdrop is a wide, low-contrast wash
+ * rather than a saturated gradient: glass still needs luminance variation and
+ * hard lines underneath it to read as glass, but it does not need to be loud
+ * about it, and a page whose background competes with its own content is a
+ * poor advertisement for a material.
+ */
+
+[data-theme='dark'] {
+  --site-bg: #0a0a0d;
+
+  --site-rule: hsl(0 0% 100% / 0.09);
+  --site-rule-strong: hsl(0 0% 100% / 0.17);
+  --site-hover: hsl(0 0% 100% / 0.08);
+  --site-chip: hsl(0 0% 100% / 0.09);
+
+  --site-panel: hsl(228 22% 10% / 0.4);
+  --site-well: hsl(228 26% 7% / 0.55);
+  --site-well-bar: hsl(0 0% 100% / 0.03);
+  --site-inset: hsl(228 30% 5% / 0.5);
+  --site-sticky: hsl(228 26% 7% / 0.93);
+  --site-scrim: hsl(228 30% 3% / 0.5);
+
+  --site-title: linear-gradient(175deg, #fff 30%, hsl(228 18% 76%));
+
+  --site-wash:
+    radial-gradient(72rem 46rem at 50% -18%, hsl(224 52% 20%), transparent 66%),
+    radial-gradient(46rem 36rem at 8% 42%, hsl(232 54% 16% / 0.85), transparent 62%),
+    radial-gradient(52rem 40rem at 92% 74%, hsl(200 52% 15% / 0.8), transparent 62%);
+  --site-grid: hsl(0 0% 100% / 0.034);
+  --site-yes: hsl(150 58% 64%);
+
+  /* The library's --lg-fg-muted and --lg-fg-subtle are alpha values tuned to
+   * sit on glass, which is a more forgiving surround than a flat page. Reusing
+   * them for prose and nav puts 2.2:1 text on a light background, so the page
+   * chrome gets its own pair. */
+  --site-text-muted: hsl(228 14% 76%);
+  --site-text-subtle: hsl(228 12% 58%);
+  /* --lg-accent is tuned to sit on glass, which is a darker surround than this
+   * page's small text ever gets. Kept separate so the label colour can meet
+   * contrast without dragging the whole accent hue with it. */
+  --site-accent-text: hsl(var(--lg-accent-hue) 90% 70%);
+
+  --tk-plain: hsl(225 18% 84%);
+  --tk-comment: hsl(228 13% 52%);
+  --tk-string: hsl(150 52% 66%);
+  --tk-number: hsl(28 82% 72%);
+  --tk-keyword: hsl(280 70% 78%);
+  --tk-tag: hsl(200 78% 72%);
+  --tk-attr: hsl(42 76% 72%);
+  --tk-function: hsl(214 84% 78%);
+  --tk-punctuation: hsl(228 13% 62%);
+}
+
+[data-theme='light'] {
+  --site-bg: #eef0f4;
+
+  --site-rule: hsl(228 24% 22% / 0.13);
+  --site-rule-strong: hsl(228 24% 22% / 0.24);
+  --site-hover: hsl(228 24% 22% / 0.07);
+  --site-chip: hsl(228 24% 22% / 0.09);
+
+  --site-panel: hsl(0 0% 100% / 0.46);
+  --site-well: hsl(0 0% 100% / 0.6);
+  --site-well-bar: hsl(228 24% 22% / 0.035);
+  --site-inset: hsl(0 0% 100% / 0.66);
+  --site-sticky: hsl(220 30% 97% / 0.94);
+  --site-scrim: hsl(228 24% 60% / 0.4);
+
+  --site-title: linear-gradient(175deg, hsl(228 30% 12%) 30%, hsl(228 16% 40%));
+
+  --site-wash:
+    radial-gradient(72rem 46rem at 50% -18%, hsl(220 78% 90%), transparent 66%),
+    radial-gradient(46rem 36rem at 8% 42%, hsl(232 70% 92% / 0.9), transparent 62%),
+    radial-gradient(52rem 40rem at 92% 74%, hsl(196 72% 90% / 0.9), transparent 62%);
+  --site-grid: hsl(228 30% 28% / 0.065);
+  --site-yes: hsl(152 64% 28%);
+  --site-accent-text: hsl(var(--lg-accent-hue) 76% 42%);
+
+  --site-text-muted: hsl(228 16% 32%);
+  --site-text-subtle: hsl(228 12% 42%);
+
+  --tk-plain: hsl(228 20% 26%);
+  --tk-comment: hsl(228 12% 48%);
+  --tk-string: hsl(152 62% 28%);
+  --tk-number: hsl(22 76% 38%);
+  --tk-keyword: hsl(280 56% 46%);
+  --tk-tag: hsl(205 74% 34%);
+  --tk-attr: hsl(32 78% 32%);
+  --tk-function: hsl(216 72% 42%);
+  --tk-punctuation: hsl(228 12% 44%);
+}
+
+/**
+ * Inside a stage pinned to the dark theme, the page's text colours would be
+ * dark on dark. Re-point them so a demo specimen carries the right pair
+ * whichever way the page is set.
+ */
+[data-theme] .lg-theme-dark {
+  --site-text-muted: hsl(228 14% 76%);
+  --site-text-subtle: hsl(228 12% 58%);
+  --site-accent-text: hsl(var(--lg-accent-hue) 90% 70%);
 }
 
 a {
@@ -96,9 +199,10 @@ a {
 /* ---- Backdrop -----------------------------------------------------------
  *
  * Fixed behind everything and never scrolls, so the glass has something with
- * real colour and real edges under it at every scroll position. A flat page
- * would hide every flaw the material has, which would rather defeat the point
- * of a site whose job is to show the material off.
+ * real colour and real edges under it at every scroll position. A perfectly
+ * flat page would hide every flaw the material has, which rather defeats the
+ * point of a site whose job is to show the material off -- so there is a wash
+ * for luminance and a grid for straight lines, and nothing else.
  */
 
 .backdrop {
@@ -106,27 +210,15 @@ a {
   inset: 0;
   z-index: -1;
   overflow: hidden;
-  background-color: #06060a;
+  background-color: var(--site-bg);
 }
 
 .backdrop::before {
   content: '';
   position: absolute;
-  inset: -25%;
-  background:
-    radial-gradient(38rem 38rem at 14% 12%, hsl(266 92% 56% / 0.55), transparent 62%),
-    radial-gradient(34rem 34rem at 86% 8%, hsl(192 96% 50% / 0.42), transparent 64%),
-    radial-gradient(42rem 42rem at 74% 68%, hsl(328 92% 54% / 0.42), transparent 62%),
-    radial-gradient(30rem 30rem at 22% 82%, hsl(38 96% 55% / 0.3), transparent 60%),
-    conic-gradient(
-      from 210deg at 50% 50%,
-      hsl(228 74% 9%),
-      hsl(276 62% 11%),
-      hsl(202 74% 8%),
-      hsl(228 74% 9%)
-    );
-  filter: saturate(118%);
-  animation: backdrop-drift 64s var(--lg-ease-in-out) infinite alternate;
+  inset: -20%;
+  background: var(--site-wash);
+  animation: backdrop-drift 90s var(--lg-ease-in-out) infinite alternate;
 }
 
 /* A fine grid over the wash. It gives the refraction tier straight lines to
@@ -136,18 +228,18 @@ a {
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(to right, hsl(0 0% 100% / 0.028) 1px, transparent 1px),
-    linear-gradient(to bottom, hsl(0 0% 100% / 0.028) 1px, transparent 1px);
-  background-size: 56px 56px;
-  mask-image: radial-gradient(circle at 50% 30%, #000 10%, transparent 78%);
+    linear-gradient(to right, var(--site-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--site-grid) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(circle at 50% 26%, #000 8%, transparent 76%);
 }
 
 @keyframes backdrop-drift {
   from {
-    transform: translate3d(-2%, -1%, 0) scale(1.05);
+    transform: translate3d(-1.5%, -1%, 0) scale(1.04);
   }
   to {
-    transform: translate3d(2%, 2%, 0) scale(1.14);
+    transform: translate3d(1.5%, 1.5%, 0) scale(1.1);
   }
 }
 
@@ -188,7 +280,7 @@ a {
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0;
-  color: var(--lg-fg-subtle);
+  color: var(--site-text-subtle);
 }
 
 .topbar__menu {
@@ -201,7 +293,7 @@ a {
   border: 0;
   border-radius: var(--lg-radius-sm);
   background: none;
-  color: var(--lg-fg-muted);
+  color: var(--site-text-muted);
   cursor: pointer;
 }
 
@@ -212,7 +304,34 @@ a {
 
 .topbar__menu:hover {
   color: var(--lg-fg);
-  background: hsl(0 0% 100% / 0.08);
+  background: var(--site-hover);
+}
+
+.topbar__theme {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--site-rule);
+  border-radius: var(--lg-radius-sm);
+  background: none;
+  color: var(--site-text-muted);
+  cursor: pointer;
+  transition:
+    color var(--lg-dur-fast) var(--lg-ease-out),
+    border-color var(--lg-dur-fast) var(--lg-ease-out);
+}
+
+.topbar__theme svg {
+  width: 17px;
+  height: 17px;
+}
+
+.topbar__theme:hover {
+  color: var(--lg-fg);
+  border-color: var(--site-rule-strong);
 }
 
 /* ---- Mobile navigation --------------------------------------------------- */
@@ -233,7 +352,7 @@ a {
   inset: 0;
   border: 0;
   padding: 0;
-  background: hsl(230 40% 3% / 0.5);
+  background: var(--site-scrim);
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
 }
@@ -275,7 +394,7 @@ a {
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--lg-fg-subtle);
+  color: var(--site-text-subtle);
 }
 
 .mobilenav ul {
@@ -290,12 +409,12 @@ a {
   border-radius: var(--lg-radius-sm);
   text-decoration: none;
   font-size: 14px;
-  color: var(--lg-fg-muted);
+  color: var(--site-text-muted);
 }
 
 .mobilenav a:hover {
   color: var(--lg-fg);
-  background: hsl(0 0% 100% / 0.07);
+  background: var(--site-hover);
 }
 
 /* ---- Shell --------------------------------------------------------------- */
@@ -344,7 +463,7 @@ a {
   border-radius: 0 6px 6px 0;
   text-decoration: none;
   font-size: 13.5px;
-  color: var(--lg-fg-subtle);
+  color: var(--site-text-subtle);
   transition:
     color var(--lg-dur-fast) var(--lg-ease-out),
     border-color var(--lg-dur-fast) var(--lg-ease-out);
@@ -370,27 +489,6 @@ a {
   padding: clamp(56px, 10vh, 120px) 0 clamp(48px, 8vh, 96px);
 }
 
-.hero__eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 var(--lg-space-4);
-  padding: 5px 12px 5px 10px;
-  border: 1px solid var(--site-rule-strong);
-  border-radius: var(--lg-radius-pill);
-  font-size: 12.5px;
-  font-weight: 500;
-  color: var(--lg-fg-muted);
-}
-
-.hero__dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: hsl(150 80% 55%);
-  box-shadow: 0 0 0 3px hsl(150 80% 55% / 0.18);
-}
-
 .hero__title {
   margin: 0 0 var(--lg-space-4);
   font-size: clamp(40px, 6.4vw, 68px);
@@ -398,7 +496,7 @@ a {
   line-height: 1.02;
   letter-spacing: -0.04em;
   /* A very slight top-down fade, echoing the specular on the panels. */
-  background: linear-gradient(175deg, #fff 30%, hsl(230 20% 78%));
+  background: var(--site-title);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -409,7 +507,7 @@ a {
   max-width: 52ch;
   font-size: 17px;
   line-height: 1.62;
-  color: var(--lg-fg-muted);
+  color: var(--site-text-muted);
 }
 
 .hero__actions {
@@ -434,7 +532,7 @@ a {
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--lg-fg-subtle);
+  color: var(--site-text-subtle);
 }
 
 .hero__stats dd {
@@ -450,7 +548,7 @@ a {
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0;
-  color: var(--lg-fg-subtle);
+  color: var(--site-text-subtle);
 }
 
 .hero__panel {
@@ -473,20 +571,20 @@ a {
 }
 
 .hero__panel-dot[data-tone='a'] {
-  background: hsl(2 78% 62%);
+  background: hsl(2 62% 62%);
 }
 .hero__panel-dot[data-tone='b'] {
-  background: hsl(42 92% 60%);
+  background: hsl(42 72% 60%);
 }
 .hero__panel-dot[data-tone='c'] {
-  background: hsl(148 62% 52%);
+  background: hsl(148 46% 52%);
 }
 
 .hero__snippet {
   margin: 0;
   padding: var(--lg-space-4);
   border-radius: var(--lg-radius-sm);
-  background: hsl(230 40% 4% / 0.45);
+  background: var(--site-inset);
   border: 1px solid var(--site-rule);
   overflow-x: auto;
   font-family: var(--site-mono);
@@ -521,7 +619,7 @@ a {
   font-weight: 600;
   letter-spacing: 0.13em;
   text-transform: uppercase;
-  color: var(--lg-accent);
+  color: var(--site-accent-text);
 }
 
 .section__title {
@@ -540,7 +638,7 @@ a {
 .section__anchor::after {
   content: '#';
   margin-left: 0.35em;
-  color: var(--lg-fg-subtle);
+  color: var(--site-text-subtle);
   opacity: 0;
   transition: opacity var(--lg-dur-fast) var(--lg-ease-out);
 }
@@ -555,7 +653,7 @@ a {
   max-width: 68ch;
   font-size: 16px;
   line-height: 1.68;
-  color: var(--lg-fg-muted);
+  color: var(--site-text-muted);
 }
 
 .section__intro p {
@@ -579,7 +677,7 @@ a {
 
 .prose {
   max-width: 68ch;
-  color: var(--lg-fg-muted);
+  color: var(--site-text-muted);
 }
 
 .prose p {
@@ -605,7 +703,7 @@ a {
 }
 
 .prose li::marker {
-  color: var(--lg-fg-subtle);
+  color: var(--site-text-subtle);
 }
 
 .prose a,
@@ -613,7 +711,7 @@ a {
 .install__note a {
   color: var(--lg-fg);
   text-decoration: underline;
-  text-decoration-color: hsl(0 0% 100% / 0.32);
+  text-decoration-color: var(--site-rule-strong);
   text-underline-offset: 3px;
 }
 
@@ -633,7 +731,7 @@ code {
 .example__desc code {
   padding: 1.5px 5px;
   border-radius: 5px;
-  background: hsl(0 0% 100% / 0.09);
+  background: var(--site-chip);
   color: var(--lg-fg);
   white-space: nowrap;
 }
@@ -656,13 +754,13 @@ code {
   gap: var(--lg-space-3);
   padding: 7px 8px 7px 14px;
   border-bottom: 1px solid var(--site-rule);
-  background: hsl(0 0% 100% / 0.028);
+  background: var(--site-well-bar);
 }
 
 .code__name {
   font-family: var(--site-mono);
   font-size: 11.5px;
-  color: var(--lg-fg-subtle);
+  color: var(--site-text-subtle);
 }
 
 .code__copy {
@@ -673,7 +771,7 @@ code {
   font-family: inherit;
   font-size: 12px;
   font-weight: 500;
-  color: var(--lg-fg-subtle);
+  color: var(--site-text-subtle);
   cursor: pointer;
   transition:
     color var(--lg-dur-fast) var(--lg-ease-out),
@@ -682,7 +780,7 @@ code {
 
 .code__copy:hover {
   color: var(--lg-fg);
-  background: hsl(0 0% 100% / 0.09);
+  background: var(--site-hover);
 }
 
 .code__pre {
@@ -695,35 +793,36 @@ code {
   tab-size: 2;
 }
 
-/* Token palette. Deliberately low-chroma apart from strings and tags — a
- * rainbow fights the glass behind it. */
+/* Token palette. Deliberately low-chroma — a rainbow fights the glass behind
+ * it. Both themes are defined at the top of this file; these rules only wire
+ * the token names to the classes the highlighter emits. */
 .tk--plain {
-  color: hsl(225 20% 84%);
+  color: var(--tk-plain);
 }
 .tk--comment {
-  color: hsl(228 14% 52%);
+  color: var(--tk-comment);
   font-style: italic;
 }
 .tk--string {
-  color: hsl(150 58% 68%);
+  color: var(--tk-string);
 }
 .tk--number {
-  color: hsl(30 88% 72%);
+  color: var(--tk-number);
 }
 .tk--keyword {
-  color: hsl(280 76% 78%);
+  color: var(--tk-keyword);
 }
 .tk--tag {
-  color: hsl(200 84% 72%);
+  color: var(--tk-tag);
 }
 .tk--attr {
-  color: hsl(42 82% 74%);
+  color: var(--tk-attr);
 }
 .tk--function {
-  color: hsl(214 90% 78%);
+  color: var(--tk-function);
 }
 .tk--punctuation {
-  color: hsl(228 14% 62%);
+  color: var(--tk-punctuation);
 }
 
 /* ---- Install ------------------------------------------------------------- */
@@ -737,7 +836,7 @@ code {
 .install__note {
   margin: 0;
   font-size: 14px;
-  color: var(--lg-fg-muted);
+  color: var(--site-text-muted);
 }
 
 /* ---- Examples ------------------------------------------------------------ */
@@ -747,7 +846,7 @@ code {
   border: 1px solid var(--site-rule);
   border-radius: var(--lg-radius-lg);
   overflow: hidden;
-  background: hsl(230 30% 6% / 0.22);
+  background: var(--site-panel);
 }
 
 .example__caption {
@@ -765,7 +864,7 @@ code {
   margin: 4px 0 0;
   font-size: 13.5px;
   line-height: 1.6;
-  color: var(--lg-fg-muted);
+  color: var(--site-text-muted);
 }
 
 .example__preview {
@@ -799,7 +898,7 @@ code {
   font-family: inherit;
   font-size: 12.5px;
   font-weight: 500;
-  color: var(--lg-fg-subtle);
+  color: var(--site-text-subtle);
   cursor: pointer;
   transition:
     color var(--lg-dur-fast) var(--lg-ease-out),
@@ -818,7 +917,7 @@ code {
 .example__code .code {
   border: 0;
   border-radius: 0;
-  background: hsl(230 40% 4% / 0.5);
+  background: var(--site-inset);
 }
 
 /* ---- Props tables -------------------------------------------------------- */
@@ -856,8 +955,8 @@ code {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--lg-fg-subtle);
-  background: hsl(230 34% 7% / 0.92);
+  color: var(--site-text-subtle);
+  background: var(--site-sticky);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
@@ -873,25 +972,25 @@ code {
 }
 
 .props__name {
-  color: hsl(42 82% 74%);
+  color: var(--tk-attr);
 }
 
 .props__type {
-  color: hsl(200 84% 72%);
+  color: var(--tk-tag);
   white-space: nowrap;
 }
 
 .props__default {
-  color: hsl(150 58% 68%);
+  color: var(--tk-string);
 }
 
 .props__required {
   font-size: 11.5px;
-  color: var(--lg-fg-subtle);
+  color: var(--site-text-subtle);
 }
 
 .props__desc {
-  color: var(--lg-fg-muted);
+  color: var(--site-text-muted);
   min-width: 26ch;
 }
 
@@ -905,14 +1004,14 @@ code {
   border: 1px solid var(--site-rule);
   border-left: 2px solid var(--lg-accent);
   border-radius: var(--lg-radius-sm);
-  background: hsl(230 30% 8% / 0.34);
+  background: var(--site-panel);
   font-size: 14px;
   line-height: 1.6;
-  color: var(--lg-fg-muted);
+  color: var(--site-text-muted);
 }
 
 .callout[data-tone='warn'] {
-  border-left-color: hsl(38 92% 58%);
+  border-left-color: hsl(38 82% 52%);
 }
 
 .callout p {
@@ -938,11 +1037,11 @@ code {
   align-items: center;
   gap: var(--lg-space-4);
   font-size: 13.5px;
-  color: var(--lg-fg-subtle);
+  color: var(--site-text-subtle);
 }
 
 .footer a {
-  color: var(--lg-fg-muted);
+  color: var(--site-text-muted);
   text-decoration: none;
 }
 

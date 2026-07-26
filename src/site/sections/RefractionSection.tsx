@@ -142,7 +142,7 @@ export function RefractionSection() {
           </p>
         </div>
 
-        <GlassStage className="stage" onStatusChange={setStatus}>
+        <GlassStage className="stage lg-theme-dark" onStatusChange={setStatus}>
           <canvas ref={canvasRef} className="stage__canvas" aria-hidden="true" />
 
           <GlassSurface className="stage__tier1" radius="lg" elevation="raised">

@@ -232,3 +232,35 @@
   --lg-focus-ring: 0 0 0 var(--lg-focus-width) hsl(0 0% 100% / 0.8),
     0 0 0 calc(var(--lg-focus-width) * 2) var(--lg-accent);
 }
+
+/**
+ * Dark-backdrop theme, restated.
+ *
+ * These are the :root defaults again, which looks redundant until the page
+ * itself is light. `.lg-theme-light` on an ancestor makes dark text the
+ * inherited default, and then useAdaptiveContrast setting `light-fg` on a panel
+ * over a night photo would match nothing and leave that panel unreadable. An
+ * element's own declaration beats an inherited one, so restating them here is
+ * what lets the hook flip a panel in either direction rather than only one.
+ */
+:where(.lg-theme-dark),
+:where([data-lg-contrast='light-fg']) {
+  --lg-tint-light: 90%;
+  --lg-tint-alpha: 0.1;
+  --lg-brightness: 105%;
+
+  --lg-rim-bright: hsl(0 0% 100% / 0.55);
+  --lg-rim-mid: hsl(0 0% 100% / 0.14);
+  --lg-rim-dark: hsl(0 0% 100% / 0.04);
+
+  --lg-specular: hsl(0 0% 100% / 0.4);
+  --lg-inner-shadow: hsl(var(--lg-tint-hue) 30% 10% / 0.18);
+
+  --lg-fg: hsl(0 0% 100% / 0.94);
+  --lg-fg-muted: hsl(0 0% 100% / 0.66);
+  --lg-fg-subtle: hsl(0 0% 100% / 0.42);
+
+  --lg-accent-contrast: hsl(var(--lg-accent-hue) 60% 12%);
+  --lg-focus-ring: 0 0 0 var(--lg-focus-width) hsl(0 0% 4% / 0.55),
+    0 0 0 calc(var(--lg-focus-width) * 2) var(--lg-accent);
+}

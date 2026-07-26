@@ -24,7 +24,7 @@
 
   /* Denser than a resting surface. A tooltip is small and short-lived, and at
    * the default tint the text does not separate from whatever is behind it. */
-  --lg-tint-alpha: 0.2;
+  --lg-tint-alpha: calc(0.2 * var(--lg-tint-scale));
   --lg-blur: 24px;
   --lg-noise-opacity: 0.025;
 
@@ -47,7 +47,8 @@
 
   background-color: var(--lg-tint);
   transform: rotate(45deg);
-  border: var(--lg-rim-width) solid hsl(0 0% 100% / 0.16);
+  border: var(--lg-rim-width) solid
+    hsl(var(--lg-line) / calc(0.16 * var(--lg-line-scale)));
 }
 
 .lg-tooltip[data-placement='top'] .lg-tooltip__arrow {

@@ -73,21 +73,53 @@
  * through and the rim still catches light. */
 
 .lg-button[data-variant='primary'] {
-  --lg-tint: hsl(var(--lg-accent-hue) 90% 62% / 0.42);
-  --lg-tint-alpha: 0.42;
+  --lg-tint: hsl(var(--lg-accent-hue) 90% var(--lg-btn-light) / var(--lg-btn-fill));
   --lg-rim-bright: hsl(var(--lg-accent-hue) 100% 88% / 0.9);
   --lg-specular: hsl(var(--lg-accent-hue) 100% 92% / 0.55);
   --lg-shadow-color: var(--lg-accent-hue) 70% 20%;
+
+  --lg-btn-light: 62%;
+  --lg-btn-fill: 0.42;
+
   color: hsl(0 0% 100%);
   font-weight: 550;
 }
 
+/* The one place a linear scale does not work. Everything else can be a
+ * multiple of --lg-tint-scale, but this fill carries white text, so its alpha
+ * is bounded by contrast rather than by how the material reads -- pushed by
+ * the scale it would simply clip at opaque and the hover state would stop
+ * being visible. */
+:where(.lg-theme-light) .lg-button[data-variant='primary'],
+:where([data-lg-contrast='dark-fg']) .lg-button[data-variant='primary'] {
+  --lg-btn-light: 54%;
+  --lg-btn-fill: 0.88;
+}
+
 .lg-button[data-variant='primary']:hover:not([aria-disabled='true']) {
-  --lg-tint: hsl(var(--lg-accent-hue) 92% 66% / 0.56);
+  --lg-btn-light: 66%;
+  --lg-btn-fill: 0.56;
+}
+
+:where(.lg-theme-light)
+  .lg-button[data-variant='primary']:hover:not([aria-disabled='true']),
+:where([data-lg-contrast='dark-fg'])
+  .lg-button[data-variant='primary']:hover:not([aria-disabled='true']) {
+  --lg-btn-light: 58%;
+  --lg-btn-fill: 0.96;
 }
 
 .lg-button[data-variant='primary']:active:not([aria-disabled='true']) {
-  --lg-tint: hsl(var(--lg-accent-hue) 92% 58% / 0.62);
+  --lg-btn-light: 58%;
+  --lg-btn-fill: 0.62;
+}
+
+:where(.lg-theme-light)
+  .lg-button[data-variant='primary']:active:not([aria-disabled='true']),
+:where([data-lg-contrast='dark-fg'])
+  .lg-button[data-variant='primary']:active:not([aria-disabled='true']) {
+  --lg-btn-light: 48%;
+  --lg-btn-fill: 1;
 }
 
 .lg-button[data-variant='secondary'] {
@@ -99,9 +131,12 @@
  * against a busy backdrop. */
 .lg-button[data-variant='ghost'] {
   --lg-tint-alpha: 0;
-  --lg-rim-bright: hsl(0 0% 100% / 0.14);
-  --lg-rim-mid: hsl(0 0% 100% / 0.04);
-  --lg-rim-dark: hsl(0 0% 100% / 0.02);
+  /* `--lg-line` rather than white: at these alphas the frame is read against
+   * the page, not against the button, and white at 14% over a bright page is
+   * nothing at all. */
+  --lg-rim-bright: hsl(var(--lg-line) / calc(0.14 * var(--lg-line-scale)));
+  --lg-rim-mid: hsl(var(--lg-line) / calc(0.04 * var(--lg-line-scale)));
+  --lg-rim-dark: hsl(var(--lg-line) / calc(0.02 * var(--lg-line-scale)));
   --lg-specular: transparent;
   --lg-inner-shadow: transparent;
   --lg-noise-opacity: 0;
@@ -109,9 +144,9 @@
 }
 
 .lg-button[data-variant='ghost']:hover:not([aria-disabled='true']) {
-  --lg-tint-alpha: 0.12;
-  --lg-rim-bright: hsl(0 0% 100% / 0.4);
-  --lg-noise-opacity: 0.03;
+  --lg-tint-alpha: calc(0.12 * var(--lg-tint-scale));
+  --lg-rim-bright: hsl(var(--lg-line) / calc(0.4 * var(--lg-line-scale)));
+  --lg-noise-opacity: calc(var(--lg-noise-base) * 0.85);
   color: var(--lg-fg);
 }
 

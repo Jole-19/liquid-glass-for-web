@@ -29,6 +29,21 @@ const THEMING = `/* Every visual decision in the library resolves through a toke
   --lg-radius-lg: 26px;
 }`;
 
+const THEMING_LIGHT = `/* Glass over a bright page is a different material, not the same
+   one with the text inverted: a white pane with real body, a dark
+   shadow-side rim, and roughly double the shadow. */
+<html class="lg-theme-light">
+
+/* Or per subtree, wherever the backdrop under it is bright. */
+<aside class="lg-theme-light">…</aside>
+
+/* Both themes are built from the same two scalars, so retuning is
+   two numbers rather than a second copy of the stylesheet. */
+.lg-theme-light {
+  --lg-tint-scale: 3.6;      /* multiplies every tint alpha */
+  --lg-shadow-strength: 1.9; /* multiplies every shadow alpha */
+}`;
+
 const PILLARS = [
   {
     title: 'One material, not ten components',
@@ -91,7 +106,7 @@ export function GettingStarted() {
                 everywhere, costs nothing beyond a stylesheet, and is what every
                 component in the library is built from.
               </p>
-              <p className="tiers__meta">Default · ~5.8 kB gzip · no JS required</p>
+              <p className="tiers__meta">Default · ~6.1 kB gzip · no JS required</p>
             </div>
             <div className="tiers__card" data-accent="true">
               <p className="tiers__tag">Tier 2</p>
@@ -136,6 +151,18 @@ export function GettingStarted() {
             whole app, or on any subtree for part of it.
           </p>
           <CodeBlock code={THEMING} language="css" filename="theme.css" />
+
+          <p className="prose">
+            The one thing that is not a free-form token override is the
+            brightness of what sits behind the glass. A value tuned for a dark
+            page is not slightly off on a light one, it is invisible — white rim
+            on white, a shadow at 16%, grain in <code>overlay</code> that
+            resolves to nothing as the backdrop approaches white. So there are
+            two surround themes, and everything else derives from whichever one
+            is in scope.
+          </p>
+          <CodeBlock code={THEMING_LIGHT} language="css" filename="light.css" />
+
           <div className="callout">
             <p>
               Try it live in the{' '}

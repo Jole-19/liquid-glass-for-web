@@ -82,11 +82,15 @@ body {
 
   --site-title: linear-gradient(175deg, #fff 30%, hsl(228 18% 76%));
 
+  --site-specimen-a: hsl(230 70% 42% / 0.5);
+  --site-specimen-b: hsl(190 74% 34% / 0.45);
+
   --site-wash:
-    radial-gradient(72rem 46rem at 50% -18%, hsl(224 52% 20%), transparent 66%),
-    radial-gradient(46rem 36rem at 8% 42%, hsl(232 54% 16% / 0.85), transparent 62%),
-    radial-gradient(52rem 40rem at 92% 74%, hsl(200 52% 15% / 0.8), transparent 62%);
-  --site-grid: hsl(0 0% 100% / 0.034);
+    radial-gradient(50rem 30rem at 72% 30%, hsl(214 58% 25%), transparent 62%),
+    radial-gradient(70rem 44rem at 46% -6%, hsl(226 52% 18%), transparent 66%),
+    radial-gradient(44rem 34rem at 4% 46%, hsl(250 48% 17% / 0.85), transparent 62%),
+    radial-gradient(50rem 38rem at 88% 80%, hsl(196 54% 16% / 0.8), transparent 62%);
+  --site-grid: hsl(0 0% 100% / 0.055);
   --site-yes: hsl(150 58% 64%);
 
   /* The library's --lg-fg-muted and --lg-fg-subtle are alpha values tuned to
@@ -112,7 +116,11 @@ body {
 }
 
 [data-theme='light'] {
-  --site-bg: #eef0f4;
+  /* Deliberately not white. Blur and saturate need something to work on, and
+   * the previous near-white page gave the material a luminance range of about
+   * three percent to blur and almost no chroma to bloom -- which is most of
+   * why the glass read as a flat grey card here and not in dark mode. */
+  --site-bg: #e3e7f0;
 
   --site-rule: hsl(228 24% 22% / 0.13);
   --site-rule-strong: hsl(228 24% 22% / 0.24);
@@ -122,17 +130,21 @@ body {
   --site-panel: hsl(0 0% 100% / 0.46);
   --site-well: hsl(0 0% 100% / 0.6);
   --site-well-bar: hsl(228 24% 22% / 0.035);
-  --site-inset: hsl(0 0% 100% / 0.66);
+  --site-inset: hsl(0 0% 100% / 0.42);
   --site-sticky: hsl(220 30% 97% / 0.94);
   --site-scrim: hsl(228 24% 60% / 0.4);
 
   --site-title: linear-gradient(175deg, hsl(228 30% 12%) 30%, hsl(228 16% 40%));
 
+  --site-specimen-a: hsl(228 92% 72% / 0.6);
+  --site-specimen-b: hsl(188 88% 60% / 0.55);
+
   --site-wash:
-    radial-gradient(72rem 46rem at 50% -18%, hsl(220 78% 90%), transparent 66%),
-    radial-gradient(46rem 36rem at 8% 42%, hsl(232 70% 92% / 0.9), transparent 62%),
-    radial-gradient(52rem 40rem at 92% 74%, hsl(196 72% 90% / 0.9), transparent 62%);
-  --site-grid: hsl(228 30% 28% / 0.065);
+    radial-gradient(50rem 30rem at 72% 30%, hsl(214 88% 80%), transparent 62%),
+    radial-gradient(70rem 44rem at 46% -6%, hsl(226 84% 86%), transparent 66%),
+    radial-gradient(44rem 34rem at 4% 46%, hsl(250 72% 88% / 0.9), transparent 62%),
+    radial-gradient(50rem 38rem at 88% 80%, hsl(192 82% 82% / 0.9), transparent 62%);
+  --site-grid: hsl(228 40% 24% / 0.11);
   --site-yes: hsl(152 64% 28%);
   --site-accent-text: hsl(var(--lg-accent-hue) 76% 42%);
 
@@ -213,16 +225,24 @@ a {
   background-color: var(--site-bg);
 }
 
+/* The overhang only needs to cover the drift, and keeping it small means the
+ * percentage positions below still land roughly where they read on screen --
+ * which matters, because one of them has to sit behind the hero panel. */
 .backdrop::before {
   content: '';
   position: absolute;
-  inset: -20%;
+  inset: -10%;
   background: var(--site-wash);
   animation: backdrop-drift 90s var(--lg-ease-in-out) infinite alternate;
 }
 
-/* A fine grid over the wash. It gives the refraction tier straight lines to
- * bend and makes the blur of the CSS tier legible as blur. */
+/* A fine grid over the wash, and the most load-bearing thing on the page.
+ * Blurring a smooth gradient returns the same smooth gradient, so without some
+ * high-frequency content behind it a glass panel is indistinguishable from a
+ * flat translucent rectangle. The grid is what the blur has to chew on.
+ *
+ * Which is why the mask covers the whole upper band rather than a small circle
+ * in the middle: it has to reach behind the hero panel, not stop short of it. */
 .backdrop::after {
   content: '';
   position: absolute;
@@ -231,7 +251,7 @@ a {
     linear-gradient(to right, var(--site-grid) 1px, transparent 1px),
     linear-gradient(to bottom, var(--site-grid) 1px, transparent 1px);
   background-size: 60px 60px;
-  mask-image: radial-gradient(circle at 50% 26%, #000 8%, transparent 76%);
+  mask-image: radial-gradient(130% 82% at 50% 14%, #000 26%, transparent 84%);
 }
 
 @keyframes backdrop-drift {
@@ -551,7 +571,54 @@ a {
   color: var(--site-text-subtle);
 }
 
+.hero__stage {
+  position: relative;
+}
+
+/**
+ * The specimens behind the hero panel.
+ *
+ * Blurring a smooth gradient returns the same smooth gradient, so a panel over
+ * an even field is indistinguishable from a flat translucent rectangle no
+ * matter how well the material is tuned. These two discs give it an edge to
+ * carry: crisp where it passes outside the panel, soft and tinted where it
+ * passes under. That comparison, side by side in one glance, is the only
+ * honest demonstration of a backdrop filter.
+ *
+ * They are anchored to the hero rather than to the fixed page backdrop because
+ * a fixed decoration ends up parked behind body copy the moment you scroll.
+ */
+.hero__specimens {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero__specimens::before,
+.hero__specimens::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+}
+
+.hero__specimens::before {
+  width: 18rem;
+  height: 18rem;
+  left: -4%;
+  top: -44%;
+  background: var(--site-specimen-a);
+}
+
+.hero__specimens::after {
+  width: 14rem;
+  height: 14rem;
+  right: 5%;
+  bottom: -46%;
+  background: var(--site-specimen-b);
+}
+
 .hero__panel {
+  position: relative;
   padding: var(--lg-space-4);
   display: flex;
   flex-direction: column;
@@ -1065,8 +1132,19 @@ code {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .hero__panel {
+  .hero__stage {
     max-width: 520px;
+  }
+
+  /* Stacked, the panel sits directly under the stats, and a disc protruding as
+   * far as it does on the wide layout ends up behind body copy. Enough of each
+   * one still crosses the rim to make the point. */
+  .hero__specimens::before {
+    top: -20%;
+  }
+
+  .hero__specimens::after {
+    bottom: -22%;
   }
 }
 

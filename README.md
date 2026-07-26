@@ -4,7 +4,7 @@
 [![Stars](https://img.shields.io/github/stars/Jole-19/Liquid-glass-library?style=flat-square&color=6b7cff)](https://github.com/Jole-19/Liquid-glass-library/stargazers)
 [![Last commit](https://img.shields.io/github/last-commit/Jole-19/Liquid-glass-library?style=flat-square&color=6b7cff)](https://github.com/Jole-19/Liquid-glass-library/commits)
 ![JS](https://img.shields.io/badge/js-9.5%20kB%20gzip-6b7cff?style=flat-square)
-![CSS](https://img.shields.io/badge/css-5.8%20kB%20gzip-6b7cff?style=flat-square)
+![CSS](https://img.shields.io/badge/css-6.1%20kB%20gzip-6b7cff?style=flat-square)
 
 A glassmorphic React component library built on one portable CSS material, with
 an opt-in WebGL refraction tier for hero elements.

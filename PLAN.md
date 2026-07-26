@@ -146,6 +146,20 @@ Each becomes a token plus a layer in `.lg-surface`.
   glass stays legible over arbitrary photos. Ported from Lumen's `applyUiTheme`.
   Very few libraries do this, and it is the difference between a demo and
   something usable in production.
+- **A light surround that is a different material, not an inverted one.** Glass
+  over a bright page is a *white* frosted pane; tinting it dark at low alpha
+  gives it no highlight to catch and no body of its own, and it lands as a grey
+  card. The shadow-side rim, not the white lit edge, is what draws the
+  silhouette; shadows need roughly double the alpha; and the grain has to switch
+  from `overlay` to `multiply`, because `overlay` converges on a no-op as the
+  backdrop approaches white. This is the failure mode nearly every glass library
+  ships with, because the light theme is written as a text-colour swap.
+- **Something behind the glass worth blurring.** Blurring a smooth gradient
+  returns the same smooth gradient, so a panel over an even field is
+  indistinguishable from a flat translucent rectangle however well the material
+  is tuned. A 20px blur also erases a 1px grid line completely — only features
+  wider than the blur radius survive. Every showcase surface needs a hard edge
+  crossing its rim, crisp outside and soft within.
 
 ---
 
@@ -155,7 +169,7 @@ Each becomes a token plus a layer in `.lg-surface`.
 Liquid-Glass-Library/
   src/lib/                  the published library
     styles/
-      tokens.css            design tokens (custom properties)
+      tokens.css            design tokens; surround-independent, then two themes
       surface.css           the .lg-surface material
       index.css             import order, owns the cascade
     primitives/
@@ -167,16 +181,27 @@ Liquid-Glass-Library/
       GlassStage.tsx        Tier 2 root
       useLiquidGlass.ts
     index.ts                public exports
-  src/demo/                 showcase app, consumes src/lib
-  index.html                demo entry
-  vite.config.ts            demo build
-  vite.lib.config.ts        library build (ESM + CJS + types)
+  src/site/                 documentation site, consumes src/lib
+    components/             site chrome: TopBar, SideNav, CodeBlock, Example...
+    sections/               one file per documentation section
+    theme.ts                light/dark switching, persisted
+    site.css  showcase.css
+  index.html                site entry, incl. the blocking theme bootstrap
+  vite.config.ts            site build -> dist-site/
+  vite.lib.config.ts        library build (ESM + CJS + types) -> dist/
   tsconfig.json
 ```
 
 Two Vite configs rather than one with modes, because the outputs differ
-genuinely: the demo is an app with hashed assets, the library is externalized
+genuinely: the site is an app with hashed assets, the library is externalized
 ESM plus rolled-up types with a single extracted stylesheet.
+
+`tokens.css` is in two halves: everything that does not care what is behind the
+glass (geometry, motion, and every token *derived* from a leaf), then the two
+surround themes, which set only leaves. Custom properties substitute at use time
+rather than at declaration time, so a derived token written once re-resolves
+correctly under either theme — which is what keeps the shadow stack and the rim
+gradient from existing twice.
 
 ---
 
@@ -212,6 +237,18 @@ ESM plus rolled-up types with a single extracted stylesheet.
 - [x] **polish** — reduced-motion support, `backdrop-filter` fallbacks,
       `forced-colors` and `prefers-contrast` handling, accessibility audit,
       README
+- [x] **docs-site** — the demo replaced by a real documentation site: sticky
+      chrome, sidebar with scrollspy, live examples paired with their source,
+      prop tables, a token playground and a self-contained syntax highlighter.
+      *No highlighting dependency; a single-pass tokenizer covers the three
+      languages the page actually shows.*
+- [x] **surround-themes** — light and dark as two real themes rather than a text
+      swap. Every hard-coded alpha in the library re-expressed against
+      `--lg-tint-scale`, `--lg-shadow-strength` and `--lg-line`, so a theme is a
+      handful of leaves. *Found and fixed a matching bug in
+      `useAdaptiveContrast`: it only ever had a dark-surround set to switch to,
+      so it worked in one direction and coincidentally agreed with the defaults
+      in the other.*
 
 ---
 
@@ -219,7 +256,6 @@ ESM plus rolled-up types with a single extracted stylesheet.
 
 - npm publishing and versioning
 - A Web Component wrapper (the CSS layer is built to make this cheap)
-- Full dark/light theme switching beyond the adaptive contrast pass
 - Storybook
 - Popover — a click-triggered, focus-managed sibling of Tooltip. The hard half,
   edge-aware positioning, is already done in `useAnchoredPosition`.

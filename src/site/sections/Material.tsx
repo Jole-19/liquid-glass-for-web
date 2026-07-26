@@ -33,14 +33,29 @@ const TOKEN_ROWS = [
   {
     name: '--lg-tint-alpha',
     type: '<number>',
-    default: '0.1',
+    default: '0.1 × --lg-tint-scale',
     description: 'Tint strength. Animated on hover and press.',
   },
   {
-    name: '--lg-noise-opacity',
+    name: '--lg-tint-scale',
     type: '<number>',
-    default: '0.035',
-    description: 'Microtexture strength. Usable range is roughly 0.02 to 0.04.',
+    default: '1 (3.6 on light)',
+    description:
+      'Multiplies every tint alpha in the library at once, including the hover and press states and each component\u2019s own. Raising it is how the light theme gets a white pane with real body without every component needing a second value.',
+  },
+  {
+    name: '--lg-shadow-strength',
+    type: '<number>',
+    default: '1 (1.9 on light)',
+    description:
+      'Multiplies every shadow alpha. A shadow that reads correctly against a dark page is close to invisible on a bright one.',
+  },
+  {
+    name: '--lg-noise-base',
+    type: '<number>',
+    default: '0.035 (0.05 on light)',
+    description:
+      'Microtexture strength. Usable range is roughly 0.02 to 0.06; --lg-noise-opacity is the near token components override.',
   },
   {
     name: '--lg-accent-hue',

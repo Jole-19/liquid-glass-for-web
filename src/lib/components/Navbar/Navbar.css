@@ -27,14 +27,9 @@
    * themed `--lg-blur` or `--lg-tint-hue` still applies. */
   --lg-blur: calc(var(--lg-nav-progress) * 22px);
   --lg-saturate: calc(100% + var(--lg-nav-progress) * 80%);
-  --lg-tint-alpha: calc(var(--lg-nav-progress) * 0.14);
-  --lg-noise-opacity: calc(var(--lg-nav-progress) * 0.035);
+  --lg-tint-alpha: calc(var(--lg-nav-progress) * 0.14 * var(--lg-tint-scale));
+  --lg-noise-opacity: calc(var(--lg-nav-progress) * var(--lg-noise-base));
 
-  /* The hairline under the bar is the first thing to appear and does most of
-   * the work of separating the bar from the content sliding under it. */
-  --lg-rim-bright: hsl(0 0% 100% / calc(var(--lg-nav-progress) * 0.4));
-  --lg-rim-mid: hsl(0 0% 100% / calc(var(--lg-nav-progress) * 0.1));
-  --lg-rim-dark: hsl(0 0% 100% / calc(var(--lg-nav-progress) * 0.03));
   --lg-specular: hsl(0 0% 100% / calc(var(--lg-nav-progress) * 0.3));
   --lg-inner-shadow: transparent;
 
@@ -56,14 +51,21 @@
 }
 
 /* The rim is a full frame by default; on a full-bleed bar only the bottom edge
- * should read as an edge, since the others run off the viewport. */
+ * should read as an edge, since the others run off the viewport.
+ *
+ * This hairline is the first thing to appear as you scroll and does most of the
+ * work of separating the bar from the content sliding under it, which is why it
+ * is drawn in `--lg-line` -- it has to be read against the page. */
 .lg-navbar::before {
   -webkit-mask: none;
   mask: none;
   padding: 0;
   background-image: none;
   border-bottom: 1px solid
-    hsl(0 0% 100% / calc(var(--lg-nav-progress) * 0.14));
+    hsl(
+      var(--lg-line) /
+        calc(var(--lg-nav-progress) * 0.14 * var(--lg-line-scale))
+    );
 }
 
 /* The scroll response is a blur ramp, and without `backdrop-filter` there is no
@@ -78,7 +80,7 @@
 
   :where(.lg-theme-light) .lg-navbar,
   :where([data-lg-contrast='dark-fg']) .lg-navbar {
-    --lg-tint-light: 96%;
+    --lg-tint-light: 98%;
   }
 }
 

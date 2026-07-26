@@ -62,7 +62,7 @@ export function Hero() {
           <div>
             <dt>Stylesheet</dt>
             <dd>
-              5.8<span>kB gzip</span>
+              6.1<span>kB gzip</span>
             </dd>
           </div>
           <div>
@@ -76,44 +76,51 @@ export function Hero() {
         </dl>
       </div>
 
-      <GlassSurface className="hero__panel" radius="xl" elevation="overlay">
-        <div className="hero__panel-row">
-          <span className="hero__panel-dot" data-tone="a" aria-hidden="true" />
-          <span className="hero__panel-dot" data-tone="b" aria-hidden="true" />
-          <span className="hero__panel-dot" data-tone="c" aria-hidden="true" />
-        </div>
-        <pre className="hero__snippet">
-          <code>
-            <span className="tk tk--keyword">import</span>
-            <span className="tk tk--punctuation"> {'{ '}</span>
-            <span className="tk tk--tag">Button</span>
-            <span className="tk tk--punctuation">{' } '}</span>
-            <span className="tk tk--keyword">from</span>{' '}
-            <span className="tk tk--string">{`'${PACKAGE_NAME}'`}</span>
-            <span className="tk tk--punctuation">;</span>
-            {'\n'}
-            <span className="tk tk--keyword">import</span>{' '}
-            <span className="tk tk--string">{`'${PACKAGE_NAME}/styles.css'`}</span>
-            <span className="tk tk--punctuation">;</span>
-            {'\n\n'}
-            <span className="tk tk--tag">{'<Button'}</span>{' '}
-            <span className="tk tk--attr">variant</span>
-            <span className="tk tk--punctuation">=</span>
-            <span className="tk tk--string">"primary"</span>
-            <span className="tk tk--tag">{'>'}</span>
-            {'Continue'}
-            <span className="tk tk--tag">{'</Button>'}</span>
-          </code>
-        </pre>
-        <div className="hero__panel-actions">
-          <Button variant="primary" size="sm">
-            Continue
-          </Button>
-          <Button variant="ghost" size="sm">
-            Cancel
-          </Button>
-        </div>
-      </GlassSurface>
+      <div className="hero__stage">
+        {/* Two discs sitting half behind the panel. They are the hero's whole
+            argument: the same hard edge appears crisp outside the glass and
+            soft, tinted and displaced inside it. */}
+        <div className="hero__specimens" aria-hidden="true" />
+
+        <GlassSurface className="hero__panel" radius="xl" elevation="overlay">
+          <div className="hero__panel-row">
+            <span className="hero__panel-dot" data-tone="a" aria-hidden="true" />
+            <span className="hero__panel-dot" data-tone="b" aria-hidden="true" />
+            <span className="hero__panel-dot" data-tone="c" aria-hidden="true" />
+          </div>
+          <pre className="hero__snippet">
+            <code>
+              <span className="tk tk--keyword">import</span>
+              <span className="tk tk--punctuation"> {'{ '}</span>
+              <span className="tk tk--tag">Button</span>
+              <span className="tk tk--punctuation">{' } '}</span>
+              <span className="tk tk--keyword">from</span>{' '}
+              <span className="tk tk--string">{`'${PACKAGE_NAME}'`}</span>
+              <span className="tk tk--punctuation">;</span>
+              {'\n'}
+              <span className="tk tk--keyword">import</span>{' '}
+              <span className="tk tk--string">{`'${PACKAGE_NAME}/styles.css'`}</span>
+              <span className="tk tk--punctuation">;</span>
+              {'\n\n'}
+              <span className="tk tk--tag">{'<Button'}</span>{' '}
+              <span className="tk tk--attr">variant</span>
+              <span className="tk tk--punctuation">=</span>
+              <span className="tk tk--string">"primary"</span>
+              <span className="tk tk--tag">{'>'}</span>
+              {'Continue'}
+              <span className="tk tk--tag">{'</Button>'}</span>
+            </code>
+          </pre>
+          <div className="hero__panel-actions">
+            <Button variant="primary" size="sm">
+              Continue
+            </Button>
+            <Button variant="ghost" size="sm">
+              Cancel
+            </Button>
+          </div>
+        </GlassSurface>
+      </div>
     </header>
   );
 }

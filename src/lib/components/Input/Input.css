@@ -42,24 +42,33 @@
   border-radius: var(--lg-radius-sm);
 
   /* Recessed: specular on the bottom edge, shadow cast down from the top. */
-  --lg-tint-alpha: 0.06;
+  --lg-tint-alpha: calc(0.06 * var(--lg-tint-scale));
   --lg-inset:
-    inset 0 1px 2px hsl(var(--lg-tint-hue) 30% 8% / 0.28),
+    inset 0 1px 2px hsl(var(--lg-tint-hue) 30% 8% / calc(0.28 * var(--lg-shadow-strength))),
     inset 0 -1px 0 0 hsl(0 0% 100% / 0.16);
   --lg-rim-gradient: linear-gradient(
     var(--lg-light-angle),
-    hsl(0 0% 100% / 0.06),
-    hsl(0 0% 100% / 0.16)
+    hsl(var(--lg-line) / calc(0.06 * var(--lg-line-scale))),
+    hsl(var(--lg-line) / calc(0.16 * var(--lg-line-scale)))
   );
   --lg-noise-opacity: 0.02;
+
+  /* The nearest thing to the field's own body colour, used only to paint over
+   * Chrome's autofill yellow. See the note further down. */
+  --lg-field-autofill: hsl(var(--lg-tint-hue) 30% 18% / 0.9);
 
   transition:
     box-shadow var(--lg-dur-fast) var(--lg-ease-out),
     --lg-tint-alpha var(--lg-dur-fast) var(--lg-ease-out);
 }
 
+:where(.lg-theme-light) .lg-field__box,
+:where([data-lg-contrast='dark-fg']) .lg-field__box {
+  --lg-field-autofill: hsl(var(--lg-tint-hue) 40% 96% / 0.94);
+}
+
 .lg-field__box:hover {
-  --lg-tint-alpha: 0.09;
+  --lg-tint-alpha: calc(0.09 * var(--lg-tint-scale));
 }
 
 /* The ring lives on the box because the box is what the user sees as "the
@@ -68,7 +77,7 @@
  * is deliberate -- a text field being focused by click should show it, unlike
  * a button. */
 .lg-field__box:focus-within {
-  --lg-tint-alpha: 0.1;
+  --lg-tint-alpha: calc(0.1 * var(--lg-tint-scale));
   box-shadow: var(--lg-inset), var(--lg-focus-ring);
 }
 
@@ -103,7 +112,7 @@
 .lg-field__input:-webkit-autofill:hover,
 .lg-field__input:-webkit-autofill:focus {
   -webkit-text-fill-color: var(--lg-fg);
-  -webkit-box-shadow: 0 0 0 1000px hsl(var(--lg-tint-hue) 30% 18% / 0.9) inset;
+  -webkit-box-shadow: 0 0 0 1000px var(--lg-field-autofill) inset;
   caret-color: var(--lg-fg);
   transition: background-color 100000s ease 0s;
 }
@@ -171,7 +180,7 @@
 .lg-field[data-invalid='true'] .lg-field__box:focus-within {
   box-shadow:
     var(--lg-inset),
-    0 0 0 var(--lg-focus-width) hsl(0 0% 4% / 0.55),
+    0 0 0 var(--lg-focus-width) var(--lg-focus-halo),
     0 0 0 calc(var(--lg-focus-width) * 2) var(--lg-danger);
 }
 

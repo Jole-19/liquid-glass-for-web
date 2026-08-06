@@ -56,10 +56,13 @@
 
   /* The dialog is brighter than a resting surface. It has the page's own glass
    * behind it as well as the scrim, and at the default tint it would read as
-   * murky rather than as a pane floating above everything. */
+   * murky rather than as a pane floating above everything.
+   *
+   * Composed rather than set as leaves, so the buttons in the footer keep the
+   * page's material instead of inheriting the dialog's heavier one. */
   --lg-tint-alpha: calc(0.16 * var(--lg-tint-scale));
-  --lg-blur: 32px;
-  --lg-saturate: 190%;
+  --lg-backdrop: blur(calc(var(--lg-blur) * 1.6)) saturate(190%)
+    brightness(var(--lg-brightness));
 
   outline: none;
   animation: lg-modal-in var(--lg-dur-base) var(--lg-ease-spring) both;

@@ -154,6 +154,15 @@ Each becomes a token plus a layer in `.lg-surface`.
   from `overlay` to `multiply`, because `overlay` converges on a no-op as the
   backdrop approaches white. This is the failure mode nearly every glass library
   ships with, because the light theme is written as a text-colour swap.
+- **Derived tokens have to be re-declared wherever a leaf can change.** A
+  custom property whose value contains `var()` is substituted on the element
+  that *declares* it, not on the one that uses it, so a composite written once
+  on `:root` inherits everywhere as a finished string. Every subtree theme,
+  every component that tunes its own glass, and every hover state works by
+  changing a leaf below `:root` — which means all of them silently do nothing
+  unless the composite is declared again where the change happens. This is easy
+  to ship without noticing, because the defaults are correct and the page looks
+  finished; it is only wrong in the states nobody screenshots.
 - **Something behind the glass worth blurring.** Blurring a smooth gradient
   returns the same smooth gradient, so a panel over an even field is
   indistinguishable from a flat translucent rectangle however well the material
@@ -196,12 +205,17 @@ Two Vite configs rather than one with modes, because the outputs differ
 genuinely: the site is an app with hashed assets, the library is externalized
 ESM plus rolled-up types with a single extracted stylesheet.
 
-`tokens.css` is in two halves: everything that does not care what is behind the
-glass (geometry, motion, and every token *derived* from a leaf), then the two
-surround themes, which set only leaves. Custom properties substitute at use time
-rather than at declaration time, so a derived token written once re-resolves
-correctly under either theme — which is what keeps the shadow stack and the rim
-gradient from existing twice.
+`tokens.css` is in three parts: the constants, then the *composites* built out
+of leaf tokens, then the two surround themes, which set only leaves.
+
+The composites carry a wider selector than the constants, and that is the
+load-bearing detail of the file. A custom property containing `var()` is
+substituted at computed-value time **on the element that declares it**, not
+where it is eventually used — so a composite declared only on `:root` inherits
+everywhere as a finished string and re-declaring a leaf further down the tree
+does nothing. They are therefore declared again on each theme hook and on
+`.lg-surface`, written once and reused via the selector list, at zero
+specificity so component rules still win.
 
 ---
 
@@ -249,6 +263,23 @@ gradient from existing twice.
       `useAdaptiveContrast`: it only ever had a dark-surround set to switch to,
       so it worked in one direction and coincidentally agreed with the defaults
       in the other.*
+- [x] **token-substitution** — the composites re-declared on every theme hook
+      and on `.lg-surface`, so that changing a leaf below `:root` actually
+      resolves. This was the bug behind most of the library's dynamic
+      behaviour: hover and press tint and blur, the Navbar's scroll ramp, the
+      Modal's heavier glass, the primary Button's accent rim, `.lg-theme-*` on
+      a subtree, and every token `useAdaptiveContrast` writes were all inert.
+      Navbar and Modal now override the composites rather than the leaves they
+      are built from, which also keeps their tuning from inheriting into the
+      surfaces nested inside them. *Verified in a real browser rather than by
+      reading: the failure mode is invisible in the resting state.*
+- [x] **site-fixes** — the sticky anatomy stage constrained to its own row
+      (Chrome constrains a sticky *grid item* to the grid container, not its
+      grid area, so it slid over the code block beneath it); the Tier 2 panel's
+      layout no longer overridden by a `[data-refraction]` rule the consumer
+      could not outrank; and the refraction stage no longer re-initialises
+      forever — panel registration and renderer status were in one context, so
+      each drove the other and the shaders recompiled about twice a second.
 
 ---
 

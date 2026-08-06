@@ -24,14 +24,24 @@
 
   /* At rest the bar is effectively invisible; at full progress it is a normal
    * pane of glass. Both ends are still expressed in the shared tokens, so a
-   * themed `--lg-blur` or `--lg-tint-hue` still applies. */
-  --lg-blur: calc(var(--lg-nav-progress) * 22px);
-  --lg-saturate: calc(100% + var(--lg-nav-progress) * 80%);
+   * themed `--lg-blur` or `--lg-tint-hue` still applies.
+   *
+   * The ramp drives the *composites* rather than the leaves they are built
+   * from. Leaves inherit, and everything in the bar's action slot is itself a
+   * surface deriving its own material -- a secondary Button would ramp down
+   * with the bar and disappear at the top of the page. The composites are
+   * re-declared on every `.lg-surface`, so overriding them here stops at the
+   * bar's own box. */
+  --lg-backdrop: blur(calc(var(--lg-nav-progress) * var(--lg-blur)))
+    saturate(calc(100% + var(--lg-nav-progress) * 80%))
+    brightness(var(--lg-brightness));
   --lg-tint-alpha: calc(var(--lg-nav-progress) * 0.14 * var(--lg-tint-scale));
   --lg-noise-opacity: calc(var(--lg-nav-progress) * var(--lg-noise-base));
 
-  --lg-specular: hsl(0 0% 100% / calc(var(--lg-nav-progress) * 0.3));
-  --lg-inner-shadow: transparent;
+  /* Specular only -- the bar has no inner shadow, since its lower edge is the
+   * hairline below rather than a rolled-off thickness. */
+  --lg-inset: inset 0 var(--lg-rim-width) var(--lg-specular-blur) 0
+    hsl(0 0% 100% / calc(var(--lg-nav-progress) * 0.3));
 
   box-shadow:
     var(--lg-inset),

@@ -199,7 +199,9 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: var(--lg-space-5);
-  align-items: start;
+  /* No `align-items: start` here, deliberately: the pane has to stretch to the
+   * full row height for the sticky stage inside it to have anywhere to travel,
+   * and to stop travelling at the row's bottom edge. */
 }
 
 .anatomy__stage {
@@ -501,68 +503,11 @@
 
 /* ---- Refraction stage ---------------------------------------------------- */
 
-.stagewrap__head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--lg-space-4);
-  margin-bottom: var(--lg-space-4);
-}
-
 .stagewrap__hint {
-  flex: 1 1 320px;
-  margin: 0;
+  margin: 0 0 var(--lg-space-4);
   max-width: 56ch;
   font-size: 14px;
   color: var(--site-text-muted);
-}
-
-.stagewrap__status {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-  padding: 5px 12px;
-  border: 1px solid var(--site-rule);
-  border-radius: var(--lg-radius-pill);
-  font-family: var(--site-mono);
-  font-size: 11.5px;
-  white-space: nowrap;
-  color: var(--site-text-muted);
-}
-
-.stagewrap__pip {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--site-text-subtle);
-}
-
-.stagewrap__status[data-status='loading'] .stagewrap__pip {
-  background: hsl(42 92% 60%);
-  animation: pip-pulse 1.1s ease-in-out infinite;
-}
-
-.stagewrap__status[data-status='ready'] .stagewrap__pip {
-  background: hsl(150 80% 55%);
-  box-shadow: 0 0 0 3px hsl(150 80% 55% / 0.2);
-}
-
-.stagewrap__status[data-status='unavailable'] .stagewrap__pip {
-  background: hsl(2 78% 62%);
-}
-
-@keyframes pip-pulse {
-  50% {
-    opacity: 0.3;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .stagewrap__status[data-status='loading'] .stagewrap__pip {
-    animation: none;
-  }
 }
 
 .stage {

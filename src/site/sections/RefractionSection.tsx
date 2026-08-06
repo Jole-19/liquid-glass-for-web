@@ -11,9 +11,8 @@
  * path in the renderer -- canvas, img and video go through `drawImage`, while
  * anything else behind the glass is rasterized with `html-to-image`.
  */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { GlassPanel, GlassStage, GlassSurface } from '../../lib';
-import type { RefractionStatus } from '../../lib';
 import { Section, Subsection } from '../components/Section';
 import { CodeBlock } from '../components/CodeBlock';
 import { PACKAGE_NAME } from '../config';
@@ -24,7 +23,7 @@ const USAGE = `import { GlassStage, GlassPanel } from '${PACKAGE_NAME}';
 
 // The renderer is dynamically imported the first time a stage mounts,
 // so the shader code never lands in the bundle of an app that does
-// not use it.
+// not use it. onStatusChange reports whether it got there.
 <GlassStage onStatusChange={setStatus}>
   {/* Panels must be direct children — the renderer reads their
       geometry relative to the stage. */}
@@ -34,13 +33,6 @@ const USAGE = `import { GlassStage, GlassPanel } from '${PACKAGE_NAME}';
     Play
   </GlassPanel>
 </GlassStage>`;
-
-const STATUS_LABEL: Record<RefractionStatus, string> = {
-  idle: 'not started',
-  loading: 'compiling shaders…',
-  ready: 'active',
-  unavailable: 'unavailable — showing the CSS material',
-};
 
 function paintBackdrop(canvas: HTMLCanvasElement): void {
   const ctx = canvas.getContext('2d');
@@ -101,7 +93,6 @@ function paintBackdrop(canvas: HTMLCanvasElement): void {
 
 export function RefractionSection() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [status, setStatus] = useState<RefractionStatus>('idle');
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -130,19 +121,13 @@ export function RefractionSection() {
       }
     >
       <div className="stagewrap">
-        <div className="stagewrap__head">
-          <p className="stagewrap__hint">
-            Both panels sit over the same canvas. Watch the grid lines where
-            they cross each rim — the left panel blurs them, the right one bends
-            them. Drag the right panel around.
-          </p>
-          <p className="stagewrap__status" data-status={status}>
-            <span className="stagewrap__pip" aria-hidden="true" />
-            WebGL {STATUS_LABEL[status]}
-          </p>
-        </div>
+        <p className="stagewrap__hint">
+          Both panels sit over the same canvas. Watch the grid lines where they
+          cross each rim — the left panel blurs them, the right one bends them.
+          Drag the right panel around.
+        </p>
 
-        <GlassStage className="stage lg-theme-dark" onStatusChange={setStatus}>
+        <GlassStage className="stage lg-theme-dark">
           <canvas ref={canvasRef} className="stage__canvas" aria-hidden="true" />
 
           <GlassSurface className="stage__tier1" radius="lg" elevation="raised">

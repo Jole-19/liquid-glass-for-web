@@ -13,5 +13,11 @@ export default defineConfig({
   build: {
     // Kept out of `dist`, which belongs to the library build.
     outDir: 'dist-site',
+    rollupOptions: {
+      input: {
+        main: 'index.html',
+        mock: 'mock.html',
+      },
+    },
   },
 });

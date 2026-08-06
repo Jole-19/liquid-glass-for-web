@@ -35,24 +35,34 @@ import { devWarn } from '../utils/devWarn';
 import { useLiquidGlass } from './useLiquidGlass';
 import type { RefractionConfig, RefractionStatus } from './types';
 
-interface StageContextValue {
+/**
+ * Registration is deliberately a separate context from renderer state.
+ *
+ * A panel registers in an effect keyed on the context it reads, so if that
+ * context also carried `status` the two would drive each other: registering
+ * re-inits the renderer, re-initialising moves the status, a new status is a
+ * new context value, and the panel re-registers. The renderer tears itself
+ * down and recompiles for as long as the page is open. Splitting the volatile
+ * half off is what breaks the cycle -- both members here are stable for the
+ * lifetime of the stage, so the registration effect runs exactly once.
+ */
+interface StageRegistry {
   rootRef: React.RefObject<HTMLDivElement | null>;
   register: (element: HTMLElement) => () => void;
+}
+
+interface StageState {
   markChanged: (element?: HTMLElement) => void;
   status: RefractionStatus;
 }
 
-const StageContext = createContext<StageContextValue | null>(null);
+const RegistryContext = createContext<StageRegistry | null>(null);
+const StateContext = createContext<StageState | null>(null);
 
 /** Renderer state and the manual invalidation hook, for panels and their
  * children. Returns null outside a `<GlassStage>`. */
-export function useGlassStage(): Pick<
-  StageContextValue,
-  'markChanged' | 'status'
-> | null {
-  const context = useContext(StageContext);
-  if (!context) return null;
-  return { markChanged: context.markChanged, status: context.status };
+export function useGlassStage(): StageState | null {
+  return useContext(StateContext);
 }
 
 export interface GlassStageProps extends HTMLAttributes<HTMLDivElement> {
@@ -136,22 +146,29 @@ export const GlassStage = forwardRef(function GlassStage(
     );
   }, [status, revision]);
 
-  const context = useMemo<StageContextValue>(
-    () => ({ rootRef, register, markChanged, status }),
-    [markChanged, register, status],
+  const registry = useMemo<StageRegistry>(
+    () => ({ rootRef, register }),
+    [register],
+  );
+
+  const state = useMemo<StageState>(
+    () => ({ markChanged, status }),
+    [markChanged, status],
   );
 
   return (
-    <StageContext.Provider value={context}>
-      <div
-        {...rest}
-        ref={setRefs}
-        className={cx('lg-stage', className)}
-        data-refraction={status}
-      >
-        {children}
-      </div>
-    </StageContext.Provider>
+    <RegistryContext.Provider value={registry}>
+      <StateContext.Provider value={state}>
+        <div
+          {...rest}
+          ref={setRefs}
+          className={cx('lg-stage', className)}
+          data-refraction={status}
+        >
+          {children}
+        </div>
+      </StateContext.Provider>
+    </RegistryContext.Provider>
   );
 });
 
@@ -191,7 +208,7 @@ export const GlassPanel = forwardRef(function GlassPanel(
   }: GlassPanelProps,
   ref: Ref<HTMLDivElement>,
 ) {
-  const stage = useContext(StageContext);
+  const registry = useContext(RegistryContext);
   const nodeRef = useRef<HTMLDivElement | null>(null);
 
   const setRefs = useCallback(
@@ -204,18 +221,18 @@ export const GlassPanel = forwardRef(function GlassPanel(
   );
 
   devWarn(
-    stage === null,
+    registry === null,
     '<GlassPanel> renders outside a <GlassStage> and will only ever show the CSS material. The WebGL renderer needs a root that owns the panel, which is what <GlassStage> provides.',
   );
 
   useEffect(() => {
     const node = nodeRef.current;
-    if (!node || !stage) return;
+    if (!node || !registry) return;
 
     // The check the renderer would otherwise make silently, phrased in terms of
     // the components rather than the DOM. Skipping registration keeps the panel
     // on Tier 1 instead of letting it look broken.
-    if (node.parentElement !== stage.rootRef.current) {
+    if (node.parentElement !== registry.rootRef.current) {
       devWarn(
         true,
         '<GlassPanel> must be a *direct* child of <GlassStage>. This one is nested inside another element, so the renderer would drop it; it has been left on the CSS material instead. Move the panel up, or move the wrapper inside the panel.',
@@ -223,8 +240,8 @@ export const GlassPanel = forwardRef(function GlassPanel(
       return;
     }
 
-    return stage.register(node);
-  }, [stage]);
+    return registry.register(node);
+  }, [registry]);
 
   const glassConfig: Partial<RefractionConfig> = {
     cornerRadius: radius,

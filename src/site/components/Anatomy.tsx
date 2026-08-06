@@ -107,24 +107,30 @@ export function Anatomy() {
 
   return (
     <div className="anatomy">
-      {/* The stage stays dark in light mode -- a glass panel over a white page
-          demonstrates nothing -- so the panel inside it is pinned to the
-          dark-backdrop theme rather than following the page. */}
-      <div className="anatomy__stage lg-theme-dark">
-        <GlassSurface
-          className="anatomy__panel"
-          radius="xl"
-          elevation="raised"
-          style={style}
-        >
-          <p className="anatomy__panel-title">
-            {offCount === 0 ? 'Complete material' : `${offCount} layer${offCount === 1 ? '' : 's'} removed`}
-          </p>
-          <p className="anatomy__panel-body">
-            Switch the layers off one at a time. The ones that seem least
-            important are usually the ones doing the most work.
-          </p>
-        </GlassSurface>
+      {/* The pane exists so that the stage inside it can be sticky. A sticky
+          grid *item* is constrained to the grid container rather than to its
+          own grid area, so as a direct child the stage slides down over the
+          code block in the row beneath it. */}
+      <div className="anatomy__pane">
+        {/* The stage stays dark in light mode -- a glass panel over a white
+            page demonstrates nothing -- so the panel inside it is pinned to
+            the dark-backdrop theme rather than following the page. */}
+        <div className="anatomy__stage lg-theme-dark">
+          <GlassSurface
+            className="anatomy__panel"
+            radius="xl"
+            elevation="raised"
+            style={style}
+          >
+            <p className="anatomy__panel-title">
+              {offCount === 0 ? 'Complete material' : `${offCount} layer${offCount === 1 ? '' : 's'} removed`}
+            </p>
+            <p className="anatomy__panel-body">
+              Switch the layers off one at a time. The ones that seem least
+              important are usually the ones doing the most work.
+            </p>
+          </GlassSurface>
+        </div>
       </div>
 
       <ul className="anatomy__list">

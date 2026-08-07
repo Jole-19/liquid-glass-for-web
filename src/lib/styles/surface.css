@@ -37,10 +37,15 @@
 .lg-surface {
   position: relative;
   isolation: isolate;
-  border: 0;
   border-radius: var(--lg-radius);
   color: var(--lg-fg);
   font-family: var(--lg-font);
+
+  /* Sharp bezel border — the crisp dark outline that defines the pane's edge
+   * against any backdrop. Without this the glass reads as a fuzzy glow; with
+   * it the shape is immediately legible, which is what makes the material
+   * look premium. */
+  border: var(--lg-border-width) solid var(--lg-border-color);
 
   background-color: var(--lg-tint);
   background-image: var(--lg-body-gradient);

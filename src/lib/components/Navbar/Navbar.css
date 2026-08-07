@@ -20,6 +20,7 @@
   min-height: 56px;
   padding-inline: var(--lg-space-5);
   border-radius: 0;
+  border: 0;
   font-family: var(--lg-font);
 
   /* At rest the bar is effectively invisible; at full progress it is a normal

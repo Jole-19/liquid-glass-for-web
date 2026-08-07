@@ -6,7 +6,6 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardMedia,
   CardTitle,
   GlassSurface,
   Input,
@@ -149,6 +148,15 @@ function IconTrash() {
   );
 }
 
+function IconLock() {
+  return (
+    <svg {...I}>
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+    </svg>
+  );
+}
+
 /* ---- Theme toggle -------------------------------------------------------- */
 
 function useTheme(): ['light' | 'dark', () => void] {
@@ -167,7 +175,7 @@ function useTheme(): ['light' | 'dark', () => void] {
   return [theme, toggle];
 }
 
-/* ---- Stats data ---------------------------------------------------------- */
+/* ---- Data ---------------------------------------------------------------- */
 
 const STATS = [
   { label: 'Revenue', value: '$48.2k', change: '+12.4%', up: true },
@@ -193,7 +201,7 @@ const ACTIVITY = [
 
 export function MockApp() {
   const [theme, toggleTheme] = useTheme();
-  const [tab, setTab] = useState('overview');
+  const [tab, setTab] = useState('showcase');
   const [modalOpen, setModalOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState('');
   const [notifications, setNotifications] = useState(true);
@@ -255,40 +263,216 @@ export function MockApp() {
       <div className="mock-shell">
         <header className="mock-header">
           <div>
-            <h1 className="mock-title">Dashboard</h1>
-            <p className="mock-subtitle">Welcome back — here's what's happening today.</p>
+            <h1 className="mock-title">Component Showcase</h1>
+            <p className="mock-subtitle">
+              Visual test of the liquid glass material across every component.
+            </p>
           </div>
           <Button variant="primary" startIcon={<IconPlus />}>
             New project
           </Button>
         </header>
 
-        {/* ---- Stat cards ------------------------------------------------ */}
-        <div className="mock-stats">
-          {STATS.map((s) => (
-            <GlassSurface key={s.label} className="mock-stat" radius="lg" interactive>
-              <span className="mock-stat__icon">
-                <IconTrend />
-              </span>
-              <span className="mock-stat__label">{s.label}</span>
-              <span className="mock-stat__value">{s.value}</span>
-              <span className={'mock-stat__change' + (s.up ? ' up' : ' down')}>
-                {s.change}
-              </span>
-            </GlassSurface>
-          ))}
-        </div>
-
-        {/* ---- Tabs ------------------------------------------------------ */}
         <Tabs value={tab} onValueChange={setTab}>
-          <TabList label="Dashboard sections" className="mock-tablist">
-            <Tab value="overview">Overview</Tab>
-            <Tab value="projects">Projects</Tab>
+          <TabList label="Sections" className="mock-tablist">
+            <Tab value="showcase">Showcase</Tab>
+            <Tab value="dashboard">Dashboard</Tab>
             <Tab value="settings">Settings</Tab>
           </TabList>
 
-          {/* ---- Overview panel ------------------------------------------ */}
-          <TabPanel value="overview">
+          {/* ============================================================ */}
+          {/* SHOWCASE TAB — focused visual test of the glass material      */}
+          {/* ============================================================ */}
+          <TabPanel value="showcase">
+            {/* ---- Buttons section ---------------------------------------- */}
+            <section className="mock-section">
+              <h2 className="mock-section__title">Buttons</h2>
+              <p className="mock-section__desc">
+                All three sizes and variants on the glass material.
+              </p>
+
+              <div className="mock-showcase-row">
+                <Button variant="secondary" size="sm" startIcon={<IconLock />}>
+                  Small
+                </Button>
+                <Button variant="secondary" size="md" startIcon={<IconLock />}>
+                  Medium
+                </Button>
+                <Button variant="secondary" size="lg" startIcon={<IconLock />}>
+                  Large
+                </Button>
+              </div>
+
+              <div className="mock-showcase-row">
+                <Button variant="primary" size="sm">Primary Small</Button>
+                <Button variant="primary" size="md">Primary Medium</Button>
+                <Button variant="primary" size="lg">Primary Large</Button>
+              </div>
+
+              <div className="mock-showcase-row">
+                <Button variant="ghost" size="sm" startIcon={<IconSettings />}>
+                  Ghost Small
+                </Button>
+                <Button variant="ghost" size="md" startIcon={<IconFolder />}>
+                  Ghost Medium
+                </Button>
+                <Button variant="ghost" size="lg" startIcon={<IconBox />}>
+                  Ghost Large
+                </Button>
+              </div>
+
+              <div className="mock-showcase-row">
+                <Button variant="secondary" size="lg" radius="pill" startIcon={<IconLock />}>
+                  Pill Button
+                </Button>
+                <Button variant="primary" size="lg" radius="pill">
+                  Pill Primary
+                </Button>
+                <Button variant="secondary" size="lg" iconOnly aria-label="Settings">
+                  <IconSettings />
+                </Button>
+              </div>
+            </section>
+
+            {/* ---- Surfaces section --------------------------------------- */}
+            <section className="mock-section">
+              <h2 className="mock-section__title">Glass Surfaces</h2>
+              <p className="mock-section__desc">
+                Raw GlassSurface primitives at different radii.
+              </p>
+
+              <div className="mock-showcase-surfaces">
+                <GlassSurface className="mock-surface-demo mock-surface-demo--sm" radius="sm">
+                  <span>Small radius</span>
+                </GlassSurface>
+                <GlassSurface className="mock-surface-demo mock-surface-demo--md" radius="md">
+                  <span>Medium radius</span>
+                </GlassSurface>
+                <GlassSurface className="mock-surface-demo mock-surface-demo--lg" radius="lg">
+                  <span>Large radius</span>
+                </GlassSurface>
+                <GlassSurface className="mock-surface-demo mock-surface-demo--xl" radius="xl">
+                  <span>XL radius</span>
+                </GlassSurface>
+                <GlassSurface className="mock-surface-demo mock-surface-demo--pill" radius="pill">
+                  <span>Pill</span>
+                </GlassSurface>
+              </div>
+            </section>
+
+            {/* ---- Cards section ------------------------------------------ */}
+            <section className="mock-section">
+              <h2 className="mock-section__title">Cards</h2>
+              <p className="mock-section__desc">
+                Cards with different content layouts on the glass material.
+              </p>
+
+              <div className="mock-showcase-cards">
+                <Card radius="lg">
+                  <CardHeader>
+                    <CardTitle>Analytics</CardTitle>
+                    <CardDescription>Weekly performance report</CardDescription>
+                  </CardHeader>
+                  <CardBody>
+                    <div className="mock-stat-inline">
+                      <span className="mock-stat-inline__value">12.4k</span>
+                      <span className="mock-stat-inline__label">Page views</span>
+                    </div>
+                    <div className="mock-stat-inline">
+                      <span className="mock-stat-inline__value">847</span>
+                      <span className="mock-stat-inline__label">Unique visitors</span>
+                    </div>
+                  </CardBody>
+                  <CardFooter>
+                    <Button variant="primary" size="sm">View report</Button>
+                    <Button variant="ghost" size="sm">Dismiss</Button>
+                  </CardFooter>
+                </Card>
+
+                <Card radius="lg" interactive>
+                  <CardHeader>
+                    <CardTitle>Notifications</CardTitle>
+                    <CardDescription>3 unread messages</CardDescription>
+                  </CardHeader>
+                  <CardBody>
+                    <ul className="mock-activity">
+                      {ACTIVITY.slice(0, 2).map((a, i) => (
+                        <li key={i} className="mock-activity__item">
+                          <span className="mock-activity__avatar">{a.user[0]}</span>
+                          <div>
+                            <span className="mock-activity__user">{a.user}</span>{' '}
+                            {a.action}
+                            <span className="mock-activity__time">{a.time}</span>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardBody>
+                </Card>
+
+                <Card radius="lg">
+                  <CardHeader>
+                    <CardTitle>Quick Actions</CardTitle>
+                  </CardHeader>
+                  <CardBody>
+                    <div className="mock-quick-actions">
+                      <Button variant="secondary" block startIcon={<IconFolder />}>
+                        Browse files
+                      </Button>
+                      <Button variant="secondary" block startIcon={<IconBox />}>
+                        View packages
+                      </Button>
+                    </div>
+                  </CardBody>
+                </Card>
+              </div>
+            </section>
+
+            {/* ---- Inputs section ----------------------------------------- */}
+            <section className="mock-section">
+              <h2 className="mock-section__title">Inputs &amp; Controls</h2>
+              <div className="mock-showcase-inputs">
+                <Input
+                  label="Search"
+                  placeholder="Type to search…"
+                  startIcon={<IconSearch />}
+                  block
+                />
+                <Input
+                  label="Email address"
+                  type="email"
+                  placeholder="name@company.com"
+                  block
+                />
+                <div className="mock-switches-row">
+                  <Switch label="Dark mode" checked={theme === 'dark'} onChange={toggleTheme} />
+                  <Switch label="Notifications" checked={notifications} onChange={setNotifications} />
+                  <Switch label="Compact" checked={compactMode} onChange={setCompactMode} />
+                </div>
+              </div>
+            </section>
+          </TabPanel>
+
+          {/* ============================================================ */}
+          {/* DASHBOARD TAB — the original dashboard layout                 */}
+          {/* ============================================================ */}
+          <TabPanel value="dashboard">
+            {/* ---- Stat cards -------------------------------------------- */}
+            <div className="mock-stats">
+              {STATS.map((s) => (
+                <GlassSurface key={s.label} className="mock-stat" radius="lg" interactive>
+                  <span className="mock-stat__icon">
+                    <IconTrend />
+                  </span>
+                  <span className="mock-stat__label">{s.label}</span>
+                  <span className="mock-stat__value">{s.value}</span>
+                  <span className={'mock-stat__change' + (s.up ? ' up' : ' down')}>
+                    {s.change}
+                  </span>
+                </GlassSurface>
+              ))}
+            </div>
+
             <div className="mock-grid">
               {/* Activity feed */}
               <Card className="mock-feed" radius="lg">
@@ -339,52 +523,9 @@ export function MockApp() {
             </div>
           </TabPanel>
 
-          {/* ---- Projects panel ------------------------------------------ */}
-          <TabPanel value="projects">
-            <div className="mock-projects">
-              {PROJECTS.map((p) => (
-                <Card key={p.name} className="mock-project" radius="lg" interactive>
-                  <CardMedia>
-                    <div
-                      className="mock-project__art"
-                      style={{ '--project-colour': p.colour } as React.CSSProperties}
-                      aria-hidden="true"
-                    />
-                  </CardMedia>
-                  <CardHeader>
-                    <CardTitle>{p.name}</CardTitle>
-                    <CardDescription>{p.status} · {p.progress}% complete</CardDescription>
-                  </CardHeader>
-                  <CardBody>
-                    <div className="mock-progress">
-                      <div
-                        className="mock-progress__bar"
-                        style={{
-                          width: `${p.progress}%`,
-                          background: p.colour,
-                        }}
-                      />
-                    </div>
-                  </CardBody>
-                  <CardFooter>
-                    <Button variant="primary" size="sm" startIcon={<IconCheck />}>
-                      Open
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      startIcon={<IconTrash />}
-                      onClick={() => openDelete(p.name)}
-                    >
-                      Delete
-                    </Button>
-                  </CardFooter>
-                </Card>
-              ))}
-            </div>
-          </TabPanel>
-
-          {/* ---- Settings panel ------------------------------------------ */}
+          {/* ============================================================ */}
+          {/* SETTINGS TAB                                                  */}
+          {/* ============================================================ */}
           <TabPanel value="settings">
             <Card radius="lg" className="mock-settings">
               <CardHeader>

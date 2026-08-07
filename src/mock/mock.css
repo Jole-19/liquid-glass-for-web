@@ -37,19 +37,11 @@ body {
   position: fixed;
   inset: 0;
   z-index: -1;
-  /* Using a similar dark forest image from Unsplash since I cannot directly download the chat attachment to your local folder */
-  background-image: url('https://images.unsplash.com/photo-1448375240586-882707db888b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: hsl(240, 4%, 38%); /* Solid grey to match reference */
 }
 
 [data-theme='light'] .mock-backdrop {
-  /* In light mode, we'll use a brighter forest image to match */
-  background-image: url('https://images.unsplash.com/photo-1473448912268-2022ce9509d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: hsl(220 20% 90%);
 }
 
 /* ---- Navbar tweaks ------------------------------------------------------ */
@@ -301,4 +293,124 @@ a {
 
 a:hover {
   text-decoration: underline;
+}
+
+/* ---- Showcase sections -------------------------------------------------- */
+
+.mock-section {
+  margin-bottom: 48px;
+}
+
+.mock-section__title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+
+.mock-section__desc {
+  font-size: 14px;
+  color: var(--lg-fg-muted);
+  margin-bottom: 20px;
+}
+
+.mock-showcase-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+/* ---- Surface demos ------------------------------------------------------ */
+
+.mock-showcase-surfaces {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+}
+
+.mock-surface-demo {
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--lg-fg-muted);
+}
+
+.mock-surface-demo--sm {
+  width: 120px;
+  height: 80px;
+}
+
+.mock-surface-demo--md {
+  width: 160px;
+  height: 100px;
+}
+
+.mock-surface-demo--lg {
+  width: 180px;
+  height: 110px;
+}
+
+.mock-surface-demo--xl {
+  width: 200px;
+  height: 120px;
+}
+
+.mock-surface-demo--pill {
+  width: 180px;
+  height: 60px;
+}
+
+/* ---- Showcase cards ----------------------------------------------------- */
+
+.mock-showcase-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+/* ---- Inline stats (inside cards) ---------------------------------------- */
+
+.mock-stat-inline {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 12px;
+}
+
+.mock-stat-inline:last-child {
+  margin-bottom: 0;
+}
+
+.mock-stat-inline__value {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.mock-stat-inline__label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--lg-fg-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ---- Showcase inputs ---------------------------------------------------- */
+
+.mock-showcase-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  max-width: 480px;
+}
+
+.mock-switches-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding-top: 8px;
 }

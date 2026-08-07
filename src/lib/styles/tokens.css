@@ -51,7 +51,8 @@
 
   --lg-blur: 20px;
   --lg-tint-hue: 220;
-  --lg-rim-width: 1px;
+  --lg-rim-width: 1.5px;
+  --lg-border-width: 1px;
 
   --lg-noise-size: 180px;
   /* Inline so the library never needs a second network request for an asset
@@ -261,31 +262,37 @@
   --lg-saturate: 180%;
   --lg-brightness: 105%;
 
-  /* Gradient across the body, brighter on the lit edge. Subtle -- this is the
-   * difference between "a translucent rectangle" and "a pane with a surface". */
+  /* Sharp, dark outer bezel border. The reference image has a distinct dark line
+   * tracing the entire shape, separating it cleanly from the background. */
+  --lg-border-color: hsl(0 0% 0% / 0.7);
+
+  /* Gradient across the body, brighter on the lit edge. Strengthened from the
+   * original to create a more pronounced sheen, matching the reference's
+   * visible top-to-bottom luminance sweep. */
   --lg-body-gradient: linear-gradient(
     var(--lg-light-angle),
-    hsl(0 0% 100% / 0.12),
-    hsl(0 0% 100% / 0.02) 42%,
-    hsl(0 0% 100% / 0) 100%
+    hsl(0 0% 100% / 0.18),
+    hsl(0 0% 100% / 0.05) 38%,
+    hsl(0 0% 0% / 0.06) 100%
   );
 
-  --lg-rim-bright: hsl(0 0% 100% / 0.55);
-  --lg-rim-mid: hsl(0 0% 100% / 0.14);
-  --lg-rim-dark: hsl(0 0% 100% / 0.04);
+  --lg-rim-bright: hsl(0 0% 100% / 0.65);
+  --lg-rim-mid: hsl(0 0% 100% / 0.18);
+  --lg-rim-dark: hsl(0 0% 100% / 0.06);
 
   --lg-fringe-alpha: 0.28;
   --lg-fringe-warm: 28 100% 70%;
   --lg-fringe-cool: 205 100% 74%;
 
-  --lg-specular: hsl(0 0% 100% / 0.4);
-  --lg-specular-y: var(--lg-rim-width);
-  --lg-specular-blur: 1px;
-  --lg-inner-shadow: hsl(var(--lg-tint-hue) 30% 10% / 0.18);
+  --lg-specular: hsl(0 0% 100% / 0.75);
+  --lg-specular-y: 1.5px;
+  /* 0px blur is key to replicating the reference image's razor-sharp top edge highlight */
+  --lg-specular-blur: 0px;
+  --lg-inner-shadow: hsl(0 0% 0% / 0.85);
   --lg-inner-shadow-x: 0;
-  --lg-inner-shadow-y: calc(-1 * var(--lg-inner-shadow-blur) / 2);
-  --lg-inner-shadow-blur: 12px;
-  --lg-inner-shadow-spread: calc(-1 * var(--lg-inner-shadow-blur) / 2);
+  --lg-inner-shadow-y: -1.5px;
+  --lg-inner-shadow-blur: 1px;
+  --lg-inner-shadow-spread: 0px;
 
   /* No outer groove on dark -- the cast shadow does the job. */
   --lg-outer-groove: 0 0 0 0 transparent;
@@ -334,6 +341,10 @@
 
   --lg-saturate: 190%;
   --lg-brightness: 102%;
+
+  /* Crisp bezel border for light mode — dark enough to read against a bright
+   * background while still looking like glass, not a card border. */
+  --lg-border-color: hsl(var(--lg-tint-hue) 16% 40% / 0.40);
 
   /* The body gradient is now a very subtle sheen — just enough to catch the
    * eye on the lit edge, not enough to look like a white card. */

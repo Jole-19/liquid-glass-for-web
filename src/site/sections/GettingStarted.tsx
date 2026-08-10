@@ -2,6 +2,7 @@ import { Section, Subsection } from '../components/Section';
 import { CodeBlock } from '../components/CodeBlock';
 import { InstallTabs } from '../components/InstallTabs';
 import { PACKAGE_NAME } from '../config';
+import { GlassSurface } from '../../lib';
 
 const QUICK_START = `import { Button, Card, CardTitle, CardBody } from '${PACKAGE_NAME}';
 import '${PACKAGE_NAME}/styles.css';
@@ -87,14 +88,28 @@ export function GettingStarted() {
           </>
         }
       >
-        <ul className="pillars">
+        <GlassSurface
+          as="ul"
+          className="pillars"
+          radius="xl"
+          elevation="raised"
+          style={
+            {
+              '--lg-tint-alpha': '0',
+              '--lg-body-gradient': 'none',
+              '--lg-blur': '0px',
+              '--lg-brightness': '100%',
+              '--lg-saturate': '100%',
+            } as React.CSSProperties
+          }
+        >
           {PILLARS.map((pillar) => (
             <li className="pillars__item" key={pillar.title}>
               <h3>{pillar.title}</h3>
               <p>{pillar.body}</p>
             </li>
           ))}
-        </ul>
+        </GlassSurface>
 
         <Subsection title="Two tiers">
           <div className="tiers">

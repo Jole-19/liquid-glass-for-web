@@ -18,8 +18,9 @@
 
 html {
   scroll-behavior: smooth;
-  /* Anchors land under the fixed header without this. */
-  scroll-padding-top: 88px;
+  /* Anchors land under the fixed floating navbar without this.
+     Navbar: 14px top offset + 52px height + 30px breathing room. */
+  scroll-padding-top: 96px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -46,12 +47,13 @@ body {
 
 :root {
   --site-max: 1240px;
-  --site-sidebar: 232px;
   --site-gutter: 40px;
-  --site-header: 57px;
+  --site-header: 72px;
 
-  --site-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
-    'Liberation Mono', monospace;
+  --site-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono',
+    Menlo, Consolas, 'Liberation Mono', monospace;
+  --site-nav-font: 'Poppins', -apple-system, system-ui,
+    sans-serif;
 }
 
 /**
@@ -80,17 +82,23 @@ body {
   --site-sticky: hsl(228 26% 7% / 0.93);
   --site-scrim: hsl(228 30% 3% / 0.5);
 
-  --site-title: linear-gradient(175deg, #fff 30%, hsl(228 18% 76%));
+  --site-title: hsl(0 0% 100% / 0.96);
 
   --site-specimen-a: hsl(230 70% 42% / 0.5);
   --site-specimen-b: hsl(190 74% 34% / 0.45);
+  --site-specimen-c: hsl(28 80% 50% / 0.4);
 
+  /* Caustic-light wash: overlapping wide ellipses simulate the dappled
+   * bright spots you see on a surface under a glass of water. The radials
+   * are elongated and softly feathered, never circular blobs, to read as
+   * refracted light rather than decorative colour. */
   --site-wash:
-    radial-gradient(50rem 30rem at 72% 30%, hsl(214 58% 25%), transparent 62%),
-    radial-gradient(70rem 44rem at 46% -6%, hsl(226 52% 18%), transparent 66%),
-    radial-gradient(44rem 34rem at 4% 46%, hsl(250 48% 17% / 0.85), transparent 62%),
-    radial-gradient(50rem 38rem at 88% 80%, hsl(196 54% 16% / 0.8), transparent 62%);
-  --site-grid: hsl(0 0% 100% / 0.055);
+    radial-gradient(80rem 18rem at 30% 16%, hsl(210 52% 28% / 0.7), transparent 60%),
+    radial-gradient(60rem 14rem at 68% 40%, hsl(200 48% 22% / 0.55), transparent 58%),
+    radial-gradient(90rem 12rem at 20% 62%, hsl(230 42% 20% / 0.5), transparent 55%),
+    radial-gradient(70rem 16rem at 80% 78%, hsl(195 50% 18% / 0.45), transparent 56%),
+    radial-gradient(50rem 10rem at 52% 90%, hsl(240 38% 16% / 0.4), transparent 52%);
+  --site-grid: hsl(0 0% 100% / 0.05);
   --site-yes: hsl(150 58% 64%);
 
   /* The library's --lg-fg-muted and --lg-fg-subtle are alpha values tuned to
@@ -134,17 +142,19 @@ body {
   --site-sticky: hsl(220 30% 97% / 0.94);
   --site-scrim: hsl(228 24% 60% / 0.4);
 
-  --site-title: linear-gradient(175deg, hsl(228 30% 12%) 30%, hsl(228 16% 40%));
+  --site-title: hsl(228 28% 14% / 0.95);
 
   --site-specimen-a: hsl(228 92% 72% / 0.6);
   --site-specimen-b: hsl(188 88% 60% / 0.55);
+  --site-specimen-c: hsl(30 92% 64% / 0.5);
 
   --site-wash:
-    radial-gradient(50rem 30rem at 72% 30%, hsl(214 88% 80%), transparent 62%),
-    radial-gradient(70rem 44rem at 46% -6%, hsl(226 84% 86%), transparent 66%),
-    radial-gradient(44rem 34rem at 4% 46%, hsl(250 72% 88% / 0.9), transparent 62%),
-    radial-gradient(50rem 38rem at 88% 80%, hsl(192 82% 82% / 0.9), transparent 62%);
-  --site-grid: hsl(228 40% 24% / 0.11);
+    radial-gradient(80rem 18rem at 30% 16%, hsl(210 80% 84% / 0.8), transparent 60%),
+    radial-gradient(60rem 14rem at 68% 40%, hsl(200 72% 80% / 0.65), transparent 58%),
+    radial-gradient(90rem 12rem at 20% 62%, hsl(234 66% 86% / 0.6), transparent 55%),
+    radial-gradient(70rem 16rem at 80% 78%, hsl(192 74% 82% / 0.55), transparent 56%),
+    radial-gradient(50rem 10rem at 52% 90%, hsl(244 58% 88% / 0.5), transparent 52%);
+  --site-grid: hsl(228 40% 24% / 0.09);
   --site-yes: hsl(152 64% 28%);
   --site-accent-text: hsl(var(--lg-accent-hue) 76% 42%);
 
@@ -233,33 +243,54 @@ a {
   position: absolute;
   inset: -10%;
   background: var(--site-wash);
-  animation: backdrop-drift 90s var(--lg-ease-in-out) infinite alternate;
+  animation: backdrop-drift 120s var(--lg-ease-in-out) infinite alternate;
 }
 
-/* A fine grid over the wash, and the most load-bearing thing on the page.
+/* Faceted-glass line pattern over the wash.
+ *
  * Blurring a smooth gradient returns the same smooth gradient, so without some
  * high-frequency content behind it a glass panel is indistinguishable from a
- * flat translucent rectangle. The grid is what the blur has to chew on.
+ * flat translucent rectangle. These lines are what the blur has to chew on.
  *
- * Which is why the mask covers the whole upper band rather than a small circle
- * in the middle: it has to reach behind the hero panel, not stop short of it. */
+ * Instead of a rectangular grid, the lines form a triangular lattice at
+ * vertical, 60° and −60° with deliberately unequal spacing — creating
+ * irregular polygonal cells like the fracture pattern in tempered glass.
+ * Two sparser lines at off-angles (25°, −40°) add secondary cracks that
+ * break any residual regularity. The result reads as faceted/shattered
+ * glass rather than a dashboard grid. */
 .backdrop::after {
   content: '';
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(to right, var(--site-grid) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--site-grid) 1px, transparent 1px);
-  background-size: 60px 60px;
+    /* Primary facet mesh — three directions forming irregular polygonal cells */
+    repeating-linear-gradient(90deg,
+      var(--site-grid) 0 1px,
+      transparent 1px 58px),
+    repeating-linear-gradient(60deg,
+      var(--site-grid) 0 1px,
+      transparent 1px 72px),
+    repeating-linear-gradient(-60deg,
+      var(--site-grid) 0 1px,
+      transparent 1px 66px),
+    /* Secondary fracture lines — sparser, thinner, at off-angles */
+    repeating-linear-gradient(25deg,
+      var(--site-grid) 0 0.5px,
+      transparent 0.5px 140px),
+    repeating-linear-gradient(-40deg,
+      var(--site-grid) 0 0.5px,
+      transparent 0.5px 160px);
+  opacity: 0.7;
   mask-image: radial-gradient(130% 82% at 50% 14%, #000 26%, transparent 84%);
 }
 
 @keyframes backdrop-drift {
   from {
-    transform: translate3d(-1.5%, -1%, 0) scale(1.04);
+    transform: translate3d(-0.8%, -0.5%, 0) scale(1.02);
   }
+
   to {
-    transform: translate3d(1.5%, 1.5%, 0) scale(1.1);
+    transform: translate3d(0.8%, 0.8%, 0) scale(1.06);
   }
 }
 
@@ -269,41 +300,192 @@ a {
   }
 }
 
-/* ---- Header -------------------------------------------------------------- */
+/* ---- Floating glass navbar ---------------------------------------------- *
+ *
+ * A pill-shaped GlassSurface pinned to the top of the viewport. The bar itself
+ * is `position: fixed` with auto margins so it centres and floats over the
+ * page content. Space Grotesk throughout for the geometric crispness the brand
+ * asks for. Dropdowns open as their own lg-surface panels.
+ */
 
-.topbar {
-  min-height: var(--site-header);
-  padding-inline: clamp(16px, 3vw, 28px);
-  gap: var(--lg-space-3);
+.fnav {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: var(--lg-z-overlay);
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: max(680px, min(92vw, 940px));
+  height: 52px;
+  padding: 0 8px 0 16px;
+  font-family: var(--site-nav-font);
+  /* The lg-surface class gives us rim light, specular, microtexture, and
+     the full glass material — no need to re-invent any of it here. */
 }
 
-.topbar__mark {
-  display: inline-flex;
-  width: 20px;
-  height: 20px;
-  color: var(--lg-accent);
+/* Override the navbar's own ::before (rim) to keep the pill shape */
+.fnav.lg-surface::before {
+  border-radius: var(--lg-radius-pill);
 }
 
-.topbar__wordmark {
+/* ---- Brand -------------------------------------------------------------- */
+
+.fnav__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   text-decoration: none;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: -0.02em;
+  flex-shrink: 0;
   border-radius: 6px;
 }
 
-.topbar__version {
-  padding: 2px 7px;
-  border: 1px solid var(--site-rule-strong);
-  border-radius: var(--lg-radius-pill);
-  font-family: var(--site-mono);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0;
-  color: var(--site-text-subtle);
+.fnav__logo-img {
+  display: block;
+  height: 70px;
+  width: auto;
+  object-fit: contain;
+  margin-left: 4px;
+  /* Prevent any layout flicker when the src swaps on theme toggle. */
+  transition: none;
 }
 
-.topbar__menu {
+/* ---- Divider ------------------------------------------------------------ */
+
+.fnav__divider {
+  width: 1px;
+  height: 22px;
+  margin: 0 14px;
+  background: var(--site-rule-strong);
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+/* ---- Nav links (desktop) ------------------------------------------------ */
+
+.fnav__links {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.fnav__group {
+  position: relative;
+}
+
+.fnav__trigger {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border: 0;
+  border-radius: var(--lg-radius-pill);
+  background: none;
+  font-family: var(--site-nav-font);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--site-text-muted);
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    color var(--lg-dur-fast) var(--lg-ease-out),
+    background-color var(--lg-dur-fast) var(--lg-ease-out);
+}
+
+.fnav__trigger:hover,
+.fnav__trigger[aria-expanded='true'] {
+  color: var(--lg-fg);
+  background: var(--site-hover);
+}
+
+.fnav__chevron {
+  flex-shrink: 0;
+  transition: transform var(--lg-dur-fast) var(--lg-ease-out);
+}
+
+.fnav__chevron[data-open='true'] {
+  transform: rotate(180deg);
+}
+
+/* ---- Dropdown panels ---------------------------------------------------- */
+
+.fnav__dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 180px;
+  padding: 8px;
+  z-index: var(--lg-z-popover);
+  animation: fnav-drop-in var(--lg-dur-fast) var(--lg-ease-out) both;
+}
+
+@keyframes fnav-drop-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-6px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fnav__dropdown {
+    animation-duration: 1ms;
+  }
+}
+
+.fnav__dropdown-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fnav__dropdown-link {
+  display: block;
+  padding: 8px 14px;
+  border-radius: var(--lg-radius-sm);
+  text-decoration: none;
+  font-family: var(--site-nav-font);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--site-text-muted);
+  transition:
+    color var(--lg-dur-fast) var(--lg-ease-out),
+    background-color var(--lg-dur-fast) var(--lg-ease-out);
+}
+
+.fnav__dropdown-link:hover {
+  color: var(--lg-fg);
+  background: var(--site-hover);
+}
+
+/* ---- Spacer ------------------------------------------------------------- */
+
+.fnav__spacer {
+  flex: 1;
+  min-width: var(--lg-space-3);
+}
+
+/* ---- Actions ------------------------------------------------------------ */
+
+.fnav__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+
+
+
+/* ---- Hamburger (mobile only) -------------------------------------------- */
+
+.fnav__hamburger {
   display: none;
   align-items: center;
   justify-content: center;
@@ -317,57 +499,30 @@ a {
   cursor: pointer;
 }
 
-.topbar__menu svg {
+.fnav__hamburger svg {
   width: 20px;
   height: 20px;
 }
 
-.topbar__menu:hover {
+.fnav__hamburger:hover {
   color: var(--lg-fg);
   background: var(--site-hover);
 }
 
-.topbar__theme {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  border: 1px solid var(--site-rule);
-  border-radius: var(--lg-radius-sm);
-  background: none;
-  color: var(--site-text-muted);
-  cursor: pointer;
-  transition:
-    color var(--lg-dur-fast) var(--lg-ease-out),
-    border-color var(--lg-dur-fast) var(--lg-ease-out);
-}
+/* ---- Mobile navigation -------------------------------------------------- */
 
-.topbar__theme svg {
-  width: 17px;
-  height: 17px;
-}
-
-.topbar__theme:hover {
-  color: var(--lg-fg);
-  border-color: var(--site-rule-strong);
-}
-
-/* ---- Mobile navigation --------------------------------------------------- */
-
-.mobilenav {
+.fnav-mobile {
   position: fixed;
-  inset: var(--site-header) 0 0;
+  inset: calc(var(--site-header) + 8px) 0 0;
   z-index: 900;
   display: none;
 }
 
-.mobilenav[data-open='true'] {
+.fnav-mobile[data-open='true'] {
   display: block;
 }
 
-.mobilenav__scrim {
+.fnav-mobile__scrim {
   position: absolute;
   inset: 0;
   border: 0;
@@ -377,39 +532,44 @@ a {
   backdrop-filter: blur(4px);
 }
 
-.mobilenav__sheet {
+.fnav-mobile__sheet {
   position: absolute;
-  inset: 0 auto 0 0;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 1;
-  width: min(300px, 84vw);
+  width: min(360px, 90vw);
   padding: var(--lg-space-5);
-  border-radius: 0;
   overflow-y: auto;
-  animation: sheet-in var(--lg-dur-base) var(--lg-ease-out) both;
+  max-height: calc(100dvh - var(--site-header) - 48px);
+  animation: fnav-mobile-in var(--lg-dur-base) var(--lg-ease-out) both;
 }
 
-@keyframes sheet-in {
+@keyframes fnav-mobile-in {
   from {
-    transform: translateX(-100%);
+    opacity: 0;
+    transform: translateX(-50%) translateY(-12px) scale(0.96);
   }
+
   to {
-    transform: none;
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .mobilenav__sheet {
+  .fnav-mobile__sheet {
     animation-duration: 1ms;
   }
 }
 
-.mobilenav__group + .mobilenav__group {
+.fnav-mobile__group+.fnav-mobile__group {
   margin-top: var(--lg-space-5);
 }
 
-.mobilenav__label,
-.sidenav__label {
+.fnav-mobile__label {
   margin: 0 0 var(--lg-space-2);
+  font-family: var(--site-nav-font);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -417,22 +577,23 @@ a {
   color: var(--site-text-subtle);
 }
 
-.mobilenav ul {
+.fnav-mobile ul {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.mobilenav a {
+.fnav-mobile a {
   display: block;
   padding: 7px 10px;
   border-radius: var(--lg-radius-sm);
   text-decoration: none;
+  font-family: var(--site-nav-font);
   font-size: 14px;
   color: var(--site-text-muted);
 }
 
-.mobilenav a:hover {
+.fnav-mobile a:hover {
   color: var(--lg-fg);
   background: var(--site-hover);
 }
@@ -445,81 +606,25 @@ a {
   padding: 0 clamp(16px, 3vw, 28px) 120px;
 }
 
-.layout {
-  display: grid;
-  grid-template-columns: var(--site-sidebar) minmax(0, 1fr);
-  gap: var(--site-gutter);
-  align-items: start;
-}
 
-.sidenav {
-  position: sticky;
-  top: calc(var(--site-header) + 24px);
-  max-height: calc(100dvh - var(--site-header) - 48px);
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding-bottom: var(--lg-space-5);
-  /* Scrollbar gutter reserved so the list does not shift sideways when a long
-   * section makes it scrollable. */
-  scrollbar-gutter: stable;
-}
-
-.sidenav__group + .sidenav__group {
-  margin-top: var(--lg-space-5);
-}
-
-.sidenav__list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-left: 1px solid var(--site-rule);
-}
-
-.sidenav__link {
-  display: block;
-  padding: 5px 12px;
-  margin-left: -1px;
-  border-left: 1px solid transparent;
-  border-radius: 0 6px 6px 0;
-  text-decoration: none;
-  font-size: 13.5px;
-  color: var(--site-text-subtle);
-  transition:
-    color var(--lg-dur-fast) var(--lg-ease-out),
-    border-color var(--lg-dur-fast) var(--lg-ease-out);
-}
-
-.sidenav__link:hover {
-  color: var(--lg-fg);
-}
-
-.sidenav__link[data-active='true'] {
-  color: var(--lg-fg);
-  font-weight: 550;
-  border-left-color: var(--lg-accent);
-}
 
 /* ---- Hero ---------------------------------------------------------------- */
 
 .hero {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
-  gap: clamp(32px, 6vw, 72px);
+  gap: clamp(24px, 4vw, 56px);
   align-items: center;
-  padding: clamp(56px, 10vh, 120px) 0 clamp(48px, 8vh, 96px);
+  padding: clamp(180px, 22vh, 240px) 0 clamp(40px, 6vh, 72px);
 }
 
 .hero__title {
   margin: 0 0 var(--lg-space-4);
-  font-size: clamp(40px, 6.4vw, 68px);
-  font-weight: 600;
-  line-height: 1.02;
-  letter-spacing: -0.04em;
-  /* A very slight top-down fade, echoing the specular on the panels. */
-  background: var(--site-title);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  font-size: clamp(40px, 6.4vw, 62px);
+  font-weight: 500;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+  color: var(--site-title);
 }
 
 .hero__lede {
@@ -540,9 +645,9 @@ a {
 .hero__stats {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, auto));
-  gap: clamp(20px, 3vw, 40px);
+  gap: clamp(20px, 3vw, 36px);
   margin: 0;
-  padding-top: var(--lg-space-5);
+  padding-top: var(--lg-space-4);
   border-top: 1px solid var(--site-rule);
   justify-content: start;
 }
@@ -576,49 +681,30 @@ a {
 }
 
 /**
- * The specimens behind the hero panel.
+ * The glass G logo mark behind the hero panel.
  *
- * Blurring a smooth gradient returns the same smooth gradient, so a panel over
- * an even field is indistinguishable from a flat translucent rectangle no
- * matter how well the material is tuned. These two discs give it an edge to
- * carry: crisp where it passes outside the panel, soft and tinted where it
- * passes under. That comparison, side by side in one glance, is the only
- * honest demonstration of a backdrop filter.
- *
- * They are anchored to the hero rather than to the fixed page backdrop because
- * a fixed decoration ends up parked behind body copy the moment you scroll.
+ * Positioned to the upper-right of the code panel, partially overlapping it
+ * so the panel sits on top in z-order. The mark extends above the panel's
+ * top edge to read as the hero's visual anchor on the right side.
  */
-.hero__specimens {
-  position: absolute;
-  inset: 0;
+.hero__mark {
+  position: relative;
+  width: clamp(340px, 44vw, 560px);
+  max-width: 100%;
+  height: auto;
+  /* Center within the column, and shift up slightly */
+  margin: -60px auto 0;
+  display: block;
+  z-index: 0;
   pointer-events: none;
-}
-
-.hero__specimens::before,
-.hero__specimens::after {
-  content: '';
-  position: absolute;
-  border-radius: 50%;
-}
-
-.hero__specimens::before {
-  width: 18rem;
-  height: 18rem;
-  left: -4%;
-  top: -44%;
-  background: var(--site-specimen-a);
-}
-
-.hero__specimens::after {
-  width: 14rem;
-  height: 14rem;
-  right: 5%;
-  bottom: -46%;
-  background: var(--site-specimen-b);
+  user-select: none;
+  -webkit-user-select: none;
+  object-fit: contain;
 }
 
 .hero__panel {
   position: relative;
+  margin-top: 64px;
   padding: var(--lg-space-4);
   display: flex;
   flex-direction: column;
@@ -640,9 +726,11 @@ a {
 .hero__panel-dot[data-tone='a'] {
   background: hsl(2 62% 62%);
 }
+
 .hero__panel-dot[data-tone='b'] {
   background: hsl(42 72% 60%);
 }
+
 .hero__panel-dot[data-tone='c'] {
   background: hsl(148 46% 52%);
 }
@@ -672,7 +760,7 @@ a {
   scroll-margin-top: calc(var(--site-header) + 24px);
 }
 
-.section + .section {
+.section+.section {
   margin-top: clamp(16px, 3vh, 32px);
 }
 
@@ -680,19 +768,25 @@ a {
   margin-bottom: var(--lg-space-5);
 }
 
+/* Eyebrows removed — the heading carries its own weight and the sidebar
+ * already groups sections by category. The class stays so the component
+ * still renders; it just contributes nothing visually. */
 .section__eyebrow {
-  margin: 0 0 var(--lg-space-2);
-  font-size: 11.5px;
-  font-weight: 600;
-  letter-spacing: 0.13em;
-  text-transform: uppercase;
-  color: var(--site-accent-text);
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 .section__title {
   margin: 0;
   font-size: clamp(26px, 3.4vw, 34px);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: -0.032em;
   line-height: 1.15;
 }
@@ -866,28 +960,36 @@ code {
 .tk--plain {
   color: var(--tk-plain);
 }
+
 .tk--comment {
   color: var(--tk-comment);
   font-style: italic;
 }
+
 .tk--string {
   color: var(--tk-string);
 }
+
 .tk--number {
   color: var(--tk-number);
 }
+
 .tk--keyword {
   color: var(--tk-keyword);
 }
+
 .tk--tag {
   color: var(--tk-tag);
 }
+
 .tk--attr {
   color: var(--tk-attr);
 }
+
 .tk--function {
   color: var(--tk-function);
 }
+
 .tk--punctuation {
   color: var(--tk-punctuation);
 }
@@ -1068,8 +1170,7 @@ code {
   gap: var(--lg-space-3);
   margin-top: var(--lg-space-4);
   padding: var(--lg-space-4);
-  border: 1px solid var(--site-rule);
-  border-left: 2px solid var(--lg-accent);
+  border: 1px solid var(--site-rule-strong);
   border-radius: var(--lg-radius-sm);
   background: var(--site-panel);
   font-size: 14px;
@@ -1078,14 +1179,14 @@ code {
 }
 
 .callout[data-tone='warn'] {
-  border-left-color: hsl(38 82% 52%);
+  border-color: hsl(38 82% 52% / 0.35);
 }
 
 .callout p {
   margin: 0;
 }
 
-.callout p + p {
+.callout p+p {
   margin-top: var(--lg-space-2);
 }
 
@@ -1124,7 +1225,6 @@ code {
 
 @media (max-width: 1080px) {
   :root {
-    --site-sidebar: 200px;
     --site-gutter: 28px;
   }
 
@@ -1134,34 +1234,30 @@ code {
 
   .hero__stage {
     max-width: 520px;
-  }
-
-  /* Stacked, the panel sits directly under the stats, and a disc protruding as
-   * far as it does on the wide layout ends up behind body copy. Enough of each
-   * one still crosses the rim to make the point. */
-  .hero__specimens::before {
-    top: -20%;
-  }
-
-  .hero__specimens::after {
-    bottom: -22%;
+    margin: 0 auto;
   }
 }
 
 @media (max-width: 820px) {
-  .layout {
-    grid-template-columns: minmax(0, 1fr);
+  .fnav {
+    width: calc(100vw - 24px);
+    min-width: 0;
+    padding: 0 6px 0 14px;
   }
 
-  .sidenav {
+  .fnav__links {
     display: none;
   }
 
-  .topbar__menu {
+  .fnav__divider {
+    display: none;
+  }
+
+  .fnav__hamburger {
     display: inline-flex;
   }
 
-  .topbar__version {
+  .fnav__github {
     display: none;
   }
 

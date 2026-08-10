@@ -103,7 +103,7 @@
   --lg-space-5: 24px;
   --lg-space-6: 32px;
 
-  --lg-font: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', system-ui,
+  --lg-font: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui,
     sans-serif;
   --lg-text-sm: 13px;
   --lg-text-base: 14px;

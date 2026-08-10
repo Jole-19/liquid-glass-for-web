@@ -15,16 +15,15 @@ export function Hero() {
     <header className="hero" id="top">
       <div className="hero__body">
         <h1 className="hero__title">
-          Glass that behaves
+          A Component Library For Web,
           <br />
-          like glass.
+          Built on Real Glass Physics.
         </h1>
 
         <p className="hero__lede">
-          A component library built on one portable CSS material — saturated
-          backdrop, asymmetric rim light, inset specular and real
-          microtexture — with an opt-in WebGL tier that refracts pixels instead
-          of blurring them.
+          Built on one portable CSS material: saturated backdrop, asymmetric rim
+          light, inset specular, and real microtexture. An opt-in WebGL tier
+          refracts pixels instead of blurring them.
         </p>
 
         <div className="hero__actions">
@@ -77,11 +76,16 @@ export function Hero() {
       </div>
 
       <div className="hero__stage">
-        {/* Two discs sitting half behind the panel. They are the hero's whole
-            argument: the same hard edge appears crisp outside the glass and
-            soft, tinted and displaced inside it. */}
-        <div className="hero__specimens" aria-hidden="true" />
+        {/* Glass G logo mark — the hero's visual anchor, sitting behind
+            the code panel in z-order. */}
+        <img
+          className="hero__mark"
+          src="/logos/hero-img.png"
+          alt=""
+          aria-hidden="true"
+        />
 
+        {/*
         <GlassSurface className="hero__panel" radius="xl" elevation="overlay">
           <div className="hero__panel-row">
             <span className="hero__panel-dot" data-tone="a" aria-hidden="true" />
@@ -120,6 +124,7 @@ export function Hero() {
             </Button>
           </div>
         </GlassSurface>
+        */}
       </div>
     </header>
   );

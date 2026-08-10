@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Hero } from './components/Hero';
-import { SideNav } from './components/SideNav';
-import { TopBar } from './components/TopBar';
+import { FloatingNav } from './components/FloatingNav';
 import { GettingStarted } from './sections/GettingStarted';
 import { Material } from './sections/Material';
 import { AdaptiveSection } from './sections/AdaptiveSection';
@@ -27,7 +26,7 @@ export function App() {
           position or the whole page is a demo of nothing. */}
       <div className="backdrop" aria-hidden="true" />
 
-      <TopBar
+      <FloatingNav
         menuOpen={menuOpen}
         onMenuToggle={setMenuOpen}
         theme={theme}
@@ -37,19 +36,15 @@ export function App() {
       <div className="shell">
         <Hero />
 
-        <div className="layout">
-          <SideNav />
-
-          <main id="content" className="content">
-            <GettingStarted />
-            <Material />
-            <AdaptiveSection />
-            <RefractionSection />
-            <ComponentsCore />
-            <ComponentsInteractive />
-            <Reference />
-          </main>
-        </div>
+        <main id="content" className="content">
+          <GettingStarted />
+          <Material />
+          <AdaptiveSection />
+          <RefractionSection />
+          <ComponentsCore />
+          <ComponentsInteractive />
+          <Reference />
+        </main>
 
         <footer className="footer">
           <span>Liquid Glass · MIT</span>

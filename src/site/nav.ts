@@ -1,8 +1,9 @@
 /**
  * The site's table of contents.
  *
- * One list, consumed by both the sidebar and the scroll spy, so a section can
- * never exist in the nav without existing on the page or the other way round.
+ * One list, consumed by both the floating navbar and the scroll spy, so a
+ * section can never exist in the nav without existing on the page or the
+ * other way round.
  */
 
 export interface NavItem {
@@ -11,20 +12,21 @@ export interface NavItem {
 }
 
 export interface NavGroup {
+  /** Short label shown in the navbar. */
   label: string;
   items: NavItem[];
 }
 
 export const NAV: NavGroup[] = [
   {
-    label: 'Getting started',
+    label: 'Docs',
     items: [
       { id: 'overview', label: 'Overview' },
       { id: 'install', label: 'Installation' },
     ],
   },
   {
-    label: 'The material',
+    label: 'Material',
     items: [
       { id: 'anatomy', label: 'Anatomy' },
       { id: 'tokens', label: 'Tokens' },

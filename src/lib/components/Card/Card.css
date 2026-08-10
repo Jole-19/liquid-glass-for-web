@@ -17,6 +17,9 @@
 .lg-card[data-flush='true'] {
   padding: 0;
   --lg-card-pad: 0px;
+  /* CardMedia bleeds to the card edge; clip descendants to the pane shape
+   * without affecting the cast shadow (which is not clipped by overflow). */
+  overflow: hidden;
 }
 
 .lg-card__header,
@@ -90,6 +93,8 @@
 
 .lg-card__media:first-child {
   margin-top: calc(-1 * var(--lg-card-pad));
+  border-start-start-radius: var(--lg-radius);
+  border-start-end-radius: var(--lg-radius);
   border-end-start-radius: 0;
   border-end-end-radius: 0;
 }

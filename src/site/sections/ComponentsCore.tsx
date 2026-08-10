@@ -307,7 +307,7 @@ export function ComponentsCore() {
           </p>
         }
       >
-        <Example code={CARD_CODE} stack>
+        <Example code={CARD_CODE} stack flush>
           <div className="cardgrid">
             <Card flush className="showcard">
               <CardMedia>

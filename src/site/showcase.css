@@ -103,21 +103,15 @@
 .pillars {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1px;
+  gap: 0;
   margin: 0;
   padding: 0;
   list-style: none;
-  border: 1px solid var(--site-rule);
-  border-radius: var(--lg-radius-lg);
-  overflow: hidden;
-  /* The 1px grid gap plus this background is what draws the hairlines between
-   * cells, which stays correct however many columns the grid resolves to. */
-  background: var(--site-rule);
+  /* GlassSurface provides the outer border, radius, and background. */
 }
 
 .pillars__item {
   padding: var(--lg-space-5);
-  background: var(--site-panel);
 }
 
 .pillars__item h3 {
@@ -196,29 +190,24 @@
 /* ---- Anatomy ------------------------------------------------------------- */
 
 .anatomy {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: var(--lg-space-5);
-  /* No `align-items: start` here, deliberately: the pane has to stretch to the
-   * full row height for the sticky stage inside it to have anywhere to travel,
-   * and to stop travelling at the row's bottom edge. */
+}
+
+/* The preview stage spans full width to match the grid below it. */
+.anatomy__stage-wrap {
+  width: 100%;
 }
 
 .anatomy__stage {
-  position: sticky;
-  /* Sticky already establishes a containing block for the ::before grid. Worth
-   * knowing, because switching this to `static` in the responsive rules below
-   * would let the overlay escape -- so that rule sets `position: relative`
-   * rather than `static`. */
-  top: calc(var(--site-header) + 32px);
+  position: relative;
   display: grid;
   place-items: center;
   min-height: 300px;
   padding: var(--lg-space-6);
   border-radius: var(--lg-radius-lg);
   overflow: hidden;
-  /* Its own busy backdrop. Removing a layer has to be visible, and it would not
-   * be over the page's own wash at this size. */
   background:
     radial-gradient(18rem 18rem at 20% 25%, var(--demo-blob-1), transparent 60%),
     radial-gradient(16rem 16rem at 82% 22%, var(--demo-blob-2), transparent 62%),
@@ -257,44 +246,80 @@
   color: var(--site-text-muted);
 }
 
-.anatomy__list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+/* Property rows — one unified glass container with a 2-column internal grid.
+ * The 7th row (odd count) spans full width at the bottom. */
+.anatomy__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  padding: var(--lg-space-2);
+  background-image: linear-gradient(var(--site-rule), var(--site-rule));
+  background-size: 1px calc(100% - 32px);
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
-.anatomy__item {
-  padding: var(--lg-space-3) 0;
-  border-bottom: 1px solid var(--site-rule);
+.anatomy__row {
+  position: relative;
+  padding: var(--lg-space-3) var(--lg-space-4);
   transition: opacity var(--lg-dur-fast) var(--lg-ease-out);
 }
 
-.anatomy__item:last-child {
-  border-bottom: 0;
-}
-
-.anatomy__item[data-off] {
+.anatomy__row[data-off] {
   opacity: 0.48;
 }
 
-.anatomy__blurb {
-  margin: 6px 0 0 calc(var(--lg-space-2) + 34px);
+/* The Switch fills the row; its label acts as the row title */
+.anatomy__row .lg-switch {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.anatomy__row .lg-switch__label {
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+}
+
+/* Description revealed on hover */
+.anatomy__row-blurb {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: max(220px, 100%);
+  max-width: 320px;
+  padding: var(--lg-space-3) var(--lg-space-4);
+  margin: 0;
+  border-radius: var(--lg-radius-md);
+  background: var(--site-sticky);
+  border: 1px solid var(--site-rule);
+  box-shadow: 0 4px 16px hsl(228 40% 10% / 0.18);
   font-size: 12.5px;
   line-height: 1.55;
-  color: var(--site-text-subtle);
+  color: var(--site-text-muted);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--lg-dur-fast) var(--lg-ease-out);
+  z-index: 10;
+}
+
+.anatomy__row:hover .anatomy__row-blurb {
+  opacity: 1;
 }
 
 .anatomy__code {
-  grid-column: 1 / -1;
+  width: 100%;
 }
 
 /* ---- Playground ---------------------------------------------------------- */
 
 .playground {
-  display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  display: flex;
+  flex-direction: column;
   gap: var(--lg-space-5);
-  align-items: start;
 }
 
 .playground__preview {
@@ -339,20 +364,31 @@
   margin-top: var(--lg-space-3);
 }
 
+/* 
+  Since playground__controls is now a GlassSurface, 
+  we don't need the solid background and border here.
+*/
 .playground__controls {
-  padding: var(--lg-space-4);
-  border: 1px solid var(--site-rule);
-  border-radius: var(--lg-radius-lg);
-  background: var(--site-panel);
+  padding: 0;
+  width: 100%;
 }
 
 .playground__controls-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--lg-space-3);
-  padding-bottom: var(--lg-space-3);
-  border-bottom: 1px solid var(--site-rule);
+  margin: 0;
+  padding: var(--lg-space-4) var(--lg-space-5) var(--lg-space-2) var(--lg-space-5);
+}
+
+.playground__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  padding: 0;
+  background-image: linear-gradient(var(--site-rule), var(--site-rule));
+  background-size: 1px calc(100% - 24px);
+  background-position: center top 8px;
+  background-repeat: no-repeat;
 }
 
 .playground__legend {
@@ -385,8 +421,8 @@
   border-color: var(--site-rule-strong);
 }
 
-.playground__control + .playground__control {
-  margin-top: var(--lg-space-3);
+.playground__control {
+  padding: var(--lg-space-2) var(--lg-space-5);
 }
 
 .playground__control label {
@@ -400,7 +436,10 @@
 }
 
 .playground__name {
-  color: var(--site-text-muted);
+  color: var(--site-text);
+  font-size: 13.5px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }
 
 .playground__value {
@@ -572,13 +611,25 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: var(--lg-space-4);
+  box-sizing: border-box;
   width: 100%;
+  padding: var(--lg-space-5);
+  align-items: stretch;
+}
+
+.cardgrid > .lg-card {
+  height: 100%;
+  min-width: 0;
 }
 
 .showcard {
   display: flex;
   flex-direction: column;
   text-decoration: none;
+  min-height: 100%;
+  /* Clip CardMedia flush to the card's own border-radius so the image
+   * corners don't leak past the rounded glass shape. */
+  overflow: hidden;
 }
 
 .showcard__art {
@@ -587,6 +638,12 @@
     radial-gradient(12rem 8rem at 26% 30%, var(--demo-blob-1), transparent 62%),
     radial-gradient(10rem 8rem at 78% 68%, var(--demo-blob-2), transparent 60%),
     linear-gradient(140deg, var(--demo-stage-a), var(--demo-stage-b));
+}
+
+/* Inside the card grid, let the body fill remaining space so cards of
+ * different slot counts still match height. */
+.cardgrid .lg-card__body {
+  flex: 1;
 }
 
 .fieldgrid {
@@ -634,20 +691,29 @@
 /* ---- Responsive ---------------------------------------------------------- */
 
 @media (max-width: 1080px) {
-  .anatomy,
-  .playground {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .anatomy__stage,
   .playground__preview {
     position: relative;
     top: auto;
     min-height: 260px;
   }
+
+  .anatomy__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 640px) {
+  .anatomy__grid,
+  .playground__grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* When stacked to 1 column, remove the vertical separator */
+  .anatomy__grid,
+  .playground__grid {
+    background-image: none;
+  }
+
   .stage__tier1,
   .stage__tier2 {
     top: 18%;

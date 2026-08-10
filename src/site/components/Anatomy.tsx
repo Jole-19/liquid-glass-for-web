@@ -107,11 +107,8 @@ export function Anatomy() {
 
   return (
     <div className="anatomy">
-      {/* The pane exists so that the stage inside it can be sticky. A sticky
-          grid *item* is constrained to the grid container rather than to its
-          own grid area, so as a direct child the stage slides down over the
-          code block in the row beneath it. */}
-      <div className="anatomy__pane">
+      {/* Preview stage — spans full width above the property grid */}
+      <div className="anatomy__stage-wrap">
         {/* The stage stays dark in light mode -- a glass panel over a white
             page demonstrates nothing -- so the panel inside it is pinned to
             the dark-backdrop theme rather than following the page. */}
@@ -133,21 +130,42 @@ export function Anatomy() {
         </div>
       </div>
 
-      <ul className="anatomy__list">
+      {/* All 7 property rows inside one unified glass container */}
+      <GlassSurface
+        className="anatomy__grid"
+        radius="xl"
+        elevation="raised"
+        style={
+          {
+            '--lg-tint-alpha': '0',
+            '--lg-body-gradient': 'none',
+            '--lg-blur': '0px',
+            '--lg-brightness': '100%',
+            '--lg-saturate': '100%',
+          } as React.CSSProperties
+        }
+      >
         {LAYERS.map((layer) => (
-          <li key={layer.id} className="anatomy__item" data-off={!enabled[layer.id] || undefined}>
+          <div
+            key={layer.id}
+            className="anatomy__row"
+            data-off={!enabled[layer.id] || undefined}
+          >
             <Switch
               size="sm"
               label={layer.label}
+              labelPosition="start"
               checked={enabled[layer.id] ?? true}
               onChange={(next) =>
                 setEnabled((prev) => ({ ...prev, [layer.id]: next }))
               }
             />
-            <p className="anatomy__blurb">{layer.blurb}</p>
-          </li>
+            <p className="anatomy__row-blurb">{layer.blurb}</p>
+          </div>
         ))}
-      </ul>
+        {/* Empty slot to complete the last row's 2-column pair */}
+        <div className="anatomy__row anatomy__row--empty" />
+      </GlassSurface>
 
       <div className="anatomy__code">
         <CodeBlock code={css} language="css" filename="overrides" />

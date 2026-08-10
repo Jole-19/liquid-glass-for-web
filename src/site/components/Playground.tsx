@@ -171,7 +171,20 @@ export function Playground() {
         </GlassSurface>
       </div>
 
-      <div className="playground__controls">
+      <GlassSurface
+        className="playground__controls"
+        radius="xl"
+        elevation="raised"
+        style={
+          {
+            '--lg-tint-alpha': '0',
+            '--lg-body-gradient': 'none',
+            '--lg-blur': '0px',
+            '--lg-brightness': '100%',
+            '--lg-saturate': '100%',
+          } as React.CSSProperties
+        }
+      >
         <div className="playground__controls-head">
           <p className="playground__legend">Tokens</p>
           <button
@@ -184,38 +197,37 @@ export function Playground() {
           </button>
         </div>
 
-        {CONTROLS.map((control) => {
-          const value = values[control.id] ?? control.initial;
-          return (
-            <div className="playground__control" key={control.id}>
-              <label htmlFor={`pg-${control.id}`}>
-                <span className="playground__name">{control.label}</span>
-                <code className="playground__value">
-                  {control.step < 1 ? value.toFixed(3) : value}
-                  {control.unit}
-                </code>
-              </label>
-              <input
-                id={`pg-${control.id}`}
-                type="range"
-                min={control.min}
-                max={control.max}
-                step={control.step}
-                value={value}
-                onChange={(event) =>
-                  setValues((prev) => ({
-                    ...prev,
-                    [control.id]: Number(event.target.value),
-                  }))
-                }
-              />
-              {control.hint ? (
-                <p className="playground__hint">{control.hint}</p>
-              ) : null}
-            </div>
-          );
-        })}
-      </div>
+        <div className="playground__grid">
+          {CONTROLS.map((control) => {
+            const value = values[control.id] ?? control.initial;
+            return (
+              <div className="playground__control" key={control.id}>
+                <label htmlFor={`pg-${control.id}`}>
+                  <span className="playground__name">{control.label}</span>
+                  <code className="playground__value">
+                    {control.step < 1 ? value.toFixed(3) : value}
+                    {control.unit}
+                  </code>
+                </label>
+                <input
+                  id={`pg-${control.id}`}
+                  type="range"
+                  min={control.min}
+                  max={control.max}
+                  step={control.step}
+                  value={value}
+                  onChange={(event) =>
+                    setValues((prev) => ({
+                      ...prev,
+                      [control.id]: Number(event.target.value),
+                    }))
+                  }
+                />
+              </div>
+            );
+          })}
+        </div>
+      </GlassSurface>
 
       <div className="playground__code">
         <CodeBlock code={css} language="css" filename="your-theme.css" />

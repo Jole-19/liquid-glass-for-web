@@ -17,7 +17,7 @@ import { Section, Subsection } from '../components/Section';
 import { CodeBlock } from '../components/CodeBlock';
 import { PACKAGE_NAME } from '../config';
 
-const SIZE = 720;
+const SIZE = 1440;
 
 const USAGE = `import { GlassStage, GlassPanel } from '${PACKAGE_NAME}';
 
@@ -39,11 +39,11 @@ function paintBackdrop(canvas: HTMLCanvasElement): void {
   if (!ctx) return;
 
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const h = Math.round(SIZE * 0.35);
+  
   canvas.width = SIZE * dpr;
-  canvas.height = Math.round(SIZE * 0.62) * dpr;
+  canvas.height = h * dpr;
   ctx.scale(dpr, dpr);
-
-  const h = SIZE * 0.62;
 
   const bg = ctx.createLinearGradient(0, 0, SIZE, h);
   bg.addColorStop(0, '#1b1140');
@@ -55,14 +55,14 @@ function paintBackdrop(canvas: HTMLCanvasElement): void {
   // A hard grid. Straight lines are the most legible test there is: under Tier
   // 1 they blur but stay straight, under Tier 2 they visibly bend at the rim.
   ctx.strokeStyle = 'rgba(255,255,255,0.16)';
-  ctx.lineWidth = 1;
-  for (let x = 0; x <= SIZE; x += 32) {
+  ctx.lineWidth = 2;
+  for (let x = 0; x <= SIZE; x += 64) {
     ctx.beginPath();
     ctx.moveTo(x + 0.5, 0);
     ctx.lineTo(x + 0.5, h);
     ctx.stroke();
   }
-  for (let y = 0; y <= h; y += 32) {
+  for (let y = 0; y <= h; y += 64) {
     ctx.beginPath();
     ctx.moveTo(0, y + 0.5);
     ctx.lineTo(SIZE, y + 0.5);
@@ -70,10 +70,10 @@ function paintBackdrop(canvas: HTMLCanvasElement): void {
   }
 
   const blobs: Array<[number, number, number, string]> = [
-    [SIZE * 0.2, h * 0.3, 150, 'rgba(255,64,160,0.85)'],
-    [SIZE * 0.78, h * 0.24, 130, 'rgba(64,220,255,0.8)'],
-    [SIZE * 0.6, h * 0.8, 170, 'rgba(255,190,60,0.75)'],
-    [SIZE * 0.34, h * 0.78, 120, 'rgba(120,90,255,0.8)'],
+    [SIZE * 0.2, h * 0.3, 300, 'rgba(255,64,160,0.85)'],
+    [SIZE * 0.78, h * 0.24, 260, 'rgba(64,220,255,0.8)'],
+    [SIZE * 0.6, h * 0.8, 340, 'rgba(255,190,60,0.75)'],
+    [SIZE * 0.34, h * 0.78, 240, 'rgba(120,90,255,0.8)'],
   ];
   for (const [x, y, r, color] of blobs) {
     const g = ctx.createRadialGradient(x, y, 0, x, y, r);
@@ -85,10 +85,11 @@ function paintBackdrop(canvas: HTMLCanvasElement): void {
     ctx.fill();
   }
 
-  ctx.font = '600 84px Inter, system-ui, sans-serif';
+  ctx.font = '600 168px Inter, system-ui, sans-serif';
   ctx.fillStyle = 'rgba(255,255,255,0.9)';
   ctx.textAlign = 'center';
-  ctx.fillText('REFRACT', SIZE / 2, h * 0.56);
+  ctx.textBaseline = 'middle';
+  ctx.fillText('REFRACT', Math.round(SIZE / 2), Math.round(h * 0.5));
 }
 
 export function RefractionSection() {
@@ -97,7 +98,7 @@ export function RefractionSection() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (canvas) paintBackdrop(canvas);
-  }, []);
+  });
 
   return (
     <Section

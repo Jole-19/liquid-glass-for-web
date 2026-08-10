@@ -325,8 +325,15 @@ a {
      the full glass material — no need to re-invent any of it here. */
 }
 
+.fnav__bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
 /* Override the navbar's own ::before (rim) to keep the pill shape */
-.fnav.lg-surface::before {
+.fnav__bg.lg-surface::before {
   border-radius: var(--lg-radius-pill);
 }
 
@@ -827,6 +834,7 @@ a {
 
 .subsection {
   margin-top: var(--lg-space-6);
+  margin-bottom: var(--lg-space-6);
 }
 
 .subsection__title {

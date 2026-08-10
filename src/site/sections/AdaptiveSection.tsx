@@ -62,9 +62,21 @@ export function AdaptiveSection() {
     if (canvas) paint(canvas);
   }, []);
 
-  const { mode, luminance } = useAdaptiveContrast(panelRef, {
+  const { mode, luminance, resample } = useAdaptiveContrast(panelRef, {
     source: canvasRef,
   });
+
+  useEffect(() => {
+    resample();
+  }, [x, resample]);
+
+  // Smooth font color transition: maps luminance to the HSL values
+  // of the light and dark tokens so the text fades smoothly over a distance.
+  const l = luminance ?? 0;
+  const t = Math.max(0, Math.min(1, (l - 0.05) / 0.7));
+  
+  const fg = `hsl(${228 * t} ${24 * t}% ${100 - 82 * t}% / ${0.94 + 0.06 * t})`;
+  const fgMuted = `hsl(${228 * t} ${14 * t}% ${100 - 58 * t}% / ${0.66 + 0.34 * t})`;
 
   return (
     <Section
@@ -87,7 +99,14 @@ export function AdaptiveSection() {
           className="ramp__panel"
           radius="lg"
           elevation="raised"
-          style={{ left: `${x}%` }}
+          style={
+            {
+              left: `${x}%`,
+              transform: `translate(-${x}%, -50%)`,
+              '--lg-fg': fg,
+              '--lg-fg-muted': fgMuted,
+            } as React.CSSProperties
+          }
         >
           <strong>Still readable</strong>
           <span>at either end</span>
@@ -100,7 +119,7 @@ export function AdaptiveSection() {
           <input
             type="range"
             min={0}
-            max={72}
+            max={100}
             value={x}
             onChange={(event) => setX(Number(event.target.value))}
             aria-describedby="adaptive-readout"
@@ -121,16 +140,6 @@ export function AdaptiveSection() {
             <dd aria-live="polite">{mode}</dd>
           </div>
         </dl>
-      </div>
-
-      <div className="callout">
-        <p>
-          The flip happens at <strong>0.42</strong>, not the 0.5 you might
-          expect. A tinted panel over a mid-grey backdrop is already lighter
-          than the backdrop itself, so the crossover has to sit below the
-          midpoint. There is a hysteresis band around it — park the slider right
-          on the threshold and the theme holds instead of strobing.
-        </p>
       </div>
 
       <CodeBlock code={USAGE} filename="adaptive.tsx" />

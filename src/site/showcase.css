@@ -507,6 +507,7 @@
   align-items: flex-end;
   gap: var(--lg-space-5);
   margin-top: var(--lg-space-4);
+  margin-bottom: var(--lg-space-5);
 }
 
 .ramp__slider {
@@ -668,11 +669,22 @@
   border-radius: 0;
 }
 
-.navdemo__mark {
-  display: inline-flex;
-  width: 18px;
-  height: 18px;
-  color: var(--lg-accent);
+.navdemo__logo--light {
+  display: none;
+}
+
+.navdemo__logo--dark {
+  display: block;
+}
+
+.lg-theme-light .navdemo__logo--dark,
+[data-lg-contrast='dark-fg'] .navdemo__logo--dark {
+  display: none;
+}
+
+.lg-theme-light .navdemo__logo--light,
+[data-lg-contrast='dark-fg'] .navdemo__logo--light {
+  display: block;
 }
 
 .navdemo__note {

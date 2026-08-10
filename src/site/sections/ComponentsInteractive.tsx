@@ -88,7 +88,10 @@ const NAVBAR_CODE = `{/* Blur and tint come up as the page scrolls under the bar
     transition is one --lg-nav-progress custom property written per
     frame; every visual change is a calc() on that number in CSS. */}
 <Navbar threshold={72}>
-  <NavbarBrand>Acme</NavbarBrand>
+  <NavbarBrand>
+    <img src="/logos/logo-black.png" alt="Liquid Glass" className="navdemo__logo--dark" height={48} />
+    <img src="/logos/logo-white.png" alt="Liquid Glass" className="navdemo__logo--light" height={48} />
+  </NavbarBrand>
   <NavbarSpacer />
   <NavbarActions>
     <Button variant="ghost" size="sm">Docs</Button>
@@ -220,10 +223,8 @@ export function ComponentsInteractive() {
           <div className="navdemo">
             <Navbar sticky={false} alwaysSolid className="navdemo__bar">
               <NavbarBrand>
-                <span className="navdemo__mark" aria-hidden="true">
-                  <IconSparkle />
-                </span>
-                Acme
+                <img src="/logos/logo-black.png" alt="Liquid Glass" className="navdemo__logo navdemo__logo--dark" height={48} />
+                <img src="/logos/logo-white.png" alt="Liquid Glass" className="navdemo__logo navdemo__logo--light" height={48} />
               </NavbarBrand>
               <NavbarSpacer />
               <NavbarActions>

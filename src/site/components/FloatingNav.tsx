@@ -126,11 +126,10 @@ export function FloatingNav({
     <>
       <nav
         ref={navRef}
-        className="fnav lg-surface"
+        className="fnav"
         aria-label="Site"
-        data-elevation="raised"
-        data-radius="pill"
       >
+        <div className="fnav__bg lg-surface" data-elevation="raised" data-radius="pill" aria-hidden="true" />
         {/* ---- Brand ---- */}
         <a className="fnav__brand lg-focusable" href="#top">
           <img

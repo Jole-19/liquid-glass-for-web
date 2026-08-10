@@ -1,3 +1,4 @@
+import { GlassSurface } from '../../lib';
 import { Section, Subsection } from '../components/Section';
 import { CodeBlock } from '../components/CodeBlock';
 
@@ -90,14 +91,28 @@ export function Reference() {
           </p>
         }
       >
-        <ul className="pillars">
+        <GlassSurface
+          as="ul"
+          className="pillars"
+          radius="xl"
+          elevation="raised"
+          style={
+            {
+              '--lg-tint-alpha': '0',
+              '--lg-body-gradient': 'none',
+              '--lg-blur': '0px',
+              '--lg-brightness': '100%',
+              '--lg-saturate': '100%',
+            } as React.CSSProperties
+          }
+        >
           {A11Y.map((item) => (
             <li className="pillars__item" key={item.title}>
               <h3>{item.title}</h3>
               <p>{item.body}</p>
             </li>
           ))}
-        </ul>
+        </GlassSurface>
 
         <div className="callout">
           <p>

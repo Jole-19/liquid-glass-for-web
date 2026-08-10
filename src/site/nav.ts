@@ -39,7 +39,6 @@ export const NAV: NavGroup[] = [
     items: [
       { id: 'surface', label: 'GlassSurface' },
       { id: 'button', label: 'Button' },
-      { id: 'card', label: 'Card' },
       { id: 'input', label: 'Input' },
       { id: 'switch', label: 'Switch' },
       { id: 'tabs', label: 'Tabs' },

@@ -102,11 +102,15 @@ export const Button = forwardRef(function Button<
           {startIcon}
         </span>
       ) : null}
-      {children != null && !iconOnly ? (
-        <span className="lg-button__label">{children}</span>
-      ) : (
-        children
-      )}
+      {children != null ? (
+        iconOnly ? (
+          <span className="lg-button__icon" aria-hidden="true">
+            {children}
+          </span>
+        ) : (
+          <span className="lg-button__label">{children}</span>
+        )
+      ) : null}
       {endIcon ? (
         <span className="lg-button__icon" aria-hidden="true">
           {endIcon}

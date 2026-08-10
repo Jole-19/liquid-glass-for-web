@@ -1,12 +1,5 @@
 import {
   Button,
-  Card,
-  CardBody,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardMedia,
-  CardTitle,
   GlassSurface,
   Input,
 } from '../../lib';
@@ -132,26 +125,6 @@ const BUTTON_ROWS = [
     description: 'Stretches to the width of the container.',
   },
 ];
-
-/* ---- Card ---------------------------------------------------------------- */
-
-const CARD_CODE = `<Card elevation="raised" radius="lg" flush>
-  <CardMedia>
-    {/* Bleeds to the card's edges and inherits the corner radius. */}
-    <img src="/cover.jpg" alt="" />
-  </CardMedia>
-  <CardHeader>
-    <CardTitle>Aurora</CardTitle>
-    <CardDescription>Ambient · 42 min</CardDescription>
-  </CardHeader>
-  <CardBody>
-    Slots rather than title and footer props, so a badge next to the
-    title does not require a new prop.
-  </CardBody>
-  <CardFooter>
-    <Button variant="primary" size="sm">Play</Button>
-  </CardFooter>
-</Card>`;
 
 /* ---- Input --------------------------------------------------------------- */
 
@@ -292,63 +265,6 @@ export function ComponentsCore() {
         </Example>
 
         <PropsTable label="Button props" rows={BUTTON_ROWS} />
-      </Section>
-
-      <Section
-        id="card"
-        eyebrow="Components"
-        title="Card"
-        intro={
-          <p>
-            Composed from slots rather than configured with props. The one that
-            earns its keep is <code>CardMedia</code>, which bleeds to the card's
-            edges and inherits the corner radius — fiddly by hand and wrong in
-            most hand-rolled versions.
-          </p>
-        }
-      >
-        <Example code={CARD_CODE} stack flush>
-          <div className="cardgrid">
-            <Card flush className="showcard">
-              <CardMedia>
-                <div className="showcard__art" aria-hidden="true" />
-              </CardMedia>
-              <CardHeader>
-                <CardTitle>Aurora</CardTitle>
-                <CardDescription>Ambient · 42 min</CardDescription>
-              </CardHeader>
-              <CardBody>
-                Media bleeds to the edge and picks up the card's radius, so the
-                glass rim still reads as one continuous pane.
-              </CardBody>
-              <CardFooter>
-                <Button variant="primary" size="sm">
-                  Play
-                </Button>
-                <Button variant="ghost" size="sm">
-                  Queue
-                </Button>
-              </CardFooter>
-            </Card>
-
-            <Card
-              as="a"
-              href="#card"
-              interactive
-              elevation="default"
-              className="showcard"
-            >
-              <CardHeader>
-                <CardTitle>Interactive</CardTitle>
-                <CardDescription>as="a" · hover and press states</CardDescription>
-              </CardHeader>
-              <CardBody>
-                Interactive is purely visual. Pairing it with a real anchor or
-                button is what makes the whole card operable by keyboard.
-              </CardBody>
-            </Card>
-          </div>
-        </Example>
       </Section>
 
       <Section

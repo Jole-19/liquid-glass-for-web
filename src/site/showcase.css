@@ -250,12 +250,8 @@
  * The 7th row (odd count) spans full width at the bottom. */
 .anatomy__grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   padding: var(--lg-space-2);
-  background-image: linear-gradient(var(--site-rule), var(--site-rule));
-  background-size: 1px calc(100% - 32px);
-  background-position: center;
-  background-repeat: no-repeat;
 }
 
 .anatomy__row {
@@ -383,12 +379,8 @@
 
 .playground__grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   padding: 0;
-  background-image: linear-gradient(var(--site-rule), var(--site-rule));
-  background-size: 1px calc(100% - 24px);
-  background-position: center top 8px;
-  background-repeat: no-repeat;
 }
 
 .playground__legend {
@@ -479,8 +471,8 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 200px;
-  padding: var(--lg-space-4);
+  width: 150px;
+  padding: var(--lg-space-3);
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -566,10 +558,10 @@
 .stage__tier1,
 .stage__tier2 {
   position: absolute;
-  top: 26%;
-  width: 34%;
-  min-width: 150px;
-  padding: var(--lg-space-4);
+  top: 18%;
+  width: 40%;
+  min-width: 0;
+  padding: var(--lg-space-3);
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -585,13 +577,13 @@
 
 .stage__tier1 strong,
 .stage__tier2 strong {
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
 }
 
 .stage__tier1 span,
 .stage__tier2 span {
-  font-size: 12.5px;
+  font-size: 11px;
   color: var(--site-text-muted);
 }
 
@@ -714,38 +706,46 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (min-width: 641px) {
   .anatomy__grid,
   .playground__grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  /* When stacked to 1 column, remove the vertical separator */
-  .anatomy__grid,
+  .anatomy__grid {
+    background-image: linear-gradient(var(--site-rule), var(--site-rule));
+    background-size: 1px calc(100% - 32px);
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
   .playground__grid {
-    background-image: none;
+    background-image: linear-gradient(var(--site-rule), var(--site-rule));
+    background-size: 1px calc(100% - 24px);
+    background-position: center top 8px;
+    background-repeat: no-repeat;
   }
 
   .stage__tier1,
   .stage__tier2 {
-    top: 18%;
-    width: 40%;
-    min-width: 0;
-    padding: var(--lg-space-3);
+    top: 26%;
+    width: 34%;
+    min-width: 150px;
+    padding: var(--lg-space-4);
   }
 
   .stage__tier1 strong,
   .stage__tier2 strong {
-    font-size: 13px;
+    font-size: 15px;
   }
 
   .stage__tier1 span,
   .stage__tier2 span {
-    font-size: 11px;
+    font-size: 12.5px;
   }
 
   .ramp__panel {
-    width: 150px;
-    padding: var(--lg-space-3);
+    width: 200px;
+    padding: var(--lg-space-4);
   }
 }

@@ -41,7 +41,6 @@
   ],
   "scripts": {
     "dev": "vite",
-    "mock": "vite --open /mock.html",
     "build": "tsc --noEmit && vite build",
     "build:lib": "tsc --noEmit && vite build --config vite.lib.config.ts",
     "preview": "vite preview",

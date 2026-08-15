@@ -18,7 +18,7 @@ import {
 import { Example } from '../components/Example';
 import { PropsTable } from '../components/PropsTable';
 import { Section, Subsection } from '../components/Section';
-import { IconSparkle } from '../icons';
+
 
 /* ---- Switch -------------------------------------------------------------- */
 

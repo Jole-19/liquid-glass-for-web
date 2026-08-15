@@ -11,7 +11,7 @@
  * path in the renderer -- canvas, img and video go through `drawImage`, while
  * anything else behind the glass is rasterized with `html-to-image`.
  */
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { GlassPanel, GlassStage, GlassSurface } from '../../lib';
 import { Section, Subsection } from '../components/Section';
 import { CodeBlock } from '../components/CodeBlock';
@@ -94,11 +94,20 @@ function paintBackdrop(canvas: HTMLCanvasElement): void {
 
 export function RefractionSection() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const [disabled, setDisabled] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (canvas) paintBackdrop(canvas);
-  });
+  }, []);
+
+  useEffect(() => {
+    const mql = window.matchMedia('(max-width: 820px)');
+    const check = () => setDisabled(mql.matches);
+    check();
+    mql.addEventListener('change', check);
+    return () => mql.removeEventListener('change', check);
+  }, []);
 
   return (
     <Section
@@ -128,7 +137,7 @@ export function RefractionSection() {
           Drag the right panel around.
         </p>
 
-        <GlassStage className="stage lg-theme-dark">
+        <GlassStage className="stage lg-theme-dark" disabled={disabled}>
           <canvas ref={canvasRef} className="stage__canvas" aria-hidden="true" />
 
           <GlassSurface className="stage__tier1" radius="lg" elevation="raised">

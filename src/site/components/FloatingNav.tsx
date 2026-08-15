@@ -57,7 +57,7 @@ export function FloatingNav({
 }: FloatingNavProps) {
   const [openGroup, setOpenGroup] = useState<string | null>(null);
   const navRef = useRef<HTMLElement>(null);
-  const closeTimeout = useRef<ReturnType<typeof setTimeout>>(0 as unknown as ReturnType<typeof setTimeout>);
+
 
   /* Close dropdown on outside click */
   useEffect(() => {
@@ -101,19 +101,7 @@ export function FloatingNav({
     return () => document.removeEventListener('keydown', onKey);
   }, [menuOpen, onMenuToggle]);
 
-  const handleGroupEnter = useCallback(
-    (label: string) => {
-      clearTimeout(closeTimeout.current);
-      setOpenGroup(label);
-    },
-    [],
-  );
 
-  const handleGroupLeave = useCallback(() => {
-    closeTimeout.current = setTimeout(() => {
-      setOpenGroup(null);
-    }, 180);
-  }, []);
 
   const handleGroupClick = useCallback(
     (label: string) => {
@@ -150,8 +138,8 @@ export function FloatingNav({
             <div
               key={group.label}
               className="fnav__group"
-              onMouseEnter={() => handleGroupEnter(group.label)}
-              onMouseLeave={handleGroupLeave}
+              onMouseEnter={() => setOpenGroup(group.label)}
+              onMouseLeave={() => setOpenGroup(null)}
             >
               <button
                 type="button"
@@ -165,27 +153,28 @@ export function FloatingNav({
               </button>
 
               {openGroup === group.label && (
-                <div
-                  className="fnav__dropdown lg-surface"
-                  data-elevation="overlay"
-                  data-radius="lg"
-                  onMouseEnter={() => handleGroupEnter(group.label)}
-                  onMouseLeave={handleGroupLeave}
-                >
-                  <ul className="fnav__dropdown-list">
-                    {group.items.map((item) => (
-                      <li key={item.id}>
-                        <a
-                          className="fnav__dropdown-link lg-focusable"
-                          href={`#${item.id}`}
-                          onClick={() => setOpenGroup(null)}
-                        >
-                          {item.label}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                <>
+                  <div className="fnav__dropdown-bridge" />
+                  <div
+                    className="fnav__dropdown lg-surface"
+                    data-elevation="overlay"
+                    data-radius="lg"
+                  >
+                    <ul className="fnav__dropdown-list">
+                      {group.items.map((item) => (
+                        <li key={item.id}>
+                          <a
+                            className="fnav__dropdown-link lg-focusable"
+                            href={`#${item.id}`}
+                            onClick={() => setOpenGroup(null)}
+                          >
+                            {item.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </>
               )}
             </div>
           ))}

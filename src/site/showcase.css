@@ -476,8 +476,9 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
-  /* No transition on `left`: the panel should track the slider exactly, so the
-   * luminance readout and the position always agree. */
+  transition: none !important;
+  /* No transition on `left` or `transform`: the panel should track the slider
+   * exactly, so the luminance readout and the position always agree. */
 }
 
 .ramp__panel strong {

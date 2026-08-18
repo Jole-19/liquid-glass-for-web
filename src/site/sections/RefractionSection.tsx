@@ -147,7 +147,7 @@ export function RefractionSection() {
 
           <GlassPanel className="stage__tier2" radius={24} button floating>
             <strong>Tier 2</strong>
-            <span>WebGL — drag me</span>
+            <span>{disabled ? 'Disabled on mobile' : 'WebGL — drag me'}</span>
           </GlassPanel>
         </GlassStage>
       </div>

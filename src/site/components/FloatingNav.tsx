@@ -191,7 +191,7 @@ export function FloatingNav({
             onClick={onThemeToggle}
             aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
             variant="secondary"
-            size="sm"
+            size="md"
             iconOnly
             radius="pill"
             startIcon={theme === 'dark' ? <IconSun /> : <IconMoon />}
@@ -202,7 +202,7 @@ export function FloatingNav({
             target="_blank"
             rel="noreferrer"
             variant="secondary"
-            size="sm"
+            size="md"
             startIcon={<IconGitHub />}
             className="fnav__github"
           >
@@ -231,24 +231,26 @@ export function FloatingNav({
         hidden={!menuOpen}
       >
         <div className="fnav-mobile__sheet lg-surface" data-elevation="overlay" data-radius="lg">
-          {NAV.map((group) => (
-            <div key={group.label} className="fnav-mobile__group">
-              <p className="fnav-mobile__label">{group.label}</p>
-              <ul>
-                {group.items.map((item) => (
-                  <li key={item.id}>
-                    <a
-                      className="lg-focusable"
-                      href={`#${item.id}`}
-                      onClick={() => onMenuToggle(false)}
-                    >
-                      {item.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <div className="fnav-mobile__scroll">
+            {NAV.map((group) => (
+              <div key={group.label} className="fnav-mobile__group">
+                <p className="fnav-mobile__label">{group.label}</p>
+                <ul>
+                  {group.items.map((item) => (
+                    <li key={item.id}>
+                      <a
+                        className="lg-focusable"
+                        href={`#${item.id}`}
+                        onClick={() => onMenuToggle(false)}
+                      >
+                        {item.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
         <button
           type="button"

@@ -1,5 +1,5 @@
 {
-  "name": "liquid-glass-web",
+  "name": "liquidglass-web",
   "version": "0.1.0",
   "description": "A glassmorphic React component library with a real WebGL refraction tier.",
   "type": "module",

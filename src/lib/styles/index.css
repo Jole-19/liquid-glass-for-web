@@ -1,7 +1,7 @@
 /**
  * The library stylesheet. Consumers import this once:
  *
- *   import 'liquid-glass-react/styles.css';
+ *   import 'liquid-glass-web/styles.css';
  *
  * Import order is the cascade, and it is owned here rather than by each
  * component importing its own CSS. Component files importing their own styles

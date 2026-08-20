@@ -1,16 +1,16 @@
 {
-  "name": "liquid-glass-react",
+  "name": "liquid-glass-web",
   "version": "0.1.0",
   "description": "A glassmorphic React component library with a real WebGL refraction tier.",
   "type": "module",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Jole-19/Liquid-glass-library.git"
+    "url": "git+https://github.com/Jole-19/liquid-glass-for-web.git"
   },
-  "homepage": "https://github.com/Jole-19/Liquid-glass-library#readme",
+  "homepage": "https://github.com/Jole-19/liquid-glass-for-web#readme",
   "bugs": {
-    "url": "https://github.com/Jole-19/Liquid-glass-library/issues"
+    "url": "https://github.com/Jole-19/liquid-glass-for-web/issues"
   },
   "keywords": [
     "react",
@@ -20,7 +20,12 @@
     "webgl",
     "refraction",
     "component-library",
-    "design-tokens"
+    "design-tokens",
+    "ui",
+    "glass",
+    "css",
+    "apple",
+    "components"
   ],
   "files": [
     "dist"
@@ -44,7 +49,8 @@
     "build": "tsc --noEmit && vite build",
     "build:lib": "tsc --noEmit && vite build --config vite.lib.config.ts",
     "preview": "vite preview",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm build:lib"
   },
   "peerDependencies": {
     "@ybouane/liquidglass": "^1.0.3",
@@ -55,10 +61,6 @@
     "@ybouane/liquidglass": {
       "optional": true
     }
-  },
-  "dependencies": {
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8"
   },
   "devDependencies": {
     "@types/react": "^19.2.17",

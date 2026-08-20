@@ -68,7 +68,7 @@ export function TopBar({
             <IconSparkle />
           </span>
           <a className="topbar__wordmark lg-focusable" href="#top">
-            Liquid Glass
+            Liquid Glass for Web
           </a>
           <span className="topbar__version">v0.1.0</span>
         </NavbarBrand>

@@ -123,7 +123,7 @@ export function FloatingNav({
           <img
             className="fnav__logo-img"
             src={theme === 'dark' ? '/logos/logo-black.png' : '/logos/logo-white.png'}
-            alt="Liquid Glass"
+            alt="Liquid Glass for Web"
             width="140"
             height="28"
           />

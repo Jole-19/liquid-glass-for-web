@@ -2,4 +2,6 @@ node_modules/
 dist/
 dist-site/
 *.local
+.env
+.env.*
 .DS_Store

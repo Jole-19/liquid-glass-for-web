@@ -89,8 +89,8 @@ const NAVBAR_CODE = `{/* Blur and tint come up as the page scrolls under the bar
     frame; every visual change is a calc() on that number in CSS. */}
 <Navbar threshold={72}>
   <NavbarBrand>
-    <img src="/logos/logo-black.png" alt="Liquid Glass" className="navdemo__logo--dark" height={48} />
-    <img src="/logos/logo-white.png" alt="Liquid Glass" className="navdemo__logo--light" height={48} />
+    <img src="/logos/logo-black.png" alt="Liquid Glass for Web" className="navdemo__logo--dark" height={48} />
+    <img src="/logos/logo-white.png" alt="Liquid Glass for Web" className="navdemo__logo--light" height={48} />
   </NavbarBrand>
   <NavbarSpacer />
   <NavbarActions>
@@ -223,8 +223,8 @@ export function ComponentsInteractive() {
           <div className="navdemo">
             <Navbar sticky={false} alwaysSolid className="navdemo__bar">
               <NavbarBrand>
-                <img src="/logos/logo-black.png" alt="Liquid Glass" className="navdemo__logo navdemo__logo--dark" height={48} />
-                <img src="/logos/logo-white.png" alt="Liquid Glass" className="navdemo__logo navdemo__logo--light" height={48} />
+                <img src="/logos/logo-black.png" alt="Liquid Glass for Web" className="navdemo__logo navdemo__logo--dark" height={48} />
+                <img src="/logos/logo-white.png" alt="Liquid Glass for Web" className="navdemo__logo navdemo__logo--light" height={48} />
               </NavbarBrand>
               <NavbarSpacer />
               <NavbarActions>

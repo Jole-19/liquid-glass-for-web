@@ -1,8 +1,8 @@
-# Liquid Glass
+# Liquid Glass for Web
 
-[![License](https://img.shields.io/github/license/Jole-19/Liquid-glass-library?style=flat-square&color=6b7cff)](./LICENSE)
-[![Stars](https://img.shields.io/github/stars/Jole-19/Liquid-glass-library?style=flat-square&color=6b7cff)](https://github.com/Jole-19/Liquid-glass-library/stargazers)
-[![Last commit](https://img.shields.io/github/last-commit/Jole-19/Liquid-glass-library?style=flat-square&color=6b7cff)](https://github.com/Jole-19/Liquid-glass-library/commits)
+[![License](https://img.shields.io/github/license/Jole-19/liquid-glass-for-web?style=flat-square&color=6b7cff)](./LICENSE)
+[![Stars](https://img.shields.io/github/stars/Jole-19/liquid-glass-for-web?style=flat-square&color=6b7cff)](https://github.com/Jole-19/liquid-glass-for-web/stargazers)
+[![Last commit](https://img.shields.io/github/last-commit/Jole-19/liquid-glass-for-web?style=flat-square&color=6b7cff)](https://github.com/Jole-19/liquid-glass-for-web/commits)
 ![JS](https://img.shields.io/badge/js-9.5%20kB%20gzip-6b7cff?style=flat-square)
 ![CSS](https://img.shields.io/badge/css-6.1%20kB%20gzip-6b7cff?style=flat-square)
 
@@ -35,22 +35,16 @@ the hard part:
 
 ## Install
 
-Not published to npm yet, so install straight from the repository — every major
-package manager accepts a GitHub target:
-
 ```bash
-pnpm add github:Jole-19/Liquid-glass-library
-# npm install github:Jole-19/Liquid-glass-library
-# yarn add github:Jole-19/Liquid-glass-library
-# bun add github:Jole-19/Liquid-glass-library
+npm install liquid-glass-web
+# pnpm add liquid-glass-web
+# yarn add liquid-glass-web
+# bun add liquid-glass-web
 ```
 
-Once it is published the command becomes `pnpm add liquid-glass-react` and
-nothing else changes — the import specifier is already the package name.
-
 ```tsx
-import { Button } from 'liquid-glass-react';
-import 'liquid-glass-react/styles.css';
+import { Button } from 'liquid-glass-web';
+import 'liquid-glass-web/styles.css';
 
 <Button variant="primary">Continue</Button>;
 ```
@@ -182,8 +176,7 @@ pnpm typecheck
 
 The site in `src/site` consumes `src/lib` directly — its navbar, tabs, switches
 and cards are the real components, so the documentation cannot drift from what
-it documents. See [`PLAN.md`](./PLAN.md) for the architecture and the reasoning
-behind it.
+it documents.
 
 ## Licence
 

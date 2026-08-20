@@ -47,7 +47,7 @@ export function App() {
         </main>
 
         <footer className="footer">
-          <span>Liquid Glass · MIT</span>
+          <span>Liquid Glass for Web · MIT</span>
           <span className="footer__spacer" />
           <a href={REPO_URL} target="_blank" rel="noreferrer">
             GitHub

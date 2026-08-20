@@ -36,15 +36,15 @@ the hard part:
 ## Install
 
 ```bash
-npm install liquidglass-web
-# pnpm add liquidglass-web
-# yarn add liquidglass-web
-# bun add liquidglass-web
+npm install @jole_0/liquidglass-web
+# pnpm add @jole_0/liquidglass-web
+# yarn add @jole_0/liquidglass-web
+# bun add @jole_0/liquidglass-web
 ```
 
 ```tsx
-import { Button } from 'liquidglass-web';
-import 'liquidglass-web/styles.css';
+import { Button } from '@jole_0/liquidglass-web';
+import '@jole_0/liquidglass-web/styles.css';
 
 <Button variant="primary">Continue</Button>;
 ```

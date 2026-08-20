@@ -1,5 +1,5 @@
 {
-  "name": "liquidglass-web",
+  "name": "@jole_0/liquidglass-web",
   "version": "0.1.0",
   "description": "A glassmorphic React component library with a real WebGL refraction tier.",
   "type": "module",
@@ -44,6 +44,9 @@
   "sideEffects": [
     "**/*.css"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",

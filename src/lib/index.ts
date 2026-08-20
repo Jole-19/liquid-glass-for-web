@@ -5,7 +5,7 @@
  * graph. With `cssCodeSplit: false` the library build extracts it to
  * `dist/liquid-glass.css` and strips the import from the emitted JS, so
  * consumers still get a file they import themselves
- * (`liquidglass-web/styles.css`) rather than styles injected at runtime --
+ * (`@jole_0/liquidglass-web/styles.css`) rather than styles injected at runtime --
  * which would land in the cascade wherever the bundle happened to execute.
  */
 import './styles/index.css';

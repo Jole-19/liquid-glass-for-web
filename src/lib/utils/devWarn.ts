@@ -24,5 +24,5 @@ export function devWarn(condition: boolean, message: string): void {
   // rest of the console.
   if (seen.has(message)) return;
   seen.add(message);
-  console.warn(`[liquidglass-web] ${message}`);
+  console.warn(`[@jole_0/liquidglass-web] ${message}`);
 }

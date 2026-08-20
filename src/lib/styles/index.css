@@ -1,7 +1,7 @@
 /**
  * The library stylesheet. Consumers import this once:
  *
- *   import 'liquidglass-web/styles.css';
+ *   import '@jole_0/liquidglass-web/styles.css';
  *
  * Import order is the cascade, and it is owned here rather than by each
  * component importing its own CSS. Component files importing their own styles

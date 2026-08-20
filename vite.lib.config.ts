@@ -3,7 +3,7 @@
  *
  * React is external so consumers dedupe on their own copy; bundling it would
  * give them two Reacts and break hooks. CSS is emitted as a single file the
- * consumer imports separately (`liquidglass-web/styles.css`) rather than
+ * consumer imports separately (`@jole_0/liquidglass-web/styles.css`) rather than
  * being injected by JS, so they control where it lands in their cascade.
  */
 import { defineConfig } from 'vite';

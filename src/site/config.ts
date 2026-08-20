@@ -8,4 +8,4 @@ export const REPO_URL = `https://github.com/${REPO_OWNER}/${REPO_NAME}`;
 export const REPO_SLUG = `github:${REPO_OWNER}/${REPO_NAME}`;
 
 /** The name the package will have on npm. Also its import specifier today. */
-export const PACKAGE_NAME = 'liquidglass-web';
+export const PACKAGE_NAME = '@jole_0/liquidglass-web';

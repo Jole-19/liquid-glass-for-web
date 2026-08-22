@@ -4,6 +4,7 @@
   "description": "A glassmorphic React component library with a real WebGL refraction tier.",
   "type": "module",
   "license": "MIT",
+  "packageManager": "pnpm@9.15.0",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Jole-19/liquid-glass-for-web.git"

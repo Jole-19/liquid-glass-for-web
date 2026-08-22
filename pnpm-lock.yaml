@@ -9,10 +9,10 @@ importers:
   .:
     dependencies:
       react:
-        specifier: ^19.2.8
+        specifier: '>=18'
         version: 19.2.8
       react-dom:
-        specifier: ^19.2.8
+        specifier: '>=18'
         version: 19.2.8(react@19.2.8)
     devDependencies:
       '@types/react':

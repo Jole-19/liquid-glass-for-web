@@ -24,7 +24,7 @@ function apply(theme: Theme): void {
 function read(): Theme {
   const attribute = document.documentElement.dataset['theme'];
   if (attribute === 'light' || attribute === 'dark') return attribute;
-  return 'dark';
+  return 'light';
 }
 
 export function useTheme(): [Theme, () => void] {

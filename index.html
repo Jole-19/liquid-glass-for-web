@@ -15,14 +15,14 @@
          frame of the wrong one, which on dark-to-light is a full-screen flash. -->
     <script>
       (function () {
-        var theme = 'dark';
+        var theme = 'light';
         try {
           var stored = localStorage.getItem('lg-theme');
           if (stored === 'light' || stored === 'dark') theme = stored;
-          else if (matchMedia('(prefers-color-scheme: light)').matches)
-            theme = 'light';
+          else if (matchMedia('(prefers-color-scheme: dark)').matches)
+            theme = 'dark';
         } catch (error) {
-          /* Storage is unavailable in some embedded contexts. Dark stands. */
+          /* Storage is unavailable in some embedded contexts. Light stands. */
         }
         document.documentElement.dataset.theme = theme;
         if (theme === 'light')

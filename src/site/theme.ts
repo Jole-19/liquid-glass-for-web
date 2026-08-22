@@ -34,23 +34,6 @@ export function useTheme(): [Theme, () => void] {
     apply(theme);
   }, [theme]);
 
-  // Follow the OS only while the visitor has not made a choice of their own.
-  // Once they have, changing the system theme should not overrule them.
-  useEffect(() => {
-    const query = window.matchMedia('(prefers-color-scheme: light)');
-    const onChange = (event: MediaQueryListEvent) => {
-      try {
-        if (localStorage.getItem(THEME_STORAGE_KEY)) return;
-      } catch {
-        // Storage can throw in a partitioned or private context. Following the
-        // system is the right fallback when we cannot know their preference.
-      }
-      setTheme(event.matches ? 'light' : 'dark');
-    };
-    query.addEventListener('change', onChange);
-    return () => query.removeEventListener('change', onChange);
-  }, []);
-
   const toggle = useCallback(() => {
     setTheme((current) => {
       const next: Theme = current === 'dark' ? 'light' : 'dark';
